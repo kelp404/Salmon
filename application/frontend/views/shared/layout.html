@@ -1,0 +1,41 @@
+<nav ng-controller="NavigationController" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-6">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Victorique</a>
+        </div>
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-6">
+            <ul class="nav navbar-nav navbar-right">
+                <li ng-if="user.isLogin" ng-class="{active: $state.current.name.indexOf('v.log')>=0}">
+                    <a href="/applications">Logs</a>
+                </li>
+                <li ng-if="user.isLogin" ng-class="{active: $state.current.name.indexOf('v.settings')>=0}">
+                    <a href="/settings/applications">Settings</a>
+                </li>
+                <li ng-if="!user.isLogin"><a href="{{url.login}}" target="_self">Sign in</a></li>
+                <li ng-if="user.isLogin"><a href="{{url.logout}}" target="_self">Sign out</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container v-content">
+    <div ui-view="menu"></div>
+    <div ui-view="content"></div>
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm-12 footer">
+            <p class="text-center text-muted">
+                &copy; 2014 <a href="https://github.com/kelp404" target="_blank" title="Kelp on GitHub">Kelp</a>.
+            </p>
+        </div>
+    </div>
+</div>
+<div v-confirm="$confirmModal"></div>

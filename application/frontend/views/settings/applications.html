@@ -1,0 +1,40 @@
+<div class="row">
+    <div class="col-sm-offset-2 col-sm-10">
+        <div class="panel panel-default" id="profile">
+            <div class="panel-heading">
+                <span>Applications</span>
+                <a href="/settings/applications/new" class="pull-right btn btn-success btn-xs"><i class="fa fa-plus fa-fw"></i> New application</a>
+            </div>
+            <div class="panel-body">
+                <table class="table table-hover table-striped">
+                    <thead>
+                        <tr>
+                            <th>Title</th>
+                            <th>Key</th>
+                            <th width="160px">Create time</th>
+                            <th width="80px"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-if="applications.items.length == 0">
+                            <td colspan="4" class="text-center">empty</td>
+                        </tr>
+                        <tr ng-repeat="application in applications.items">
+                            <td>{{ application.title }}</td>
+                            <td>{{ application.app_key }}</td>
+                            <td>{{ application.create_time|date:'yyyy-MM-dd HH:mm' }}</td>
+                            <td>
+                                <a href="/settings/applications/{{ application.id }}" class="btn btn-default btn-xs"><i class="fa fa-pencil"></i></a>
+                                <a ng-click="removeApplication(application, $event)"
+                                        href="/settings/applications/{{ application.id }}" class="btn btn-danger btn-xs"><i class="fa fa-times"></i></a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <ul v-pager="applications" pager-url-template="/settings/applications?index=#{index}"
+                        class="pull-right" style="margin-top: 0"></ul>
+            </div>
+        </div>
+    </div>
+</div>
+<div ui-view></div>
