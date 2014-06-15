@@ -1,5 +1,5 @@
 (function() {
-  angular.module('v.controllers', ['v.controllers.navigation', 'v.controllers.index', 'v.controllers.login', 'v.controllers.settings', 'v.controllers.logs']);
+  angular.module('v.controllers', ['v.controllers.navigation', 'v.controllers.index', 'v.controllers.login', 'v.controllers.settings']);
 
 }).call(this);
 
@@ -10,7 +10,7 @@
       $v = $injector.get('$v');
       $state = $injector.get('$state');
       if ($v.user.isLogin) {
-        return $state.go('v.log-default');
+        return $state.go('v.settings-applications');
       } else {
         return $stae.go('v.login');
       }
@@ -25,43 +25,6 @@
       var $v;
       $v = $injector.get('$v');
       return $scope.url = $v.url;
-    }
-  ]);
-
-}).call(this);
-
-(function() {
-  angular.module('v.controllers.logs', []).controller('LogsController', [
-    '$scope', '$injector', 'applications', 'logs', function($scope, $injector, applications, logs) {
-      var $state, $stateParams;
-      $state = $injector.get('$state');
-      $stateParams = $injector.get('$stateParams');
-      $scope.applications = applications;
-      $scope.logs = logs;
-      $scope.currentApplication = logs.application;
-      $scope.keyword = $stateParams.keyword;
-      $scope.search = function($event, keyword) {
-        $event.preventDefault();
-        return $state.go('v.log-list', {
-          applicationId: $scope.currentApplication.id,
-          keyword: keyword
-        }, {
-          reload: true
-        });
-      };
-      return $scope.showDetail = function(logId) {
-        return $state.go('v.log-detail', {
-          applicationId: $scope.currentApplication.id,
-          logId: logId
-        }, {
-          reload: true
-        });
-      };
-    }
-  ]).controller('LogController', [
-    '$scope', 'application', 'log', function($scope, application, log) {
-      $scope.application = application;
-      return $scope.log = log;
     }
   ]);
 
@@ -531,6 +494,19 @@
 }).call(this);
 
 (function() {
+  window._ = function(key) {
+    var result;
+    result = window.languageResource[key];
+    if (result != null) {
+      return result;
+    } else {
+      return key;
+    }
+  };
+
+}).call(this);
+
+(function() {
   angular.module('v', ['v.initial', 'v.router', 'v.directive', 'v.validations']);
 
 }).call(this);
@@ -806,90 +782,6 @@
           content: {
             templateUrl: '/views/login.html',
             controller: 'LoginController'
-          }
-        }
-      });
-      $stateProvider.state('v.log-default', {
-        url: '/applications',
-        resolve: {
-          title: function() {
-            return 'Logs - ';
-          },
-          applications: [
-            '$v', function($v) {
-              return $v.api.application.getApplications(0, true).then(function(response) {
-                return response.data;
-              });
-            }
-          ],
-          logs: [
-            '$v', function($v) {
-              return $v.api.log.getLogs().then(function(response) {
-                return response.data;
-              });
-            }
-          ]
-        },
-        views: {
-          content: {
-            templateUrl: '/views/log/list.html',
-            controller: 'LogsController'
-          }
-        }
-      });
-      $stateProvider.state('v.log-list', {
-        url: '/applications/:applicationId/logs?index?keyword',
-        resolve: {
-          title: function() {
-            return 'Logs - ';
-          },
-          applications: [
-            '$v', function($v) {
-              return $v.api.application.getApplications(0, true).then(function(response) {
-                return response.data;
-              });
-            }
-          ],
-          logs: [
-            '$v', '$stateParams', function($v, $stateParams) {
-              return $v.api.log.getLogs($stateParams.applicationId, $stateParams.index, $stateParams.keyword).then(function(response) {
-                return response.data;
-              });
-            }
-          ]
-        },
-        views: {
-          content: {
-            templateUrl: '/views/log/list.html',
-            controller: 'LogsController'
-          }
-        }
-      });
-      $stateProvider.state('v.log-detail', {
-        url: '/applications/:applicationId/logs/:logId',
-        resolve: {
-          title: function() {
-            return 'Log - ';
-          },
-          application: [
-            '$v', '$stateParams', function($v, $stateParams) {
-              return $v.api.application.getApplication($stateParams.applicationId).then(function(response) {
-                return response.data;
-              });
-            }
-          ],
-          log: [
-            '$v', '$stateParams', function($v, $stateParams) {
-              return $v.api.log.getLog($stateParams.applicationId, $stateParams.logId).then(function(response) {
-                return response.data;
-              });
-            }
-          ]
-        },
-        views: {
-          content: {
-            templateUrl: '/views/log/detail.html',
-            controller: 'LogController'
           }
         }
       });

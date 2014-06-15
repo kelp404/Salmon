@@ -13,6 +13,13 @@ module.exports = (grunt) ->
             build:
                 files:
                     'application/frontend/javascript/app.js': ['application/frontend/coffeescript/**/*.coffee']
+            language:
+                expand: yes
+                flatten: yes
+                cwd: 'application/frontend/language/',
+                src: ['*.coffee'],
+                dest: 'application/frontend/javascript/language/',
+                ext: '.js'
 
         concurrent:
             build:
@@ -81,7 +88,12 @@ module.exports = (grunt) ->
                     spawn: no
             coffee:
                 files: ['application/frontend/coffeescript/**/*.coffee']
-                tasks: ['coffee']
+                tasks: ['coffee:build']
+                options:
+                    spawn: no
+            language:
+                files: ['application/frontend/language/**/*.coffee']
+                tasks: ['coffee:language']
                 options:
                     spawn: no
 

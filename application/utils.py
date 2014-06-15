@@ -10,6 +10,14 @@ def is_debug():
     """
     return getattr(settings, "DEBUG", True)
 
+def current_language(request):
+    """
+    Get current language code.
+    :param request: The django request.
+    :return: {string}
+    """
+    return 'zh-tw'
+
 def get_iso_format(date_time):
     """
     :param date_time: {datetime} The datetime.
