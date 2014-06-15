@@ -1,10 +1,10 @@
 (function() {
-  angular.module('v.controllers', ['v.controllers.navigation', 'v.controllers.index', 'v.controllers.login', 'v.controllers.settings']);
+  angular.module('salmon.controllers', ['salmon.controllers.navigation', 'salmon.controllers.index', 'salmon.controllers.login', 'salmon.controllers.settings']);
 
 }).call(this);
 
 (function() {
-  angular.module('v.controllers.index', []).controller('IndexController', [
+  angular.module('salmon.controllers.index', []).controller('IndexController', [
     '$scope', '$injector', function($scope, $injector) {
       var $state, $v;
       $v = $injector.get('$v');
@@ -20,32 +20,30 @@
 }).call(this);
 
 (function() {
-  angular.module('v.controllers.login', []).controller('LoginController', [
+  angular.module('salmon.controllers.login', []).controller('LoginController', [
     '$scope', '$injector', function($scope, $injector) {
-      var $v;
-      $v = $injector.get('$v');
-      return $scope.url = $v.url;
+      var $salmon;
+      $salmon = $injector.get('$salmon');
+      return $scope.url = $salmon.url;
     }
   ]);
 
 }).call(this);
 
 (function() {
-  angular.module('v.controllers.navigation', []).controller('NavigationController', [
+  angular.module('salmon.controllers.navigation', []).controller('NavigationController', [
     '$scope', '$injector', function($scope, $injector) {
-      var $v;
-      $v = $injector.get('$v');
-      $scope.user = $v.user;
-      return $scope.url = $v.url;
+      var $salmon;
+      $salmon = $injector.get('$salmon');
+      $scope.user = $salmon.user;
+      return $scope.url = $salmon.url;
     }
   ]);
 
 }).call(this);
 
 (function() {
-  var __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
-
-  angular.module('v.controllers.settings', []).controller('SettingsController', [
+  angular.module('salmon.controllers.settings', []).controller('SettingsController', [
     '$scope', '$injector', function($scope, $injector) {
       var $state;
       $state = $injector.get('$state');
@@ -53,14 +51,14 @@
     }
   ]).controller('SettingsMenuController', [
     '$scope', '$injector', function($scope, $injector) {
-      var $v;
-      $v = $injector.get('$v');
-      return $scope.isRoot = $v.user.permission === 1;
+      var $salmon;
+      $salmon = $injector.get('$salmon');
+      return $scope.isRoot = $salmon.user.permission === 1;
     }
   ]).controller('SettingsProfileController', [
     '$scope', '$injector', 'profile', function($scope, $injector, profile) {
-      var $v, $validator;
-      $v = $injector.get('$v');
+      var $salmon, $validator;
+      $salmon = $injector.get('$salmon');
       $validator = $injector.get('$validator');
       return $scope.profile = {
         model: profile,
@@ -68,190 +66,29 @@
           $event.preventDefault();
           return $validator.validate($scope, 'profile.model').success(function() {
             NProgress.start();
-            return $v.api.settings.updateProfile({
+            return $salmon.api.settings.updateProfile({
               name: $scope.profile.model.name
             }).success(function() {
               NProgress.done();
-              return $v.alert.saved();
+              return $salmon.alert.saved();
             });
           });
         }
-      };
-    }
-  ]).controller('SettingsApplicationsController', [
-    '$scope', '$injector', 'applications', function($scope, $injector, applications) {
-      var $state, $stateParams, $v, $validator;
-      $v = $injector.get('$v');
-      $state = $injector.get('$state');
-      $stateParams = $injector.get('$stateParams');
-      $validator = $injector.get('$validator');
-      $scope.applications = applications;
-      return $scope.removeApplication = function(application, $event) {
-        $event.preventDefault();
-        return $v.alert.confirm("Do you want to delete the application " + application.title + "?", function(result) {
-          if (!result) {
-            return;
-          }
-          NProgress.start();
-          return $v.api.application.removeApplication(application.id).success(function() {
-            return $state.go($state.current, $stateParams, {
-              reload: true
-            });
-          });
-        });
-      };
-    }
-  ]).controller('SettingsNewApplicationController', [
-    '$scope', '$injector', function($scope, $injector) {
-      var $state, $v, $validator;
-      $v = $injector.get('$v');
-      $validator = $injector.get('$validator');
-      $state = $injector.get('$state');
-      $scope.mode = 'new';
-      $scope.application = {
-        title: '',
-        description: '',
-        email_notification: true
-      };
-      $scope.modal = {
-        autoShow: true,
-        hide: function() {},
-        hiddenCallback: function() {
-          return $state.go('v.settings-applications', null, {
-            reload: true
-          });
-        }
-      };
-      return $scope.submit = function() {
-        return $validator.validate($scope, 'application').success(function() {
-          NProgress.start();
-          return $v.api.application.addApplication($scope.application).success(function() {
-            return $scope.modal.hide();
-          });
-        });
-      };
-    }
-  ]).controller('SettingsApplicationController', [
-    '$scope', '$injector', 'application', function($scope, $injector, application) {
-      var $state, $timeout, $v, $validator, member, _i, _len, _ref, _ref1;
-      $v = $injector.get('$v');
-      $validator = $injector.get('$validator');
-      $state = $injector.get('$state');
-      $timeout = $injector.get('$timeout');
-      $scope.mode = 'edit';
-      $scope.application = application;
-      _ref = application.members;
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        member = _ref[_i];
-        member.isRoot = (_ref1 = member.id, __indexOf.call(application.root_ids, _ref1) >= 0);
-      }
-      $scope.$watch('application.members', function() {
-        var root_ids, _j, _len1, _ref2;
-        root_ids = [];
-        _ref2 = $scope.application.members;
-        for (_j = 0, _len1 = _ref2.length; _j < _len1; _j++) {
-          member = _ref2[_j];
-          if (member.isRoot) {
-            root_ids.push(member.id);
-          }
-        }
-        return $scope.application.root_ids = root_ids;
-      }, true);
-      $scope.modal = {
-        autoShow: true,
-        hide: function() {},
-        hiddenCallback: function() {
-          return $state.go('v.settings-applications', null, {
-            reload: true
-          });
-        }
-      };
-      $scope.submit = function() {
-        return $validator.validate($scope, 'application').success(function() {
-          var data;
-          NProgress.start();
-          data = {
-            id: $scope.application.id,
-            title: $scope.application.title,
-            description: $scope.application.description,
-            member_ids: $scope.application.member_ids,
-            root_ids: $scope.application.root_ids,
-            email_notification: $scope.application.email_notification
-          };
-          return $v.api.application.updateApplication(data).success(function() {
-            return $scope.modal.hide();
-          });
-        });
-      };
-      $scope.memberService = {
-        email: '',
-        invite: function($event) {
-          $event.preventDefault();
-          return $validator.validate($scope, 'memberService').success(function() {
-            NProgress.start();
-            return $v.api.application.addApplicationMember($scope.application.id, $scope.memberService.email).success(function(member) {
-              NProgress.done();
-              $scope.application.member_ids.push(member.id);
-              $scope.application.members.push(member);
-              $scope.memberService.email = '';
-              return $timeout(function() {
-                return $validator.reset($scope, 'memberService');
-              });
-            });
-          });
-        },
-        removeMember: function($event, memberId) {
-          var index, _j, _k, _l, _ref2, _ref3, _ref4;
-          $event.preventDefault();
-          for (index = _j = 0, _ref2 = $scope.application.members.length; 0 <= _ref2 ? _j < _ref2 : _j > _ref2; index = 0 <= _ref2 ? ++_j : --_j) {
-            if (!($scope.application.members[index].id === memberId)) {
-              continue;
-            }
-            $scope.application.members.splice(index, 1);
-            break;
-          }
-          for (index = _k = 0, _ref3 = $scope.application.member_ids.length; 0 <= _ref3 ? _k < _ref3 : _k > _ref3; index = 0 <= _ref3 ? ++_k : --_k) {
-            if (!($scope.application.member_ids[index] === memberId)) {
-              continue;
-            }
-            $scope.application.member_ids.splice(index, 1);
-            break;
-          }
-          for (index = _l = 0, _ref4 = $scope.application.root_ids.length; 0 <= _ref4 ? _l < _ref4 : _l > _ref4; index = 0 <= _ref4 ? ++_l : --_l) {
-            if (!($scope.application.root_ids[index] === memberId)) {
-              continue;
-            }
-            $scope.application.root_ids.splice(index, 1);
-            break;
-          }
-        }
-      };
-      return $scope.updateAppKey = function() {
-        var data;
-        NProgress.start();
-        data = {
-          id: $scope.application.id,
-          app_key: true
-        };
-        return $v.api.application.updateApplication(data).success(function(application) {
-          $scope.application.app_key = application.app_key;
-          return NProgress.done();
-        });
       };
     }
   ]).controller('SettingsUsersController', [
     '$scope', '$injector', 'users', function($scope, $injector, users) {
-      var $state, $stateParams, $v, $validator;
-      $v = $injector.get('$v');
+      var $salmon, $state, $stateParams, $validator;
+      $salmon = $injector.get('$salmon');
       $state = $injector.get('$state');
       $stateParams = $injector.get('$stateParams');
       $validator = $injector.get('$validator');
       $scope.users = users;
-      $scope.currentUser = $v.user;
-      $scope.isRoot = $v.user.permission === 1;
+      $scope.currentUser = $salmon.user;
+      $scope.isRoot = $salmon.user.permission === 1;
       return $scope.removeUser = function(user, $event) {
         $event.preventDefault();
-        return $v.alert.confirm("Do you want to delete the user " + user.name + "<" + user.email + ">?", function(result) {
+        return $salmon.alert.confirm("Do you want to delete the user " + user.name + "<" + user.email + ">?", function(result) {
           if (!result) {
             return;
           }
@@ -266,8 +103,8 @@
     }
   ]).controller('SettingsNewUserController', [
     '$scope', '$injector', function($scope, $injector) {
-      var $state, $v, $validator;
-      $v = $injector.get('$v');
+      var $salmon, $state, $validator;
+      $salmon = $injector.get('$salmon');
       $validator = $injector.get('$validator');
       $state = $injector.get('$state');
       $scope.mode = 'new';
@@ -286,7 +123,7 @@
       return $scope.submit = function() {
         return $validator.validate($scope, 'user').success(function() {
           NProgress.start();
-          return $v.api.user.inviteUser($scope.user.email).success(function() {
+          return $salmon.api.user.inviteUser($scope.user.email).success(function() {
             return $scope.modal.hide();
           });
         });
@@ -294,8 +131,8 @@
     }
   ]).controller('SettingsUserController', [
     '$scope', '$injector', 'user', function($scope, $injector, user) {
-      var $state, $v, $validator;
-      $v = $injector.get('$v');
+      var $salmon, $state, $validator;
+      $salmon = $injector.get('$salmon');
       $validator = $injector.get('$validator');
       $state = $injector.get('$state');
       $scope.mode = 'edit';
@@ -312,7 +149,7 @@
       return $scope.submit = function() {
         return $validator.validate($scope, 'user').success(function() {
           NProgress.start();
-          return $v.api.user.updateUser($scope.user).success(function() {
+          return $salmon.api.user.updateUser($scope.user).success(function() {
             return $scope.modal.hide();
           });
         });
@@ -323,14 +160,23 @@
 }).call(this);
 
 (function() {
-  angular.module('v.directive', []).directive('vFocus', function() {
+  angular.module('salmon.directive', []).directive('salmonLang', function() {
+    return {
+      restrict: 'A',
+      link: function(scope, element, attrs) {
+        return attrs.$observe('salmonLang', function(value) {
+          return $(element).text(_(value));
+        });
+      }
+    };
+  }).directive('salmonFocus', function() {
     return {
       restrict: 'A',
       link: function(scope, element) {
         return $(element).select();
       }
     };
-  }).directive('vEnter', function() {
+  }).directive('salmonEnter', function() {
     return {
 
       /*
@@ -351,11 +197,11 @@
         });
       }
     };
-  }).directive('vModal', function() {
+  }).directive('salmonModal', function() {
     return {
 
       /*
-      v-modal="scope.modal"
+      salmon-modal="scope.modal"
       scope.modal:
           autoShow: {bool} If this modal should pop as automatic, it should be yes.
           hide: -> {function} After link, it is a function for hidden the modal.
@@ -363,7 +209,7 @@
        */
       restrict: 'A',
       scope: {
-        modal: '=vModal'
+        modal: '=salmonModal'
       },
       link: function(scope, element) {
         scope.modal.hide = function() {
@@ -392,18 +238,18 @@
         }
       }
     };
-  }).directive('vConfirm', [
+  }).directive('salmonConfirm', [
     '$injector', function($injector) {
 
       /*
-      v-confirm="$rootScope.$confirmModal"
+      salmon-confirm="$rootScope.$confirmModal"
        */
       var $timeout;
       $timeout = $injector.get('$timeout');
       return {
         restrict: 'A',
         scope: {
-          modal: '=vConfirm'
+          modal: '=salmonConfirm'
         },
         replace: true,
         templateUrl: '/views/modal/confirm.html',
@@ -437,11 +283,11 @@
         }
       };
     }
-  ]).directive('vPager', function() {
+  ]).directive('salmonPager', function() {
     return {
       restrict: 'A',
       scope: {
-        pageList: '=vPager',
+        pageList: '=salmonPager',
         urlTemplate: '@pagerUrlTemplate'
       },
       replace: true,
@@ -476,16 +322,7 @@
 }).call(this);
 
 (function() {
-  angular.module('v.initial', []).config(function() {
-    $.extend($.easing, {
-      easeOutExpo: function(x, t, b, c, d) {
-        if (t === d) {
-          return b + c;
-        } else {
-          return c * (-Math.pow(2, -10 * t / d) + 1) + b;
-        }
-      }
-    });
+  angular.module('salmon.initial', []).config(function() {
     return NProgress.configure({
       showSpinner: false
     });
@@ -507,12 +344,12 @@
 }).call(this);
 
 (function() {
-  angular.module('v', ['v.initial', 'v.router', 'v.directive', 'v.validations']);
+  angular.module('salmon', ['salmon.initial', 'salmon.router', 'salmon.directive', 'salmon.validations']);
 
 }).call(this);
 
 (function() {
-  angular.module('v.provider', []).provider('$v', function() {
+  angular.module('salmon.provider', []).provider('$salmon', function() {
     var $http, $injector, $rootScope, _ref;
     $injector = null;
     $http = null;
@@ -585,34 +422,6 @@
           };
         })(this)
       },
-      log: {
-        getLogs: (function(_this) {
-          return function(applicationId, index, keyword) {
-            if (applicationId == null) {
-              applicationId = 0;
-            }
-            if (index == null) {
-              index = 0;
-            }
-            return _this.http({
-              method: 'get',
-              url: "/applications/" + applicationId + "/logs",
-              params: {
-                index: index,
-                keyword: keyword
-              }
-            });
-          };
-        })(this),
-        getLog: (function(_this) {
-          return function(applicationId, logId) {
-            return _this.http({
-              method: 'get',
-              url: "/applications/" + applicationId + "/logs/" + logId
-            });
-          };
-        })(this)
-      },
       user: {
         getUsers: (function(_this) {
           return function(index) {
@@ -664,77 +473,6 @@
             });
           };
         })(this)
-      },
-      application: {
-        getApplications: (function(_this) {
-          return function(index, all) {
-            if (index == null) {
-              index = 0;
-            }
-            if (all == null) {
-              all = false;
-            }
-            return _this.http({
-              method: 'get',
-              url: '/settings/applications',
-              params: {
-                index: index,
-                all: all
-              }
-            });
-          };
-        })(this),
-        addApplicationMember: (function(_this) {
-          return function(applicationId, email) {
-            return _this.http({
-              method: 'post',
-              url: "/settings/applications/" + applicationId + "/members",
-              data: {
-                email: email
-              }
-            });
-          };
-        })(this),
-        addApplication: (function(_this) {
-          return function(application) {
-
-            /*
-            @param application:
-                title: {string}
-                description: {string}
-             */
-            return _this.http({
-              method: 'post',
-              url: '/settings/applications',
-              data: application
-            });
-          };
-        })(this),
-        getApplication: (function(_this) {
-          return function(applicationId) {
-            return _this.http({
-              method: 'get',
-              url: "/settings/applications/" + applicationId
-            });
-          };
-        })(this),
-        updateApplication: (function(_this) {
-          return function(application) {
-            return _this.http({
-              method: 'put',
-              url: "/settings/applications/" + application.id,
-              data: application
-            });
-          };
-        })(this),
-        removeApplication: (function(_this) {
-          return function(applicationId) {
-            return _this.http({
-              method: 'delete',
-              url: "/settings/applications/" + applicationId
-            });
-          };
-        })(this)
       }
     };
     this.$get = [
@@ -755,37 +493,29 @@
 }).call(this);
 
 (function() {
-  angular.module('v.router', ['v.provider', 'v.controllers', 'ui.router']).config([
+  angular.module('salmon.router', ['salmon.provider', 'salmon.controllers', 'ui.router']).config([
     '$stateProvider', '$urlRouterProvider', '$locationProvider', function($stateProvider, $urlRouterProvider, $locationProvider) {
       $locationProvider.html5Mode(true);
       $urlRouterProvider.otherwise('/');
-      $stateProvider.state('v', {
+      $stateProvider.state('salmon', {
         url: '',
         templateUrl: '/views/shared/layout.html'
       });
-      $stateProvider.state('v.index', {
+      $stateProvider.state('salmon.index', {
         url: '/',
-        views: {
-          content: {
-            controller: 'IndexController'
-          }
-        }
+        controller: 'IndexController'
       });
-      $stateProvider.state('v.login', {
+      $stateProvider.state('salmon.login', {
         url: '/login',
         resolve: {
           title: function() {
             return 'Login - ';
           }
         },
-        views: {
-          content: {
-            templateUrl: '/views/login.html',
-            controller: 'LoginController'
-          }
-        }
+        templateUrl: '/views/login.html',
+        controller: 'LoginController'
       });
-      $stateProvider.state('v.settings', {
+      $stateProvider.state('salmon.settings', {
         url: '/settings',
         resolve: {
           title: function() {
@@ -794,105 +524,41 @@
         },
         controller: 'SettingsController'
       });
-      $stateProvider.state('v.settings-profile', {
+      $stateProvider.state('salmon.settings-profile', {
         url: '/settings/profile',
         resolve: {
           title: function() {
             return 'Profile - Settings - ';
           },
           profile: [
-            '$v', function($v) {
-              return $v.api.settings.getProfile().then(function(response) {
+            '$salmon', function($salmon) {
+              return $salmon.api.settings.getProfile().then(function(response) {
                 return response.data;
               });
             }
           ]
         },
-        views: {
-          content: {
-            templateUrl: '/views/settings/profile.html',
-            controller: 'SettingsProfileController'
-          }
-        }
+        templateUrl: '/views/settings/profile.html',
+        controller: 'SettingsProfileController'
       });
-      $stateProvider.state('v.settings-applications', {
-        url: '/settings/applications?index',
-        resolve: {
-          title: function() {
-            return 'Applications - Settings - ';
-          },
-          applications: [
-            '$v', '$stateParams', function($v, $stateParams) {
-              return $v.api.application.getApplications($stateParams.index).then(function(response) {
-                return response.data;
-              });
-            }
-          ]
-        },
-        views: {
-          menu: {
-            templateUrl: '/views/settings/menu.html',
-            controller: 'SettingsMenuController'
-          },
-          content: {
-            templateUrl: '/views/settings/applications.html',
-            controller: 'SettingsApplicationsController'
-          }
-        }
-      });
-      $stateProvider.state('v.settings-applications.new', {
-        url: '/new',
-        resolve: {
-          title: function() {
-            return 'Applications - Settings - ';
-          }
-        },
-        templateUrl: '/views/modal/application.html',
-        controller: 'SettingsNewApplicationController'
-      });
-      $stateProvider.state('v.settings-applications.detail', {
-        url: '/:applicationId',
-        resolve: {
-          title: function() {
-            return 'Application - Settings - ';
-          },
-          application: [
-            '$v', '$stateParams', function($v, $stateParams) {
-              return $v.api.application.getApplication($stateParams.applicationId).then(function(response) {
-                return response.data;
-              });
-            }
-          ]
-        },
-        templateUrl: '/views/modal/application.html',
-        controller: 'SettingsApplicationController'
-      });
-      $stateProvider.state('v.settings-users', {
+      $stateProvider.state('salmon.settings-users', {
         url: '/settings/users?index',
         resolve: {
           title: function() {
             return 'Users - Settings - ';
           },
           users: [
-            '$v', '$stateParams', function($v, $stateParams) {
-              return $v.api.user.getUsers($stateParams.index).then(function(response) {
+            '$salmon', '$stateParams', function($salmon, $stateParams) {
+              return $salmon.api.user.getUsers($stateParams.index).then(function(response) {
                 return response.data;
               });
             }
           ]
         },
-        views: {
-          menu: {
-            templateUrl: '/views/settings/menu.html',
-            controller: 'SettingsMenuController'
-          },
-          content: {
-            templateUrl: '/views/settings/users.html',
-            controller: 'SettingsUsersController'
-          }
-        }
+        templateUrl: '/views/settings/users.html',
+        controller: 'SettingsUsersController'
       });
-      $stateProvider.state('v.settings-users.new', {
+      $stateProvider.state('salmon.settings-users.new', {
         url: '/new',
         resolve: {
           title: function() {
@@ -902,15 +568,15 @@
         templateUrl: '/views/modal/user.html',
         controller: 'SettingsNewUserController'
       });
-      return $stateProvider.state('v.settings-users.detail', {
+      return $stateProvider.state('salmon.settings-users.detail', {
         url: '/:userId',
         resolve: {
           title: function() {
             return 'Users - Settings - ';
           },
           user: [
-            '$v', '$stateParams', function($v, $stateParams) {
-              return $v.api.user.getUser($stateParams.userId).then(function(response) {
+            '$salmon', '$stateParams', function($salmon, $stateParams) {
+              return $salmon.api.user.getUser($stateParams.userId).then(function(response) {
                 return response.data;
               });
             }
@@ -922,11 +588,11 @@
     }
   ]).run([
     '$injector', function($injector) {
-      var $rootScope, $state, $stateParams, $v, changeStartEvent, fromStateName, toStateName;
+      var $rootScope, $salmon, $state, $stateParams, changeStartEvent, fromStateName, toStateName;
       $rootScope = $injector.get('$rootScope');
       $stateParams = $injector.get('$stateParams');
       $state = $injector.get('$state');
-      $v = $injector.get('$v');
+      $salmon = $injector.get('$salmon');
       $rootScope.$stateParams = $stateParams;
       $rootScope.$state = $state;
       changeStartEvent = null;
@@ -940,14 +606,14 @@
       });
       $rootScope.$on('$stateChangeSuccess', function(event, toState) {
         NProgress.done();
-        if (!$v.user.isLogin && toState.name !== 'v.login') {
-          return $state.go('v.login');
+        if (!$salmon.user.isLogin && toState.name !== 'salmon.login') {
+          return $state.go('salmon.login');
         }
       });
       $rootScope.$on('$stateChangeError', function(event, toState) {
         NProgress.done();
-        if (!$v.user.isLogin && toState.name !== 'v.login') {
-          return $state.go('v.login');
+        if (!$salmon.user.isLogin && toState.name !== 'salmon.login') {
+          return $state.go('salmon.login');
         }
       });
       return $rootScope.$on('$viewContentLoaded', function() {
@@ -970,7 +636,7 @@
 }).call(this);
 
 (function() {
-  angular.module('v.validations', ['validator']).config([
+  angular.module('salmon.validations', ['validator']).config([
     '$validatorProvider', function($validatorProvider) {
       $validatorProvider.register('required', {
         validator: /.+/,

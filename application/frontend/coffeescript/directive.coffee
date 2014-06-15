@@ -1,17 +1,26 @@
-angular.module 'v.directive', []
+angular.module 'salmon.directive', []
 
 # ---------------------------------------------------------
-# v-focus
+# salmon-lang
 # ---------------------------------------------------------
-.directive 'vFocus', ->
+.directive 'salmonLang', ->
+    restrict: 'A'
+    link: (scope, element, attrs) ->
+        attrs.$observe 'salmonLang', (value) ->
+            $(element).text _(value)
+
+# ---------------------------------------------------------
+# salmon-focus
+# ---------------------------------------------------------
+.directive 'salmonFocus', ->
     restrict: 'A'
     link: (scope, element) ->
         $(element).select()
 
 # ----------------------------------------
-# v-enter
+# salmon-enter
 # ----------------------------------------
-.directive 'vEnter', ->
+.directive 'salmonEnter', ->
     ###
     Run the AngularJS expression when pressed `Enter`.
     ###
@@ -25,11 +34,11 @@ angular.module 'v.directive', []
                     $event: e
 
 # ---------------------------------------------------------
-# v-modal
+# salmon-modal
 # ---------------------------------------------------------
-.directive 'vModal', ->
+.directive 'salmonModal', ->
     ###
-    v-modal="scope.modal"
+    salmon-modal="scope.modal"
     scope.modal:
         autoShow: {bool} If this modal should pop as automatic, it should be yes.
         hide: -> {function} After link, it is a function for hidden the modal.
@@ -37,7 +46,7 @@ angular.module 'v.directive', []
     ###
     restrict: 'A'
     scope:
-        modal: '=vModal'
+        modal: '=salmonModal'
     link: (scope, element) ->
         # setup hide function for scope.modal
         scope.modal.hide = ->
@@ -60,17 +69,17 @@ angular.module 'v.directive', []
             $(element).modal 'show'
 
 # ---------------------------------------------------------
-# v-confirm
+# salmon-confirm
 # ---------------------------------------------------------
-.directive 'vConfirm', ['$injector', ($injector) ->
+.directive 'salmonConfirm', ['$injector', ($injector) ->
     ###
-    v-confirm="$rootScope.$confirmModal"
+    salmon-confirm="$rootScope.$confirmModal"
     ###
     $timeout = $injector.get '$timeout'
 
     restrict: 'A'
     scope:
-        modal: '=vConfirm'
+        modal: '=salmonConfirm'
     replace: yes
     templateUrl: '/views/modal/confirm.html'
     link: (scope, element) ->
@@ -92,12 +101,12 @@ angular.module 'v.directive', []
 ]
 
 # ---------------------------------------------------------
-# v-pager
+# salmon-pager
 # ---------------------------------------------------------
-.directive 'vPager', ->
+.directive 'salmonPager', ->
     restrict: 'A'
     scope:
-        pageList: '=vPager'
+        pageList: '=salmonPager'
         urlTemplate: '@pagerUrlTemplate'
     replace: yes
     template:

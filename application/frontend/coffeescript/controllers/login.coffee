@@ -1,6 +1,6 @@
-angular.module 'v.controllers.login', []
+angular.module 'salmon.controllers.login', []
 
 .controller 'LoginController', ['$scope', '$injector', ($scope, $injector) ->
-    $v = $injector.get '$v'
-    $scope.url = $v.url
+    $salmon = $injector.get '$salmon'
+    $scope.url = $salmon.url
 ]

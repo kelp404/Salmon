@@ -7,7 +7,7 @@
 
 /* line 8, ../sass/site/nprogress.sass */
 #nprogress .bar {
-  background: #444444;
+  background: #dd4444;
   position: fixed;
   z-index: 10000;
   top: 0;
@@ -24,7 +24,7 @@
   right: 0px;
   width: 100px;
   height: 100%;
-  box-shadow: 0 0 10px #444444, 0 0 5px #444444;
+  box-shadow: 0 0 10px #dd4444, 0 0 5px #dd4444;
   opacity: 1;
   -webkit-transform: rotate(3deg) translate(0px, -4px);
   -moz-transform: rotate(3deg) translate(0px, -4px);
@@ -48,8 +48,8 @@
   width: 14px;
   height: 14px;
   border: solid 2px transparent;
-  border-top-color: #444444;
-  border-left-color: #444444;
+  border-top-color: #dd4444;
+  border-left-color: #dd4444;
   border-radius: 10px;
   -webkit-animation: nprogress-spinner 400ms linear infinite;
   -moz-animation: nprogress-spinner 400ms linear infinite;

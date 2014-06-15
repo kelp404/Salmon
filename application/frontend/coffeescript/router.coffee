@@ -1,6 +1,6 @@
-angular.module 'v.router', [
-    'v.provider'
-    'v.controllers'
+angular.module 'salmon.router', [
+    'salmon.provider'
+    'salmon.controllers'
     'ui.router'
 ]
 
@@ -15,35 +15,31 @@ angular.module 'v.router', [
     # ---------------------------------------------------------
     #
     # ---------------------------------------------------------
-    $stateProvider.state 'v',
+    $stateProvider.state 'salmon',
         url: ''
         templateUrl: '/views/shared/layout.html'
 
     # ---------------------------------------------------------
     # /
     # ---------------------------------------------------------
-    $stateProvider.state 'v.index',
+    $stateProvider.state 'salmon.index',
         url: '/'
-        views:
-            content:
-                controller: 'IndexController'
+        controller: 'IndexController'
 
     # ---------------------------------------------------------
     # /login
     # ---------------------------------------------------------
-    $stateProvider.state 'v.login',
+    $stateProvider.state 'salmon.login',
         url: '/login'
         resolve:
             title: -> 'Login - '
-        views:
-            content:
-                templateUrl: '/views/login.html'
-                controller: 'LoginController'
+        templateUrl: '/views/login.html'
+        controller: 'LoginController'
 
     # ---------------------------------------------------------
     # /settings
     # ---------------------------------------------------------
-    $stateProvider.state 'v.settings',
+    $stateProvider.state 'salmon.settings',
         url: '/settings'
         resolve:
             title: -> 'Settings - '
@@ -51,82 +47,34 @@ angular.module 'v.router', [
     # ---------------------------------------------------------
     # /settings/profile
     # ---------------------------------------------------------
-    $stateProvider.state 'v.settings-profile',
+    $stateProvider.state 'salmon.settings-profile',
         url: '/settings/profile'
         resolve:
             title: -> 'Profile - Settings - '
-            profile: ['$v', ($v) ->
-                $v.api.settings.getProfile().then (response) ->
+            profile: ['$salmon', ($salmon) ->
+                $salmon.api.settings.getProfile().then (response) ->
                     response.data
             ]
-        views:
-            content:
-                templateUrl: '/views/settings/profile.html'
-                controller: 'SettingsProfileController'
-
-    # ---------------------------------------------------------
-    # /settings/applications
-    # ---------------------------------------------------------
-    $stateProvider.state 'v.settings-applications',
-        url: '/settings/applications?index'
-        resolve:
-            title: -> 'Applications - Settings - '
-            applications: ['$v', '$stateParams', ($v, $stateParams) ->
-                $v.api.application.getApplications($stateParams.index).then (response) ->
-                    response.data
-            ]
-        views:
-            menu:
-                templateUrl: '/views/settings/menu.html'
-                controller: 'SettingsMenuController'
-            content:
-                templateUrl: '/views/settings/applications.html'
-                controller: 'SettingsApplicationsController'
-    # ---------------------------------------------------------
-    # /settings/applications/new
-    # ---------------------------------------------------------
-    $stateProvider.state 'v.settings-applications.new',
-        url: '/new'
-        resolve:
-            title: -> 'Applications - Settings - '
-        templateUrl: '/views/modal/application.html'
-        controller: 'SettingsNewApplicationController'
-    # ---------------------------------------------------------
-    # /settings/applications/{applicationId}
-    # ---------------------------------------------------------
-    $stateProvider.state 'v.settings-applications.detail',
-        url: '/:applicationId'
-        resolve:
-            title: -> 'Application - Settings - '
-            application: ['$v', '$stateParams', ($v, $stateParams) ->
-                $v.api.application.getApplication($stateParams.applicationId).then (response) ->
-                    response.data
-            ]
-        templateUrl: '/views/modal/application.html'
-        controller: 'SettingsApplicationController'
+        templateUrl: '/views/settings/profile.html'
+        controller: 'SettingsProfileController'
 
     # ---------------------------------------------------------
     # /settings/users
     # ---------------------------------------------------------
-    $stateProvider.state 'v.settings-users',
+    $stateProvider.state 'salmon.settings-users',
         url: '/settings/users?index'
         resolve:
             title: -> 'Users - Settings - '
-            users: ['$v', '$stateParams', ($v, $stateParams) ->
-                $v.api.user.getUsers($stateParams.index).then (response) ->
+            users: ['$salmon', '$stateParams', ($salmon, $stateParams) ->
+                $salmon.api.user.getUsers($stateParams.index).then (response) ->
                     response.data
             ]
-        views:
-            menu:
-                templateUrl: '/views/settings/menu.html'
-                controller: 'SettingsMenuController'
-            content:
-                templateUrl: '/views/settings/users.html'
-                controller: 'SettingsUsersController'
+        templateUrl: '/views/settings/users.html'
+        controller: 'SettingsUsersController'
     # ---------------------------------------------------------
     # /settings/users/new
     # ---------------------------------------------------------
-    $stateProvider.state 'v.settings-users.new',
+    $stateProvider.state 'salmon.settings-users.new',
         url: '/new'
         resolve:
             title: -> 'Users - Settings - '
@@ -135,12 +83,12 @@ angular.module 'v.router', [
     # ---------------------------------------------------------
     # /settings/users/{userId}
     # ---------------------------------------------------------
-    $stateProvider.state 'v.settings-users.detail',
+    $stateProvider.state 'salmon.settings-users.detail',
         url: '/:userId'
         resolve:
             title: -> 'Users - Settings - '
-            user: ['$v', '$stateParams', ($v, $stateParams) ->
-                $v.api.user.getUser($stateParams.userId).then (response) ->
+            user: ['$salmon', '$stateParams', ($salmon, $stateParams) ->
+                $salmon.api.user.getUser($stateParams.userId).then (response) ->
                     response.data
             ]
         templateUrl: '/views/modal/user.html'
@@ -151,7 +99,7 @@ angular.module 'v.router', [
     $rootScope = $injector.get '$rootScope'
     $stateParams = $injector.get '$stateParams'
     $state = $injector.get '$state'
-    $v = $injector.get '$v'
+    $salmon = $injector.get '$salmon'
 
     $rootScope.$stateParams = $stateParams
     $rootScope.$state = $state
@@ -167,12 +115,12 @@ angular.module 'v.router', [
         NProgress.start()
     $rootScope.$on '$stateChangeSuccess', (event, toState) ->
         NProgress.done()
-        if not $v.user.isLogin and toState.name isnt 'v.login'
-            $state.go 'v.login'
+        if not $salmon.user.isLogin and toState.name isnt 'salmon.login'
+            $state.go 'salmon.login'
     $rootScope.$on '$stateChangeError', (event, toState) ->
         NProgress.done()
-        if not $v.user.isLogin and toState.name isnt 'v.login'
-            $state.go 'v.login'
+        if not $salmon.user.isLogin and toState.name isnt 'salmon.login'
+            $state.go 'salmon.login'
     $rootScope.$on '$viewContentLoaded', ->
         return if changeStartEvent?.type is 'popstate'
         if fromStateName? and toStateName?

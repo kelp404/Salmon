@@ -44,10 +44,7 @@
     </div>
 </nav>
 
-<div class="container-fluid v-content">
-    <div ui-view="menu"></div>
-    <div ui-view="content"></div>
-</div>
+<div ui-view class="container-fluid salmon-content"></div>
 
 <div class="container-fluid">
     <div class="row">
@@ -58,4 +55,4 @@
         </div>
     </div>
 </div>
-<div v-confirm="$confirmModal"></div>
+<div salmon-confirm="$confirmModal"></div>

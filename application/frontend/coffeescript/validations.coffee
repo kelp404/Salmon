@@ -1,4 +1,4 @@
-angular.module 'v.validations', [
+angular.module 'salmon.validations', [
     'validator'
 ]
 
@@ -10,6 +10,9 @@ angular.module 'v.validations', [
         validator: /.+/
         error: 'This field is required.'
 
+    # ----------------------------------------
+    # email
+    # ----------------------------------------
     $validatorProvider.register 'email',
         validator: /(^$)|(^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$)/
         error: 'This field should be the email.'

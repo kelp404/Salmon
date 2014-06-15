@@ -1,4 +1,4 @@
-angular.module 'v.controllers.index', []
+angular.module 'salmon.controllers.index', []
 
 .controller 'IndexController', ['$scope', '$injector', ($scope, $injector) ->
     $v = $injector.get '$v'

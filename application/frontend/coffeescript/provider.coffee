@@ -1,6 +1,6 @@
-angular.module 'v.provider', []
+angular.module 'salmon.provider', []
 
-.provider '$v', ->
+.provider '$salmon', ->
     $injector = null
     $http = null
     $rootScope = null
@@ -61,18 +61,6 @@ angular.module 'v.provider', []
                     method: 'put'
                     url: '/settings/profile'
                     data: profile
-        log:
-            getLogs: (applicationId=0, index=0, keyword) =>
-                @http
-                    method: 'get'
-                    url: "/applications/#{applicationId}/logs"
-                    params:
-                        index: index
-                        keyword: keyword
-            getLog: (applicationId, logId) =>
-                @http
-                    method: 'get'
-                    url: "/applications/#{applicationId}/logs/#{logId}"
         user:
             getUsers: (index=0) =>
                 @http
@@ -99,43 +87,6 @@ angular.module 'v.provider', []
                     method: 'put'
                     url: "/settings/users/#{user.id}"
                     data: user
-        application:
-            getApplications: (index=0, all=no) =>
-                @http
-                    method: 'get'
-                    url: '/settings/applications'
-                    params:
-                        index: index
-                        all: all
-            addApplicationMember: (applicationId, email) =>
-                @http
-                    method: 'post'
-                    url: "/settings/applications/#{applicationId}/members"
-                    data:
-                        email: email
-            addApplication: (application) =>
-                ###
-                @param application:
-                    title: {string}
-                    description: {string}
-                ###
-                @http
-                    method: 'post'
-                    url: '/settings/applications'
-                    data: application
-            getApplication: (applicationId) =>
-                @http
-                    method: 'get'
-                    url: "/settings/applications/#{applicationId}"
-            updateApplication: (application) =>
-                @http
-                    method: 'put'
-                    url: "/settings/applications/#{application.id}"
-                    data: application
-            removeApplication: (applicationId) =>
-                @http
-                    method: 'delete'
-                    url: "/settings/applications/#{applicationId}"
 
     # -----------------------------------------------------
     # $get

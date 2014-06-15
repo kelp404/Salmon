@@ -1,6 +1,6 @@
-angular.module 'v', [
-    'v.initial'
-    'v.router'
-    'v.directive'
-    'v.validations'
+angular.module 'salmon', [
+    'salmon.initial'
+    'salmon.router'
+    'salmon.directive'
+    'salmon.validations'
 ]

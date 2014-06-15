@@ -1,6 +1,6 @@
-angular.module 'v.controllers', [
-    'v.controllers.navigation'
-    'v.controllers.index'
-    'v.controllers.login'
-    'v.controllers.settings'
+angular.module 'salmon.controllers', [
+    'salmon.controllers.navigation'
+    'salmon.controllers.index'
+    'salmon.controllers.login'
+    'salmon.controllers.settings'
 ]
