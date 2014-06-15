@@ -1,7 +1,7 @@
 (function() {
   window.languageResource = {
-    'Salmon': '鮭魚',
-    'Salmon issue tracker': '鮭魚'
+    'Salmon': 'Salmon',
+    'Salmon issue tracker': 'Salmon 項目追蹤'
   };
 
 }).call(this);

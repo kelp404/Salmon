@@ -60,9 +60,6 @@ angular.module 'v.router', [
                     response.data
             ]
         views:
-            menu:
-                templateUrl: '/views/settings/menu.html'
-                controller: 'SettingsMenuController'
             content:
                 templateUrl: '/views/settings/profile.html'
                 controller: 'SettingsProfileController'

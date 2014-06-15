@@ -10,7 +10,7 @@
       $v = $injector.get('$v');
       $state = $injector.get('$state');
       if ($v.user.isLogin) {
-        return $state.go('v.settings-applications');
+        return $state.go('v.settings-profile');
       } else {
         return $stae.go('v.login');
       }
@@ -809,10 +809,6 @@
           ]
         },
         views: {
-          menu: {
-            templateUrl: '/views/settings/menu.html',
-            controller: 'SettingsMenuController'
-          },
           content: {
             templateUrl: '/views/settings/profile.html',
             controller: 'SettingsProfileController'
