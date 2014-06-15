@@ -1,0 +1,4 @@
+salmon
+======
+
+Salmon issue tracker.
