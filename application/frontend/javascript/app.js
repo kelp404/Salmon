@@ -48,13 +48,7 @@
     '$scope', '$injector', function($scope, $injector) {
       var $state;
       $state = $injector.get('$state');
-      return $state.go('v.settings-applications');
-    }
-  ]).controller('SettingsMenuController', [
-    '$scope', '$injector', function($scope, $injector) {
-      var $salmon;
-      $salmon = $injector.get('$salmon');
-      return $scope.isRoot = $salmon.user.permission === 1;
+      return $state.go('salmon.settings-projects');
     }
   ]).controller('SettingsProfileController', [
     '$scope', '$injector', 'profile', function($scope, $injector, profile) {
@@ -94,7 +88,7 @@
             return;
           }
           NProgress.start();
-          return $v.api.user.removeUser(user.id).success(function() {
+          return $salmon.api.user.removeUser(user.id).success(function() {
             return $state.go($state.current, $stateParams, {
               reload: true
             });
@@ -116,7 +110,7 @@
         autoShow: true,
         hide: function() {},
         hiddenCallback: function() {
-          return $state.go('v.settings-users', null, {
+          return $state.go('salmon.settings-users', null, {
             reload: true
           });
         }
@@ -142,7 +136,7 @@
         autoShow: true,
         hide: function() {},
         hiddenCallback: function() {
-          return $state.go('v.settings-users', null, {
+          return $state.go('salmon.settings-users', null, {
             reload: true
           });
         }

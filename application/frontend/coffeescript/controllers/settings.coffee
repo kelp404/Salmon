@@ -2,13 +2,7 @@ angular.module 'salmon.controllers.settings', []
 
 .controller 'SettingsController', ['$scope', '$injector', ($scope, $injector) ->
     $state = $injector.get '$state'
-    $state.go 'v.settings-applications'
-]
-
-.controller 'SettingsMenuController', ['$scope', '$injector', ($scope, $injector) ->
-    $salmon = $injector.get '$salmon'
-
-    $scope.isRoot = $salmon.user.permission is 1
+    $state.go 'salmon.settings-projects'
 ]
 
 .controller 'SettingsProfileController', ['$scope', '$injector', 'profile', ($scope, $injector, profile) ->
@@ -42,7 +36,7 @@ angular.module 'salmon.controllers.settings', []
         $salmon.alert.confirm "Do you want to delete the user #{user.name}<#{user.email}>?", (result) ->
             return if not result
             NProgress.start()
-            $v.api.user.removeUser(user.id).success ->
+            $salmon.api.user.removeUser(user.id).success ->
                 $state.go $state.current, $stateParams, reload: yes
 ]
 .controller 'SettingsNewUserController', ['$scope', '$injector', ($scope, $injector) ->
@@ -57,7 +51,7 @@ angular.module 'salmon.controllers.settings', []
         autoShow: yes
         hide: ->
         hiddenCallback: ->
-            $state.go 'v.settings-users', null, reload: yes
+            $state.go 'salmon.settings-users', null, reload: yes
     $scope.submit = ->
         $validator.validate($scope, 'user').success ->
             NProgress.start()
@@ -75,7 +69,7 @@ angular.module 'salmon.controllers.settings', []
         autoShow: yes
         hide: ->
         hiddenCallback: ->
-            $state.go 'v.settings-users', null, reload: yes
+            $state.go 'salmon.settings-users', null, reload: yes
     $scope.submit = ->
         $validator.validate($scope, 'user').success ->
             NProgress.start()

@@ -32,9 +32,15 @@
                 <li ng-if="user.isLogin" ng-class="{active: $state.current.name.indexOf('v.settings')>=0}" class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">Settings <b class="caret"></b></a>
                     <ul class="dropdown-menu">
-                        <li><a href="/settings/profile">Profile</a></li>
-                        <li><a href="/settings/projects">Projects</a></li>
-                        <li ng-if="isRoot"><a href="/settings/users">Users</a></li>
+                        <li ng-class="{active: $state.current.name.indexOf('salmon.settings-profile')==0}">
+                            <a href="/settings/profile">Profile</a>
+                        </li>
+                        <li>
+                            <a href="/settings/projects">Projects</a>
+                        </li>
+                        <li ng-if="isRoot" ng-class="{active: $state.current.name.indexOf('salmon.settings-users')==0}">
+                            <a href="/settings/users">Users</a>
+                        </li>
                     </ul>
                 </li>
                 <li ng-if="!user.isLogin"><a href="{{url.login}}" target="_self">Sign in</a></li>

@@ -17,6 +17,10 @@ class UserForm(Form):
     )
     permission = IntegerField(
         default=UserPermission.normal,
-        validators=[validators.any_of([UserPermission.root, UserPermission.normal])],
+        validators=[validators.any_of([
+            UserPermission.root,
+            UserPermission.normal,
+            UserPermission.advanced,
+        ])],
         filters=[utils.int_filter],
     )
