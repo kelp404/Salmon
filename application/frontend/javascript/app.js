@@ -36,7 +36,8 @@
       var $salmon;
       $salmon = $injector.get('$salmon');
       $scope.user = $salmon.user;
-      return $scope.url = $salmon.url;
+      $scope.url = $salmon.url;
+      return $scope.isRoot = $salmon.user.permission === 1;
     }
   ]);
 

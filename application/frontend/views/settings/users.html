@@ -1,6 +1,5 @@
-<div v-settings-menu="{current: 'users'}"></div>
 <div class="row">
-    <div class="col-sm-offset-2 col-sm-10">
+    <div class="col-sm-12">
         <div class="panel panel-default" id="profile">
             <div class="panel-heading">
                 <span>Users</span>
@@ -32,7 +31,7 @@
                         </tr>
                     </tbody>
                 </table>
-                <ul v-pager="users" pager-url-template="/settings/users?index=#{index}"
+                <ul salmon-pager="users" pager-url-template="/settings/users?index=#{index}"
                         class="pull-right" style="margin-top: 0"></ul>
             </div>
         </div>

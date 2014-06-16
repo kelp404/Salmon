@@ -34,7 +34,7 @@
                     <ul class="dropdown-menu">
                         <li><a href="/settings/profile">Profile</a></li>
                         <li><a href="/settings/projects">Projects</a></li>
-                        <li><a href="/settings/users">Users</a></li>
+                        <li ng-if="isRoot"><a href="/settings/users">Users</a></li>
                     </ul>
                 </li>
                 <li ng-if="!user.isLogin"><a href="{{url.login}}" target="_self">Sign in</a></li>
