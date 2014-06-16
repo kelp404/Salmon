@@ -11,6 +11,7 @@ window.languageResource =
     'Email': '信箱'
     'Save': '儲存'
     'New user': '新增使用者'
+    'New project': '新增專案'
     'Create time': '建立時間'
     'Invite the user': '新增使用者'
     'Update the user': '更新使用者'
@@ -18,3 +19,5 @@ window.languageResource =
     'root': '管理者'
     'normal': '一般使用者'
     'advanced': '進階使用者'
+    'empty': '沒有資料'
+    'Title': '標題'

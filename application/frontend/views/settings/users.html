@@ -1,6 +1,6 @@
 <div class="row">
     <div class="col-sm-12">
-        <div class="panel panel-default" id="profile">
+        <div class="panel panel-default">
             <div class="panel-heading">
                 <span salmon-lang>Users</span>
                 <a href="/settings/users/new" class="pull-right btn btn-success btn-xs"><i class="fa fa-plus fa-fw"></i> <span salmon-lang>New user</span></a>
@@ -17,7 +17,7 @@
                     </thead>
                     <tbody>
                         <tr ng-if="users.items.length == 0">
-                            <td colspan="4" class="text-center">empty</td>
+                            <td salmon-lang colspan="4" class="text-center">empty</td>
                         </tr>
                         <tr ng-repeat="user in users.items">
                             <td>{{ user.name }}</td>

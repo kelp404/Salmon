@@ -22,6 +22,19 @@ angular.module 'salmon.controllers.settings', []
                     $salmon.alert.saved()
 ]
 
+.controller 'SettingsProjectsController', ['$scope', '$injector', 'projects', ($scope, $injector, projects) ->
+    $salmon = $injector.get '$salmon'
+
+    $scope.projects = projects
+    $scope.removeProject = (project, $event) ->
+        $event.preventDefault()
+        $salmon.alert.confirm "Do you want to delete the project #{project.title}?", (result) ->
+            return if not result
+            NProgress.start()
+            $salmon.api.project.removeProject(project.id).success ->
+                $state.go $state.current, $stateParams, reload: yes
+]
+
 .controller 'SettingsUsersController', ['$scope', '$injector', 'users', ($scope, $injector, users) ->
     $salmon = $injector.get '$salmon'
     $state = $injector.get '$state'

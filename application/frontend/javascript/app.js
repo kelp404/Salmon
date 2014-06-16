@@ -71,6 +71,26 @@
         }
       };
     }
+  ]).controller('SettingsProjectsController', [
+    '$scope', '$injector', 'projects', function($scope, $injector, projects) {
+      var $salmon;
+      $salmon = $injector.get('$salmon');
+      $scope.projects = projects;
+      return $scope.removeProject = function(project, $event) {
+        $event.preventDefault();
+        return $salmon.alert.confirm("Do you want to delete the project " + project.title + "?", function(result) {
+          if (!result) {
+            return;
+          }
+          NProgress.start();
+          return $salmon.api.project.removeProject(project.id).success(function() {
+            return $state.go($state.current, $stateParams, {
+              reload: true
+            });
+          });
+        });
+      };
+    }
   ]).controller('SettingsUsersController', [
     '$scope', '$injector', 'users', function($scope, $injector, users) {
       var $salmon, $state, $stateParams, $validator;
@@ -421,6 +441,27 @@
           };
         })(this)
       },
+      project: {
+        getProjects: (function(_this) {
+          return function(index) {
+            if (index == null) {
+              index = 0;
+            }
+            return _this.http({
+              method: 'get',
+              url: '/settings/projects'
+            });
+          };
+        })(this),
+        removeProject: (function(_this) {
+          return function(projectId) {
+            return _this.http({
+              method: 'delete',
+              url: "/settings/projects/" + projectId
+            });
+          };
+        })(this)
+      },
       user: {
         getUsers: (function(_this) {
           return function(index) {
@@ -539,6 +580,23 @@
         },
         templateUrl: '/views/settings/profile.html',
         controller: 'SettingsProfileController'
+      });
+      $stateProvider.state('salmon.settings-projects', {
+        url: '/settings/projects?index',
+        resolve: {
+          title: function() {
+            return 'Projects - Settings - ';
+          },
+          projects: [
+            '$salmon', '$stateParams', function($salmon, $stateParams) {
+              return $salmon.api.project.getProjects($stateParams.index).then(function(response) {
+                return response.data;
+              });
+            }
+          ]
+        },
+        templateUrl: '/views/settings/projects.html',
+        controller: 'SettingsProjectsController'
       });
       $stateProvider.state('salmon.settings-users', {
         url: '/settings/users?index',

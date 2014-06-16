@@ -44,6 +44,7 @@ angular.module 'salmon.router', [
         resolve:
             title: -> 'Settings - '
         controller: 'SettingsController'
+
     # ---------------------------------------------------------
     # /settings/profile
     # ---------------------------------------------------------
@@ -57,6 +58,20 @@ angular.module 'salmon.router', [
             ]
         templateUrl: '/views/settings/profile.html'
         controller: 'SettingsProfileController'
+
+    # ---------------------------------------------------------
+    # /settings/projects
+    # ---------------------------------------------------------
+    $stateProvider.state 'salmon.settings-projects',
+        url: '/settings/projects?index'
+        resolve:
+            title: -> 'Projects - Settings - '
+            projects: ['$salmon', '$stateParams', ($salmon, $stateParams) ->
+                $salmon.api.project.getProjects($stateParams.index).then (response) ->
+                    response.data
+            ]
+        templateUrl: '/views/settings/projects.html'
+        controller: 'SettingsProjectsController'
 
     # ---------------------------------------------------------
     # /settings/users

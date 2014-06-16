@@ -61,6 +61,15 @@ angular.module 'salmon.provider', []
                     method: 'put'
                     url: '/settings/profile'
                     data: profile
+        project:
+            getProjects: (index=0) =>
+                @http
+                    method: 'get'
+                    url: '/settings/projects'
+            removeProject: (projectId) =>
+                @http
+                    method: 'delete'
+                    url: "/settings/projects/#{projectId}"
         user:
             getUsers: (index=0) =>
                 @http

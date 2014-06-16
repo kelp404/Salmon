@@ -4,6 +4,7 @@ from application.dispatches import api_dispatch, dispatch
 from application.views.base import base_view
 from application.views.settings import *
 from application.views.users import *
+from application.views.project import *
 
 
 # error handlers
@@ -27,21 +28,24 @@ urlpatterns = patterns('',
         GET=get_profile,
         PUT=update_profile,
     )),
-    # /settings/applications
-    url(r'^settings/applications$', api_dispatch(
-
+    # /settings/projects
+    url(r'^settings/projects$', api_dispatch(
+        GET=get_projects,
+        POST=add_project,
     )),
-    # /settings/applications/new
-    url(r'^settings/applications/new$', dispatch(
+    # /settings/projects/new
+    url(r'^settings/projects/new$', dispatch(
         GET=base_view,
     )),
-    # /settings/applications/<application_id>
-    url(r'^settings/applications/(?P<application_id>[0-9]{1,32})$', api_dispatch(
-
+    # /settings/projects/<project_id>
+    url(r'^settings/projects/(?P<project_id>[0-9]{1,32})$', api_dispatch(
+        GET=get_project,
+        PUT=update_project,
+        DELETE=delete_project,
     )),
-    # /settings/applications/<application_id>/members
-    url(r'^settings/applications/(?P<application_id>[0-9]{1,32})/members$', api_dispatch(
-
+    # /settings/projects/<project_id>/members
+    url(r'^settings/projects/(?P<project_id>[0-9]{1,32})/members$', api_dispatch(
+        POST=add_project_member,
     )),
     # /settings/users
     url(r'^settings/users$', api_dispatch(
