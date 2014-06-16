@@ -34,6 +34,25 @@ angular.module 'salmon.controllers.settings', []
             $salmon.api.project.removeProject(project.id).success ->
                 $state.go $state.current, $stateParams, reload: yes
 ]
+.controller 'SettingsNewProjectController', ['$scope', '$injector', ($scope, $injector) ->
+    $salmon = $injector.get '$salmon'
+    $validator = $injector.get '$validator'
+    $state = $injector.get '$state'
+
+    $scope.mode = 'new'
+    $scope.project =
+        title: ''
+    $scope.modal =
+        autoShow: yes
+        hide: ->
+        hiddenCallback: ->
+            $state.go 'salmon.settings-projects', null, reload: yes
+    $scope.submit = ->
+        $validator.validate($scope, 'project').success ->
+            NProgress.start()
+            $salmon.api.project.addProject($scope.project).success ->
+                $scope.modal.hide()
+]
 
 .controller 'SettingsUsersController', ['$scope', '$injector', 'users', ($scope, $injector, users) ->
     $salmon = $injector.get '$salmon'

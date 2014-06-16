@@ -66,6 +66,11 @@ angular.module 'salmon.provider', []
                 @http
                     method: 'get'
                     url: '/settings/projects'
+            addProject: (project) =>
+                @http
+                    method: 'post'
+                    url: "/settings/projects"
+                    data: project
             removeProject: (projectId) =>
                 @http
                     method: 'delete'

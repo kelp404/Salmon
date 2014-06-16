@@ -72,6 +72,15 @@ angular.module 'salmon.router', [
             ]
         templateUrl: '/views/settings/projects.html'
         controller: 'SettingsProjectsController'
+    # ---------------------------------------------------------
+    # /settings/projects/new
+    # ---------------------------------------------------------
+    $stateProvider.state 'salmon.settings-projects.new',
+        url: '/new'
+        resolve:
+            title: -> 'Projects - Settings - '
+        templateUrl: '/views/modal/project.html'
+        controller: 'SettingsNewProjectController'
 
     # ---------------------------------------------------------
     # /settings/users

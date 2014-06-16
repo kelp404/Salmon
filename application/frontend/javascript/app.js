@@ -91,6 +91,34 @@
         });
       };
     }
+  ]).controller('SettingsNewProjectController', [
+    '$scope', '$injector', function($scope, $injector) {
+      var $salmon, $state, $validator;
+      $salmon = $injector.get('$salmon');
+      $validator = $injector.get('$validator');
+      $state = $injector.get('$state');
+      $scope.mode = 'new';
+      $scope.project = {
+        title: ''
+      };
+      $scope.modal = {
+        autoShow: true,
+        hide: function() {},
+        hiddenCallback: function() {
+          return $state.go('salmon.settings-projects', null, {
+            reload: true
+          });
+        }
+      };
+      return $scope.submit = function() {
+        return $validator.validate($scope, 'project').success(function() {
+          NProgress.start();
+          return $salmon.api.project.addProject($scope.project).success(function() {
+            return $scope.modal.hide();
+          });
+        });
+      };
+    }
   ]).controller('SettingsUsersController', [
     '$scope', '$injector', 'users', function($scope, $injector, users) {
       var $salmon, $state, $stateParams, $validator;
@@ -453,6 +481,15 @@
             });
           };
         })(this),
+        addProject: (function(_this) {
+          return function(project) {
+            return _this.http({
+              method: 'post',
+              url: "/settings/projects",
+              data: project
+            });
+          };
+        })(this),
         removeProject: (function(_this) {
           return function(projectId) {
             return _this.http({
@@ -597,6 +634,16 @@
         },
         templateUrl: '/views/settings/projects.html',
         controller: 'SettingsProjectsController'
+      });
+      $stateProvider.state('salmon.settings-projects.new', {
+        url: '/new',
+        resolve: {
+          title: function() {
+            return 'Projects - Settings - ';
+          }
+        },
+        templateUrl: '/views/modal/project.html',
+        controller: 'SettingsNewProjectController'
       });
       $stateProvider.state('salmon.settings-users', {
         url: '/settings/users?index',
