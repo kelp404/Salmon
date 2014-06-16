@@ -24,7 +24,10 @@
     'normal': '一般使用者',
     'advanced': '進階使用者',
     'empty': '沒有資料',
-    'Title': '標題'
+    'Title': '標題',
+    'Floors': '樓層',
+    'Lowest floor': '最低樓層',
+    'Highest floor': '最高樓層'
   };
 
 }).call(this);

@@ -29,15 +29,26 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-sm-2 control-label"></label>
-                    <div class="col-sm-10">
-                        <label class="checkbox-inline">
-                            <input ng-model="application.email_notification" type="checkbox"/>
-                            Send email notification
-                        </label><br/>
-                        <small>Send the email to members when the new log has been added.</small>
+                    <label salmon-lang class="col-sm-2 control-label" for="input-floors">Floors</label>
+                    <div class="col-sm-3">
+                        <select ng-model="project.lowest"
+                                ng-options="option.value as option.label for option in options.lowest"
+                                id="input-floors" class="form-control">
+                        </select>
+                        <small salmon-lang class="text-muted">Lowest floor</small>
+                    </div>
+                    <div class="col-sm-1">
+                        <p class="form-control-static">～</p>
+                    </div>
+                    <div class="col-sm-3">
+                        <select ng-model="project.highest"
+                                ng-options="option.value as option.label for option in options.highest"
+                                class="form-control">
+                        </select>
+                        <small salmon-lang class="text-muted">Highest floor</small>
                     </div>
                 </div>
+
                 <div ng-show="mode=='edit'" class="form-group">
                     <label class="col-sm-2 control-label">Members</label>
                     <div class="col-sm-10">
@@ -76,7 +87,7 @@
             </div>
             <div class="modal-footer">
                 <button ng-click="submit()"
-                        type="submit" class="btn btn-default"><i class="fa fa-check fa-fw"></i> Save</button>
+                        type="submit" class="btn btn-default"><i class="fa fa-check fa-fw"></i> <span salmon-lang>Save</span></button>
             </div>
         </form>
     </div>

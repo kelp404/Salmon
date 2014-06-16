@@ -25,6 +25,15 @@ angular.module 'salmon.controllers.settings', []
 .controller 'SettingsProjectsController', ['$scope', '$injector', 'projects', ($scope, $injector, projects) ->
     $salmon = $injector.get '$salmon'
 
+    $scope.options =
+        lowest: do ->
+            for index in [-10..10] by 1 when index isnt 0
+                value: index
+                label: if index < 0 then "B#{index * -1}" else index
+        highest: do ->
+            for index in [1..50] by 1
+                value: index
+                label: "#{index}"
     $scope.projects = projects
     $scope.removeProject = (project, $event) ->
         $event.preventDefault()
@@ -41,7 +50,9 @@ angular.module 'salmon.controllers.settings', []
 
     $scope.mode = 'new'
     $scope.project =
-        title: ''
+        lowest: 1
+        highest: 12
+        room_options: []
     $scope.modal =
         autoShow: yes
         hide: ->

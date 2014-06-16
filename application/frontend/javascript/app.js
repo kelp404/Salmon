@@ -75,6 +75,32 @@
     '$scope', '$injector', 'projects', function($scope, $injector, projects) {
       var $salmon;
       $salmon = $injector.get('$salmon');
+      $scope.options = {
+        lowest: (function() {
+          var index, _i, _results;
+          _results = [];
+          for (index = _i = -10; _i <= 10; index = _i += 1) {
+            if (index !== 0) {
+              _results.push({
+                value: index,
+                label: index < 0 ? "B" + (index * -1) : index
+              });
+            }
+          }
+          return _results;
+        })(),
+        highest: (function() {
+          var index, _i, _results;
+          _results = [];
+          for (index = _i = 1; _i <= 50; index = _i += 1) {
+            _results.push({
+              value: index,
+              label: "" + index
+            });
+          }
+          return _results;
+        })()
+      };
       $scope.projects = projects;
       return $scope.removeProject = function(project, $event) {
         $event.preventDefault();
@@ -99,7 +125,9 @@
       $state = $injector.get('$state');
       $scope.mode = 'new';
       $scope.project = {
-        title: ''
+        lowest: 1,
+        highest: 12,
+        room_options: []
       };
       $scope.modal = {
         autoShow: true,
