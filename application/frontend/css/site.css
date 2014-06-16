@@ -2,7 +2,7 @@
 /* font-family */
 @font-face {
   font-family: CustomFont;
-  src: local("ヒラギノ角ゴ ProN"), local("Ubuntu"), local("微軟正黑體"), local("Microsoft JhengHei");
+  src: local("ヒラギノ角ゴ ProN"), local("Ubuntu"), local("微軟正黑體");
 }
 
 /* Latin */
