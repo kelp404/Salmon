@@ -1,4 +1,4 @@
-#salmon
+#Salmon
 
 
 Salmon issue tracker.
