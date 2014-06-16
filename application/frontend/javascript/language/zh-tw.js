@@ -27,7 +27,8 @@
     'Title': '標題',
     'Floors': '樓層',
     'Lowest floor': '最低樓層',
-    'Highest floor': '最高樓層'
+    'Highest floor': '最高樓層',
+    'Rooms': '戶名'
   };
 
 }).call(this);

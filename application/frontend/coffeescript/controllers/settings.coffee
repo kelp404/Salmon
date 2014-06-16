@@ -47,6 +47,7 @@ angular.module 'salmon.controllers.settings', []
     $salmon = $injector.get '$salmon'
     $validator = $injector.get '$validator'
     $state = $injector.get '$state'
+    $timeout = $injector.get '$timeout'
 
     $scope.mode = 'new'
     $scope.project =
@@ -58,9 +59,25 @@ angular.module 'salmon.controllers.settings', []
         hide: ->
         hiddenCallback: ->
             $state.go 'salmon.settings-projects', null, reload: yes
+    $scope.room =
+        roomTitle: ''
+        addRoomOption: ->
+            $validator.validate($scope, 'room').success ->
+                $scope.project.room_options.push $scope.room.roomTitle
+                $scope.room.roomTitle = ''
+                $timeout -> $validator.reset($scope, 'room')
+
     $scope.submit = ->
         $validator.validate($scope, 'project').success ->
             NProgress.start()
+            $scope.project.floor_options = do ->
+                result = []
+                for index in [$scope.project.lowest..$scope.project.highest] by 1 when index isnt 0
+                    if index < 0
+                        result.push "B#{index * -1}"
+                    else
+                        result.push "#{index}"
+                result
             $salmon.api.project.addProject($scope.project).success ->
                 $scope.modal.hide()
 ]

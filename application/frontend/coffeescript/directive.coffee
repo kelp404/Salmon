@@ -33,7 +33,7 @@ angular.module 'salmon.directive', []
             return if e.which isnt 13
             e.preventDefault()
             scope.$apply ->
-                scope.$eval attrs.vEnter,
+                scope.$eval attrs.salmonEnter,
                     $event: e
 
 # ---------------------------------------------------------

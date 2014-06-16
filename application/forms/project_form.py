@@ -15,6 +15,5 @@ class ProjectForm(Form):
     )
     member_ids = ArrayField()
     root_ids = ArrayField()
-    email_notification = BooleanField(
-        default=True
-    )
+    floor_options = ArrayField()
+    room_options = ArrayField()

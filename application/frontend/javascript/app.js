@@ -119,10 +119,11 @@
     }
   ]).controller('SettingsNewProjectController', [
     '$scope', '$injector', function($scope, $injector) {
-      var $salmon, $state, $validator;
+      var $salmon, $state, $timeout, $validator;
       $salmon = $injector.get('$salmon');
       $validator = $injector.get('$validator');
       $state = $injector.get('$state');
+      $timeout = $injector.get('$timeout');
       $scope.mode = 'new';
       $scope.project = {
         lowest: 1,
@@ -138,9 +139,35 @@
           });
         }
       };
+      $scope.room = {
+        roomTitle: '',
+        addRoomOption: function() {
+          return $validator.validate($scope, 'room').success(function() {
+            $scope.project.room_options.push($scope.room.roomTitle);
+            $scope.room.roomTitle = '';
+            return $timeout(function() {
+              return $validator.reset($scope, 'room');
+            });
+          });
+        }
+      };
       return $scope.submit = function() {
         return $validator.validate($scope, 'project').success(function() {
           NProgress.start();
+          $scope.project.floor_options = (function() {
+            var index, result, _i, _ref, _ref1;
+            result = [];
+            for (index = _i = _ref = $scope.project.lowest, _ref1 = $scope.project.highest; _i <= _ref1; index = _i += 1) {
+              if (index !== 0) {
+                if (index < 0) {
+                  result.push("B" + (index * -1));
+                } else {
+                  result.push("" + index);
+                }
+              }
+            }
+            return result;
+          })();
           return $salmon.api.project.addProject($scope.project).success(function() {
             return $scope.modal.hide();
           });
@@ -265,7 +292,7 @@
           }
           e.preventDefault();
           return scope.$apply(function() {
-            return scope.$eval(attrs.vEnter, {
+            return scope.$eval(attrs.salmonEnter, {
               $event: e
             });
           });
