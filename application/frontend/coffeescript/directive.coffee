@@ -7,7 +7,10 @@ angular.module 'salmon.directive', []
     restrict: 'A'
     link: (scope, element, attrs) ->
         attrs.$observe 'salmonLang', (value) ->
-            $(element).text _(value)
+            if value
+                $(element).text _(value)
+            else
+                $(element).text _($(element).text())
 
 # ---------------------------------------------------------
 # salmon-focus

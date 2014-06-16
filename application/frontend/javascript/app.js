@@ -160,7 +160,11 @@
       restrict: 'A',
       link: function(scope, element, attrs) {
         return attrs.$observe('salmonLang', function(value) {
-          return $(element).text(_(value));
+          if (value) {
+            return $(element).text(_(value));
+          } else {
+            return $(element).text(_($(element).text()));
+          }
         });
       }
     };
