@@ -30,21 +30,25 @@
                     <a href="/applications">Issues</a>
                 </li>
                 <li ng-if="user.isLogin" ng-class="{active: $state.current.name.indexOf('v.settings')>=0}" class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Settings <b class="caret"></b></a>
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span salmon-lang="Settings">Settings</span> <b class="caret"></b></a>
                     <ul class="dropdown-menu">
                         <li ng-class="{active: $state.current.name.indexOf('salmon.settings-profile')==0}">
-                            <a href="/settings/profile">Profile</a>
+                            <a salmon-lang="Profile" href="/settings/profile">Profile</a>
                         </li>
                         <li>
-                            <a href="/settings/projects">Projects</a>
+                            <a salmon-lang="Projects" href="/settings/projects">Projects</a>
                         </li>
                         <li ng-if="isRoot" ng-class="{active: $state.current.name.indexOf('salmon.settings-users')==0}">
-                            <a href="/settings/users">Users</a>
+                            <a salmon-lang="Users" href="/settings/users">Users</a>
                         </li>
                     </ul>
                 </li>
-                <li ng-if="!user.isLogin"><a href="{{url.login}}" target="_self">Sign in</a></li>
-                <li ng-if="user.isLogin"><a href="{{url.logout}}" target="_self">Sign out</a></li>
+                <li ng-if="!user.isLogin">
+                    <a href="{{url.login}}" salmon-lang="Sign in" target="_self">Sign in</a>
+                </li>
+                <li ng-if="user.isLogin">
+                    <a href="{{url.logout}}" salmon-lang="Sign out" target="_self">Sign out</a>
+                </li>
             </ul>
         </div>
     </div>
