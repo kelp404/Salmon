@@ -605,7 +605,7 @@
         url: '/settings/profile',
         resolve: {
           title: function() {
-            return 'Profile - Settings - ';
+            return "" + (_('Profile')) + " - " + (_('Settings')) + " - ";
           },
           profile: [
             '$salmon', function($salmon) {
@@ -622,7 +622,7 @@
         url: '/settings/projects?index',
         resolve: {
           title: function() {
-            return 'Projects - Settings - ';
+            return "" + (_('Projects')) + " - " + (_('Settings')) + " - ";
           },
           projects: [
             '$salmon', '$stateParams', function($salmon, $stateParams) {
@@ -639,7 +639,7 @@
         url: '/new',
         resolve: {
           title: function() {
-            return 'Projects - Settings - ';
+            return "" + (_('Projects')) + " - " + (_('Settings')) + " - ";
           }
         },
         templateUrl: '/views/modal/project.html',
@@ -649,7 +649,7 @@
         url: '/settings/users?index',
         resolve: {
           title: function() {
-            return 'Users - Settings - ';
+            return "" + (_('Users')) + " - " + (_('Settings')) + " - ";
           },
           users: [
             '$salmon', '$stateParams', function($salmon, $stateParams) {
@@ -666,7 +666,7 @@
         url: '/new',
         resolve: {
           title: function() {
-            return 'Users - Settings - ';
+            return "" + (_('Users')) + " - " + (_('Settings')) + " - ";
           }
         },
         templateUrl: '/views/modal/user.html',
@@ -676,7 +676,7 @@
         url: '/:userId',
         resolve: {
           title: function() {
-            return 'Users - Settings - ';
+            return "" + (_('Users')) + " - " + (_('Settings')) + " - ";
           },
           user: [
             '$salmon', '$stateParams', function($salmon, $stateParams) {

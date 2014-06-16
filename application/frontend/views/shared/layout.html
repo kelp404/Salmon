@@ -23,19 +23,19 @@
                         <li><a href="#">One more separated link</a></li>
                     </ul>
                 </li>
-                <li ng-if="user.isLogin" ng-class="{active: $state.current.name.indexOf('v.log')>=0}">
+                <li ng-if="user.isLogin" ng-class="{active: $state.current.name.indexOf('v.log')==0}">
                     <a href="/applications"><i class="fa fa-plus fa-fw"></i> New Issue</a>
                 </li>
-                <li ng-if="user.isLogin" ng-class="{active: $state.current.name.indexOf('v.log')>=0}">
+                <li ng-if="user.isLogin" ng-class="{active: $state.current.name.indexOf('v.log')==0}">
                     <a href="/applications">Issues</a>
                 </li>
-                <li ng-if="user.isLogin" ng-class="{active: $state.current.name.indexOf('v.settings')>=0}" class="dropdown">
+                <li ng-if="user.isLogin" ng-class="{active: $state.current.name.indexOf('v.settings')==0}" class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span salmon-lang>Settings</span> <b class="caret"></b></a>
                     <ul class="dropdown-menu">
                         <li ng-class="{active: $state.current.name.indexOf('salmon.settings-profile')==0}">
                             <a salmon-lang href="/settings/profile">Profile</a>
                         </li>
-                        <li>
+                        <li ng-class="{active: $state.current.name.indexOf('salmon.settings-projects')==0}">
                             <a salmon-lang href="/settings/projects">Projects</a>
                         </li>
                         <li ng-if="isRoot" ng-class="{active: $state.current.name.indexOf('salmon.settings-users')==0}">

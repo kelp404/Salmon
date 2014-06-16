@@ -51,7 +51,7 @@ angular.module 'salmon.router', [
     $stateProvider.state 'salmon.settings-profile',
         url: '/settings/profile'
         resolve:
-            title: -> 'Profile - Settings - '
+            title: -> "#{_ 'Profile'} - #{_ 'Settings'} - "
             profile: ['$salmon', ($salmon) ->
                 $salmon.api.settings.getProfile().then (response) ->
                     response.data
@@ -65,7 +65,7 @@ angular.module 'salmon.router', [
     $stateProvider.state 'salmon.settings-projects',
         url: '/settings/projects?index'
         resolve:
-            title: -> 'Projects - Settings - '
+            title: -> "#{_ 'Projects'} - #{_ 'Settings'} - "
             projects: ['$salmon', '$stateParams', ($salmon, $stateParams) ->
                 $salmon.api.project.getProjects($stateParams.index).then (response) ->
                     response.data
@@ -78,7 +78,7 @@ angular.module 'salmon.router', [
     $stateProvider.state 'salmon.settings-projects.new',
         url: '/new'
         resolve:
-            title: -> 'Projects - Settings - '
+            title: -> "#{_ 'Projects'} - #{_ 'Settings'} - "
         templateUrl: '/views/modal/project.html'
         controller: 'SettingsNewProjectController'
 
@@ -88,7 +88,7 @@ angular.module 'salmon.router', [
     $stateProvider.state 'salmon.settings-users',
         url: '/settings/users?index'
         resolve:
-            title: -> 'Users - Settings - '
+            title: -> "#{_ 'Users'} - #{_ 'Settings'} - "
             users: ['$salmon', '$stateParams', ($salmon, $stateParams) ->
                 $salmon.api.user.getUsers($stateParams.index).then (response) ->
                     response.data
@@ -101,7 +101,7 @@ angular.module 'salmon.router', [
     $stateProvider.state 'salmon.settings-users.new',
         url: '/new'
         resolve:
-            title: -> 'Users - Settings - '
+            title: -> "#{_ 'Users'} - #{_ 'Settings'} - "
         templateUrl: '/views/modal/user.html'
         controller: 'SettingsNewUserController'
     # ---------------------------------------------------------
@@ -110,7 +110,7 @@ angular.module 'salmon.router', [
     $stateProvider.state 'salmon.settings-users.detail',
         url: '/:userId'
         resolve:
-            title: -> 'Users - Settings - '
+            title: -> "#{_ 'Users'} - #{_ 'Settings'} - "
             user: ['$salmon', '$stateParams', ($salmon, $stateParams) ->
                 $salmon.api.user.getUser($stateParams.userId).then (response) ->
                     response.data
