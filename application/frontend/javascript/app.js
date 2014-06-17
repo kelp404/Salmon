@@ -184,7 +184,8 @@
       $scope.users = users;
       $scope.currentUser = $salmon.user;
       $scope.isRoot = $salmon.user.permission === 1;
-      return $scope.removeUser = function(user, $event) {
+      $scope.keyword = $stateParams.keyword;
+      $scope.removeUser = function(user, $event) {
         $event.preventDefault();
         return $salmon.alert.confirm("Do you want to delete the user " + user.name + "<" + user.email + ">?", function(result) {
           if (!result) {
@@ -196,6 +197,14 @@
               reload: true
             });
           });
+        });
+      };
+      return $scope.search = function() {
+        return $state.go('salmon.settings-users', {
+          index: 0,
+          keyword: $scope.keyword
+        }, {
+          reload: true
         });
       };
     }
@@ -556,7 +565,7 @@
       },
       user: {
         getUsers: (function(_this) {
-          return function(index) {
+          return function(index, keyword) {
             if (index == null) {
               index = 0;
             }
@@ -564,7 +573,8 @@
               method: 'get',
               url: '/settings/users',
               params: {
-                index: index
+                index: index,
+                keyword: keyword
               }
             });
           };
@@ -701,14 +711,14 @@
         controller: 'SettingsNewProjectController'
       });
       $stateProvider.state('salmon.settings-users', {
-        url: '/settings/users?index',
+        url: '/settings/users?index?keyword',
         resolve: {
           title: function() {
             return "" + (_('Users')) + " - " + (_('Settings')) + " - ";
           },
           users: [
             '$salmon', '$stateParams', function($salmon, $stateParams) {
-              return $salmon.api.user.getUsers($stateParams.index).then(function(response) {
+              return $salmon.api.user.getUsers($stateParams.index, $stateParams.keyword).then(function(response) {
                 return response.data;
               });
             }

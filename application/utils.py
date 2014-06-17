@@ -1,3 +1,4 @@
+from google.appengine.api import search
 from django.conf import settings
 
 
@@ -17,6 +18,24 @@ def current_language(request):
     :return: {string}
     """
     return 'zh-tw'
+
+def parse_keyword(keyword):
+    """
+    Parse keyword.
+    :param keyword: {string}
+    :return: ({string}, {string})
+    """
+    source = [x for x in keyword.split()]
+    plus = [x for x in source if not x.startswith('-')]
+    minus = [x[1:] for x in source if x.startswith('-')]
+    return plus, minus
+
+def get_index_users():
+    """
+    Get the the text search index of UserModel.
+    :return:
+    """
+    return search.Index(namespace='UserModel', name='default')
 
 def get_iso_format(date_time):
     """

@@ -76,12 +76,13 @@ angular.module 'salmon.provider', []
                     method: 'delete'
                     url: "/settings/projects/#{projectId}"
         user:
-            getUsers: (index=0) =>
+            getUsers: (index=0, keyword) =>
                 @http
                     method: 'get'
                     url: '/settings/users'
                     params:
                         index: index
+                        keyword: keyword
             getUser: (userId) =>
                 @http
                     method: 'get'

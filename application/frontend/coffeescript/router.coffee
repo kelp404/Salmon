@@ -86,11 +86,11 @@ angular.module 'salmon.router', [
     # /settings/users
     # ---------------------------------------------------------
     $stateProvider.state 'salmon.settings-users',
-        url: '/settings/users?index'
+        url: '/settings/users?index?keyword'
         resolve:
             title: -> "#{_ 'Users'} - #{_ 'Settings'} - "
             users: ['$salmon', '$stateParams', ($salmon, $stateParams) ->
-                $salmon.api.user.getUsers($stateParams.index).then (response) ->
+                $salmon.api.user.getUsers($stateParams.index, $stateParams.keyword).then (response) ->
                     response.data
             ]
         templateUrl: '/views/settings/users.html'

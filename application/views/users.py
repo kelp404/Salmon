@@ -1,5 +1,4 @@
 import json
-from django.conf import settings
 from django.http.response import HttpResponse
 from application import utils
 from application.exceptions import Http400, Http404, Http403
@@ -14,10 +13,13 @@ from application.models.datastore.user_model import UserModel, UserPermission
 @authorization(UserPermission.root)
 def get_users(request):
     form = SearchForm(**request.GET.dict())
-    query = UserModel.all().order('create_time')
-    total = query.count()
-    applications = query.fetch(utils.default_page_size, form.index.data * utils.default_page_size)
-    return JsonResponse(PageList(form.index.data, utils.default_page_size, total, applications))
+    if form.keyword.data:
+        users, total = UserModel.search(form.keyword.data, form.index.data, utils.default_page_size)
+    else:
+        query = UserModel.all().order('name')
+        total = query.count()
+        users = query.fetch(utils.default_page_size, form.index.data * utils.default_page_size)
+    return JsonResponse(PageList(form.index.data, utils.default_page_size, total, users))
 
 @authorization(UserPermission.root)
 def invite_user(request):

@@ -28,7 +28,9 @@
     'Floors': '樓層',
     'Lowest floor': '最低樓層',
     'Highest floor': '最高樓層',
-    'Rooms': '戶名'
+    'Rooms': '戶名',
+    'Search': '搜尋',
+    'Add': '加入'
   };
 
 }).call(this);

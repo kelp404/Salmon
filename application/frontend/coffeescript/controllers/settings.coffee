@@ -91,6 +91,7 @@ angular.module 'salmon.controllers.settings', []
     $scope.users = users
     $scope.currentUser = $salmon.user
     $scope.isRoot = $salmon.user.permission is 1
+    $scope.keyword = $stateParams.keyword
     $scope.removeUser = (user, $event) ->
         $event.preventDefault()
         $salmon.alert.confirm "Do you want to delete the user #{user.name}<#{user.email}>?", (result) ->
@@ -98,6 +99,11 @@ angular.module 'salmon.controllers.settings', []
             NProgress.start()
             $salmon.api.user.removeUser(user.id).success ->
                 $state.go $state.current, $stateParams, reload: yes
+    $scope.search = ->
+        $state.go 'salmon.settings-users',
+            index: 0
+            keyword: $scope.keyword
+        , reload: yes
 ]
 .controller 'SettingsNewUserController', ['$scope', '$injector', ($scope, $injector) ->
     $salmon = $injector.get '$salmon'
