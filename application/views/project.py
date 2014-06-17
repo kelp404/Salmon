@@ -96,8 +96,8 @@ def update_project(request, application_id):
     return JsonResponse(project)
 
 @authorization(UserPermission.root, UserPermission.normal)
-def delete_project(request, application_id):
-    project = ProjectModel.get_by_id(long(application_id))
+def delete_project(request, project_id):
+    project = ProjectModel.get_by_id(long(project_id))
     if project is None:
         raise Http404
     if request.user.permission != UserPermission.root and\

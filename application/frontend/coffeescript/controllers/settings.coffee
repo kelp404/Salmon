@@ -24,7 +24,9 @@ angular.module 'salmon.controllers.settings', []
 
 .controller 'SettingsProjectsController', ['$scope', '$injector', 'projects', ($scope, $injector, projects) ->
     $salmon = $injector.get '$salmon'
-
+    $state = $injector.get '$state'
+    $stateParams = $injector.get '$stateParams'
+    
     $scope.options =
         lowest: do ->
             for index in [-10..10] by 1 when index isnt 0

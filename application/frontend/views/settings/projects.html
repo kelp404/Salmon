@@ -10,7 +10,7 @@
                     <thead>
                         <tr>
                             <th salmon-lang>Title</th>
-                            <th>Key</th>
+                            <th salmon-lang>Description</th>
                             <th salmon-lang width="160px">Create time</th>
                             <th width="80px"></th>
                         </tr>
@@ -21,7 +21,7 @@
                         </tr>
                         <tr ng-repeat="project in projects.items">
                             <td>{{ project.title }}</td>
-                            <td>{{ project.app_key }}</td>
+                            <td>{{ project.description }}</td>
                             <td>{{ project.create_time|date:'yyyy-MM-dd HH:mm' }}</td>
                             <td>
                                 <a href="/settings/projects/{{ project.id }}" class="btn btn-default btn-xs"><i class="fa fa-pencil"></i></a>

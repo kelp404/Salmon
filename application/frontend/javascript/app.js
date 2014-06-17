@@ -72,8 +72,10 @@
     }
   ]).controller('SettingsProjectsController', [
     '$scope', '$injector', 'projects', function($scope, $injector, projects) {
-      var $salmon;
+      var $salmon, $state, $stateParams;
       $salmon = $injector.get('$salmon');
+      $state = $injector.get('$state');
+      $stateParams = $injector.get('$stateParams');
       $scope.options = {
         lowest: (function() {
           var index, _i, _results;
