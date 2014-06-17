@@ -63,12 +63,13 @@ angular.module 'salmon.provider', []
                     url: '/settings/profile'
                     data: profile
         project:
-            getProjects: (index=0) =>
+            getProjects: (index=0, all=no) =>
                 @http
                     method: 'get'
                     url: '/settings/projects'
                     params:
                         index: index
+                        all: all
             getProject: (projectId) =>
                 @http
                     method: 'get'

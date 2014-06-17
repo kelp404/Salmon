@@ -1,19 +1,40 @@
 (function() {
-  angular.module('salmon.controllers', ['salmon.controllers.navigation', 'salmon.controllers.index', 'salmon.controllers.login', 'salmon.controllers.settings']);
+  angular.module('salmon.controllers.base', []).controller('BaseController', [
+    '$scope', 'projects', function($scope, projects) {
+      return $scope.allProjects = projects;
+    }
+  ]);
+
+}).call(this);
+
+(function() {
+  angular.module('salmon.controllers', ['salmon.controllers.base', 'salmon.controllers.navigation', 'salmon.controllers.index', 'salmon.controllers.login', 'salmon.controllers.projects', 'salmon.controllers.issues', 'salmon.controllers.settings']);
 
 }).call(this);
 
 (function() {
   angular.module('salmon.controllers.index', []).controller('IndexController', [
     '$scope', '$injector', function($scope, $injector) {
-      var $state, $v;
-      $v = $injector.get('$v');
+      var $salmon, $state;
+      $salmon = $injector.get('$salmon');
       $state = $injector.get('$state');
-      if ($v.user.isLogin) {
-        return $state.go('v.settings-profile');
-      } else {
-        return $stae.go('v.login');
+      if (!$salmon.user.isLogin) {
+        $state.go('salmon.login');
       }
+      if ($scope.allProjects.items.length) {
+        return $state.go('salmon.projects-issues', {
+          projectId: $scope.allProjects.items[0].id
+        });
+      }
+    }
+  ]);
+
+}).call(this);
+
+(function() {
+  angular.module('salmon.controllers.issues', []).controller('IssuesController', [
+    '$scope', '$injector', 'project', function($scope, $injector, project) {
+      return $scope.allProjects.current = project;
     }
   ]);
 
@@ -39,6 +60,11 @@
       return $scope.url = $salmon.url;
     }
   ]);
+
+}).call(this);
+
+(function() {
+  angular.module('salmon.controllers.projects', []);
 
 }).call(this);
 
@@ -625,15 +651,19 @@
       },
       project: {
         getProjects: (function(_this) {
-          return function(index) {
+          return function(index, all) {
             if (index == null) {
               index = 0;
+            }
+            if (all == null) {
+              all = false;
             }
             return _this.http({
               method: 'get',
               url: '/settings/projects',
               params: {
-                index: index
+                index: index,
+                all: all
               }
             });
           };
@@ -762,27 +792,55 @@
       $urlRouterProvider.otherwise('/');
       $stateProvider.state('salmon', {
         url: '',
-        templateUrl: '/views/shared/layout.html'
+        resolve: {
+          projects: [
+            '$salmon', function($salmon) {
+              return $salmon.api.project.getProjects(0, true).then(function(response) {
+                return response.data;
+              });
+            }
+          ]
+        },
+        templateUrl: '/views/shared/layout.html',
+        controller: 'BaseController'
       });
       $stateProvider.state('salmon.index', {
         url: '/',
+        templateUrl: '/views/index.html',
         controller: 'IndexController'
       });
       $stateProvider.state('salmon.login', {
         url: '/login',
         resolve: {
           title: function() {
-            return 'Login - ';
+            return "" + (_('Sign in')) + " - ";
           }
         },
         templateUrl: '/views/login.html',
         controller: 'LoginController'
       });
+      $stateProvider.state('salmon.projects-issues', {
+        url: '/projects/:projectId/issues',
+        resolve: {
+          title: function() {
+            return "" + (_('Issues')) + " - ";
+          },
+          project: [
+            '$salmon', '$stateParams', function($salmon, $stateParams) {
+              return $salmon.api.project.getProject($stateParams.projectId).then(function(response) {
+                return response.data;
+              });
+            }
+          ]
+        },
+        templateUrl: '/views/projects/issues.html',
+        controller: 'IssuesController'
+      });
       $stateProvider.state('salmon.settings', {
         url: '/settings',
         resolve: {
           title: function() {
-            return 'Settings - ';
+            return "" + (_('Settings')) + " - ";
           }
         },
         controller: 'SettingsController'

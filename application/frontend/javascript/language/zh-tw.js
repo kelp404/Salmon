@@ -32,7 +32,9 @@
     'Search': '搜尋',
     'Add': '加入',
     'Members': '成員',
-    'Invite': '邀請'
+    'Invite': '邀請',
+    'There are no projects. You could create a project at': '目前沒有任何專案，請到此頁面建立專案',
+    'go to project list': '前往專案列表'
   };
 
 }).call(this);

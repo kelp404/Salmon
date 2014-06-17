@@ -4,7 +4,8 @@ from application.dispatches import api_dispatch, dispatch
 from application.views.base import base_view
 from application.views.settings import *
 from application.views.users import *
-from application.views.project import *
+from application.views.projects import *
+from application.views.issues import *
 
 
 # error handlers
@@ -18,6 +19,11 @@ urlpatterns = patterns('',
     url(r'^$', dispatch(GET=base_view)),
     url(r'^login$', dispatch(GET=base_view)),
 
+
+    # /projects/<project_id>/issues
+    url(r'^projects/(?P<project_id>[0-9]{1,32})/issues$', api_dispatch(
+        GET=get_issues,
+    )),
 
     # /settings
     url(r'^settings$', dispatch(

@@ -17,13 +17,20 @@ angular.module 'salmon.router', [
     # ---------------------------------------------------------
     $stateProvider.state 'salmon',
         url: ''
+        resolve:
+            projects: ['$salmon', ($salmon) ->
+                $salmon.api.project.getProjects(0, yes).then (response) ->
+                    response.data
+            ]
         templateUrl: '/views/shared/layout.html'
+        controller: 'BaseController'
 
     # ---------------------------------------------------------
     # /
     # ---------------------------------------------------------
     $stateProvider.state 'salmon.index',
         url: '/'
+        templateUrl: '/views/index.html'
         controller: 'IndexController'
 
     # ---------------------------------------------------------
@@ -32,9 +39,23 @@ angular.module 'salmon.router', [
     $stateProvider.state 'salmon.login',
         url: '/login'
         resolve:
-            title: -> 'Login - '
+            title: -> "#{_ 'Sign in'} - "
         templateUrl: '/views/login.html'
         controller: 'LoginController'
+
+    # ---------------------------------------------------------
+    # /projects/{projectId}/issues
+    # ---------------------------------------------------------
+    $stateProvider.state 'salmon.projects-issues',
+        url: '/projects/:projectId/issues'
+        resolve:
+            title: -> "#{_ 'Issues'} - "
+            project: ['$salmon', '$stateParams', ($salmon, $stateParams) ->
+                $salmon.api.project.getProject($stateParams.projectId).then (response) ->
+                    response.data
+            ]
+        templateUrl: '/views/projects/issues.html'
+        controller: 'IssuesController'
 
     # ---------------------------------------------------------
     # /settings
@@ -42,7 +63,7 @@ angular.module 'salmon.router', [
     $stateProvider.state 'salmon.settings',
         url: '/settings'
         resolve:
-            title: -> 'Settings - '
+            title: -> "#{_ 'Settings'} - "
         controller: 'SettingsController'
 
     # ---------------------------------------------------------
