@@ -20,6 +20,7 @@ angular.module 'salmon.provider', []
     # -----------------------------------------------------
     @user = window.user ? {}
     @user.isLogin = @user.id?
+    @user.isRoot = @user.permission is 1
     @url = window.url
 
     @alert =

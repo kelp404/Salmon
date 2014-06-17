@@ -38,7 +38,7 @@
                         <li ng-class="{active: $state.current.name.indexOf('salmon.settings-projects')==0}">
                             <a salmon-lang href="/settings/projects">Projects</a>
                         </li>
-                        <li ng-if="isRoot" ng-class="{active: $state.current.name.indexOf('salmon.settings-users')==0}">
+                        <li ng-if="user.isRoot" ng-class="{active: $state.current.name.indexOf('salmon.settings-users')==0}">
                             <a salmon-lang href="/settings/users">Users</a>
                         </li>
                     </ul>

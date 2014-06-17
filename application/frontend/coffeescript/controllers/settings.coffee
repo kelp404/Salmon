@@ -90,7 +90,6 @@ angular.module 'salmon.controllers.settings', []
 
     $scope.users = users
     $scope.currentUser = $salmon.user
-    $scope.isRoot = $salmon.user.permission is 1
     $scope.keyword = $stateParams.keyword
     $scope.removeUser = (user, $event) ->
         $event.preventDefault()

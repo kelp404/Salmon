@@ -6,7 +6,7 @@
             </div>
             <div class="panel-body">
                 <a href="/settings/users/new" class="pull-right btn btn-success btn-sm"><i class="fa fa-plus fa-fw"></i> <span salmon-lang>New user</span></a>
-                <div class="input-group col-sm-4 form-group">
+                <div class="input-group col-sm-3 form-group">
                     <input ng-model="keyword"
                            validator='/.+/'
                            salmon-focus
@@ -36,7 +36,7 @@
                             <td>{{ user.create_time|date:'yyyy-MM-dd HH:mm' }}</td>
                             <td>
                                 <a href="/settings/users/{{ user.id }}" class="btn btn-default btn-xs"><i class="fa fa-pencil"></i></a>
-                                <a ng-if="isRoot && currentUser.id != user.id" ng-click="removeUser(user, $event)"
+                                <a ng-if="currentUser.isRoot && currentUser.id != user.id" ng-click="removeUser(user, $event)"
                                         href="/settings/users/{{ user.id }}" class="btn btn-danger btn-xs"><i class="fa fa-times"></i></a>
                             </td>
                         </tr>

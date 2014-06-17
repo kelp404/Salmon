@@ -36,8 +36,7 @@
       var $salmon;
       $salmon = $injector.get('$salmon');
       $scope.user = $salmon.user;
-      $scope.url = $salmon.url;
-      return $scope.isRoot = $salmon.user.permission === 1;
+      return $scope.url = $salmon.url;
     }
   ]);
 
@@ -183,7 +182,6 @@
       $validator = $injector.get('$validator');
       $scope.users = users;
       $scope.currentUser = $salmon.user;
-      $scope.isRoot = $salmon.user.permission === 1;
       $scope.keyword = $stateParams.keyword;
       $scope.removeUser = function(user, $event) {
         $event.preventDefault();
@@ -473,6 +471,7 @@
     };
     this.user = (_ref = window.user) != null ? _ref : {};
     this.user.isLogin = this.user.id != null;
+    this.user.isRoot = this.user.permission === 1;
     this.url = window.url;
     this.alert = {
       saved: function(message) {

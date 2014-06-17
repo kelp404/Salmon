@@ -5,5 +5,4 @@ angular.module 'salmon.controllers.navigation', []
 
     $scope.user = $salmon.user
     $scope.url = $salmon.url
-    $scope.isRoot = $salmon.user.permission is 1
 ]
