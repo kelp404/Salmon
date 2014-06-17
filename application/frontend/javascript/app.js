@@ -1,7 +1,10 @@
 (function() {
   angular.module('salmon.controllers.base', []).controller('BaseController', [
     '$scope', 'projects', function($scope, projects) {
-      return $scope.allProjects = projects;
+      $scope.allProjects = projects;
+      if ($scope.allProjects.items) {
+        return $scope.allProjects.current = $scope.allProjects.items[0];
+      }
     }
   ]);
 

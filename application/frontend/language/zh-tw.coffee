@@ -2,6 +2,8 @@ window.languageResource =
     'Salmon': 'Salmon'
     'Salmon issue tracker': 'Salmon 項目追蹤'
     'Sign in': '登入'
+    'Sign In': '登入'
+    'Sign In with Google Account': '使用 Google Account 登入'
     'Sign out': '登出'
     'Settings': '設定'
     'Profile': '帳號'
