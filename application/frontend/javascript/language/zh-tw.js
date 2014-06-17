@@ -30,7 +30,9 @@
     'Highest floor': '最高樓層',
     'Rooms': '戶名',
     'Search': '搜尋',
-    'Add': '加入'
+    'Add': '加入',
+    'Members': '成員',
+    'Invite': '邀請'
   };
 
 }).call(this);

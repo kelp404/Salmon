@@ -30,3 +30,5 @@ window.languageResource =
     'Rooms': '戶名'
     'Search': '搜尋'
     'Add': '加入'
+    'Members': '成員'
+    'Invite': '邀請'

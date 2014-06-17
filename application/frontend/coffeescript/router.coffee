@@ -81,6 +81,19 @@ angular.module 'salmon.router', [
             title: -> "#{_ 'Projects'} - #{_ 'Settings'} - "
         templateUrl: '/views/modal/project.html'
         controller: 'SettingsNewProjectController'
+    # ---------------------------------------------------------
+    # /settings/projects/{projectId}
+    # ---------------------------------------------------------
+    $stateProvider.state 'salmon.settings-projects.detail',
+        url: '/:projectId'
+        resolve:
+            title: -> "#{_ 'Projects'} - #{_ 'Settings'} - "
+            project: ['$salmon', '$stateParams', ($salmon, $stateParams) ->
+                $salmon.api.project.getProject($stateParams.projectId).then (response) ->
+                    response.data
+            ]
+        templateUrl: '/views/modal/project.html'
+        controller: 'SettingsProjectController'
 
     # ---------------------------------------------------------
     # /settings/users

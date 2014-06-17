@@ -43,6 +43,8 @@
 }).call(this);
 
 (function() {
+  var __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
+
   angular.module('salmon.controllers.settings', []).controller('SettingsController', [
     '$scope', '$injector', function($scope, $injector) {
       var $state;
@@ -173,6 +175,93 @@
             return $scope.modal.hide();
           });
         });
+      };
+    }
+  ]).controller('SettingsProjectController', [
+    '$scope', '$injector', 'project', function($scope, $injector, project) {
+      var $salmon, $state, $timeout, $validator, member, _i, _len, _ref, _ref1;
+      $salmon = $injector.get('$salmon');
+      $validator = $injector.get('$validator');
+      $state = $injector.get('$state');
+      $timeout = $injector.get('$timeout');
+      $scope.mode = 'edit';
+      $scope.project = project;
+      _ref = project.members;
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        member = _ref[_i];
+        member.isRoot = (_ref1 = member.id, __indexOf.call(project.root_ids, _ref1) >= 0);
+      }
+      $scope.$watch('project.members', function() {
+        var root_ids, _j, _len1, _ref2;
+        root_ids = [];
+        _ref2 = $scope.project.members;
+        for (_j = 0, _len1 = _ref2.length; _j < _len1; _j++) {
+          member = _ref2[_j];
+          if (member.isRoot) {
+            root_ids.push(member.id);
+          }
+        }
+        return $scope.project.root_ids = root_ids;
+      }, true);
+      $scope.modal = {
+        autoShow: true,
+        hide: function() {},
+        hiddenCallback: function() {
+          return $state.go('salmon.settings-projects', null, {
+            reload: true
+          });
+        }
+      };
+      $scope.submit = function() {
+        return $validator.validate($scope, 'project').success(function() {
+          NProgress.start();
+          return $salmon.api.project.updateProject($scope.project).success(function() {
+            return $scope.modal.hide();
+          });
+        });
+      };
+      return $scope.memberService = {
+        email: '',
+        invite: function($event) {
+          $event.preventDefault();
+          return $validator.validate($scope, 'memberService').success(function() {
+            NProgress.start();
+            return $salmon.api.project.addProjectMember($scope.project.id, $scope.memberService.email).success(function(member) {
+              NProgress.done();
+              $scope.project.member_ids.push(member.id);
+              $scope.project.members.push(member);
+              $scope.memberService.email = '';
+              return $timeout(function() {
+                return $validator.reset($scope, 'memberService');
+              });
+            });
+          });
+        },
+        removeMember: function($event, memberId) {
+          var index, _j, _k, _l, _ref2, _ref3, _ref4;
+          $event.preventDefault();
+          for (index = _j = 0, _ref2 = $scope.project.members.length; 0 <= _ref2 ? _j < _ref2 : _j > _ref2; index = 0 <= _ref2 ? ++_j : --_j) {
+            if (!($scope.project.members[index].id === memberId)) {
+              continue;
+            }
+            $scope.project.members.splice(index, 1);
+            break;
+          }
+          for (index = _k = 0, _ref3 = $scope.project.member_ids.length; 0 <= _ref3 ? _k < _ref3 : _k > _ref3; index = 0 <= _ref3 ? ++_k : --_k) {
+            if (!($scope.project.member_ids[index] === memberId)) {
+              continue;
+            }
+            $scope.project.member_ids.splice(index, 1);
+            break;
+          }
+          for (index = _l = 0, _ref4 = $scope.project.root_ids.length; 0 <= _ref4 ? _l < _ref4 : _l > _ref4; index = 0 <= _ref4 ? ++_l : --_l) {
+            if (!($scope.project.root_ids[index] === memberId)) {
+              continue;
+            }
+            $scope.project.root_ids.splice(index, 1);
+            break;
+          }
+        }
       };
     }
   ]).controller('SettingsUsersController', [
@@ -542,7 +631,18 @@
             }
             return _this.http({
               method: 'get',
-              url: '/settings/projects'
+              url: '/settings/projects',
+              params: {
+                index: index
+              }
+            });
+          };
+        })(this),
+        getProject: (function(_this) {
+          return function(projectId) {
+            return _this.http({
+              method: 'get',
+              url: "/settings/projects/" + projectId
             });
           };
         })(this),
@@ -560,6 +660,26 @@
             return _this.http({
               method: 'delete',
               url: "/settings/projects/" + projectId
+            });
+          };
+        })(this),
+        updateProject: (function(_this) {
+          return function(project) {
+            return _this.http({
+              method: 'put',
+              url: "/settings/projects/" + project.id,
+              data: project
+            });
+          };
+        })(this),
+        addProjectMember: (function(_this) {
+          return function(projectId, email) {
+            return _this.http({
+              method: 'post',
+              url: "/settings/projects/" + projectId + "/members",
+              data: {
+                email: email
+              }
             });
           };
         })(this)
@@ -710,6 +830,23 @@
         },
         templateUrl: '/views/modal/project.html',
         controller: 'SettingsNewProjectController'
+      });
+      $stateProvider.state('salmon.settings-projects.detail', {
+        url: '/:projectId',
+        resolve: {
+          title: function() {
+            return "" + (_('Projects')) + " - " + (_('Settings')) + " - ";
+          },
+          project: [
+            '$salmon', '$stateParams', function($salmon, $stateParams) {
+              return $salmon.api.project.getProject($stateParams.projectId).then(function(response) {
+                return response.data;
+              });
+            }
+          ]
+        },
+        templateUrl: '/views/modal/project.html',
+        controller: 'SettingsProjectController'
       });
       $stateProvider.state('salmon.settings-users', {
         url: '/settings/users?index?keyword',

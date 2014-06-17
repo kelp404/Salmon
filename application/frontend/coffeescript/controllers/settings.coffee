@@ -26,7 +26,7 @@ angular.module 'salmon.controllers.settings', []
     $salmon = $injector.get '$salmon'
     $state = $injector.get '$state'
     $stateParams = $injector.get '$stateParams'
-    
+
     $scope.options =
         lowest: do ->
             for index in [-10..10] by 1 when index isnt 0
@@ -68,7 +68,6 @@ angular.module 'salmon.controllers.settings', []
                 $scope.project.room_options.push $scope.room.roomTitle
                 $scope.room.roomTitle = ''
                 $timeout -> $validator.reset($scope, 'room')
-
     $scope.submit = ->
         $validator.validate($scope, 'project').success ->
             NProgress.start()
@@ -82,6 +81,57 @@ angular.module 'salmon.controllers.settings', []
                 result
             $salmon.api.project.addProject($scope.project).success ->
                 $scope.modal.hide()
+]
+.controller 'SettingsProjectController', ['$scope', '$injector', 'project', ($scope, $injector, project) ->
+    $salmon = $injector.get '$salmon'
+    $validator = $injector.get '$validator'
+    $state = $injector.get '$state'
+    $timeout = $injector.get '$timeout'
+
+    $scope.mode = 'edit'
+    $scope.project = project
+    for member in project.members
+        member.isRoot = member.id in project.root_ids
+    $scope.$watch 'project.members', ->
+        root_ids = []
+        for member in $scope.project.members when member.isRoot
+            root_ids.push member.id
+        $scope.project.root_ids = root_ids
+    , yes
+    $scope.modal =
+        autoShow: yes
+        hide: ->
+        hiddenCallback: ->
+            $state.go 'salmon.settings-projects', null, reload: yes
+    $scope.submit = ->
+        $validator.validate($scope, 'project').success ->
+            NProgress.start()
+            $salmon.api.project.updateProject($scope.project).success ->
+                $scope.modal.hide()
+    $scope.memberService =
+        email: ''
+        invite: ($event) ->
+            $event.preventDefault()
+            $validator.validate($scope, 'memberService').success ->
+                NProgress.start()
+                $salmon.api.project.addProjectMember($scope.project.id, $scope.memberService.email).success (member) ->
+                    NProgress.done()
+                    $scope.project.member_ids.push member.id
+                    $scope.project.members.push member
+                    $scope.memberService.email = ''
+                    $timeout -> $validator.reset $scope, 'memberService'
+        removeMember: ($event, memberId) ->
+            $event.preventDefault()
+            for index in [0...$scope.project.members.length] when $scope.project.members[index].id is memberId
+                $scope.project.members.splice index, 1
+                break
+            for index in [0...$scope.project.member_ids.length] when $scope.project.member_ids[index] is memberId
+                $scope.project.member_ids.splice index, 1
+                break
+            for index in [0...$scope.project.root_ids.length] when $scope.project.root_ids[index] is memberId
+                $scope.project.root_ids.splice index, 1
+                break
+            return
 ]
 
 .controller 'SettingsUsersController', ['$scope', '$injector', 'users', ($scope, $injector, users) ->

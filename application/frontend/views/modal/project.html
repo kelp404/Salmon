@@ -21,13 +21,6 @@
                                class="form-control" id="input-description" type="text"/>
                     </div>
                 </div>
-                <div ng-if="application.app_key" class="form-group">
-                    <label class="col-sm-2 control-label">App key</label>
-                    <div class="col-sm-10">
-                        <button ng-click="updateAppKey()" class="btn btn-default btn-sm pull-right" type="button">Update app key</button>
-                        <p class="form-control-static">{{ application.app_key }}</p>
-                    </div>
-                </div>
                 <div class="form-group">
                     <label salmon-lang class="col-sm-2 control-label" for="input-floors">Floors</label>
                     <div class="col-sm-3">
@@ -77,24 +70,24 @@
                 </div>
 
                 <div ng-show="mode=='edit'" class="form-group">
-                    <label class="col-sm-2 control-label">Members</label>
+                    <label salmon-lang class="col-sm-2 control-label">Members</label>
                     <div class="col-sm-10">
                         <table class="table table-condensed table-hover">
                             <tbody>
-                            <tr ng-repeat="member in application.members">
+                            <tr ng-repeat="member in project.members">
                                 <td>{{ member.name }} &lt;{{ member.email }}&gt;</td>
                                 <td width="60px">
                                     <label class="checkbox-inline" style="padding-top: 0;">
                                         <input ng-model="member.isRoot"
-                                               ng-disabled="member.isRoot && application.root_ids.length==1"
+                                               ng-disabled="member.isRoot && project.root_ids.length==1"
                                                type="checkbox"/>
                                         root
                                     </label>
                                 </td>
                                 <td width="36px">
                                     <a ng-click="memberService.removeMember($event, member.id)"
-                                       ng-hide="(member.isRoot && application.root_ids.length==1) || application.member_ids.length == 1"
-                                       href="/settings/applications/{{ application.id }}/members/{{ member.id }}" class="btn btn-danger btn-xs"><i class="fa fa-times"></i></a>
+                                       ng-hide="(member.isRoot && project.root_ids.length==1) || project.member_ids.length == 1"
+                                       href="/settings/projects/{{ project.id }}/members/{{ member.id }}" class="btn btn-danger btn-xs"><i class="fa fa-times"></i></a>
                                 </td>
                             </tr>
                             </tbody>
@@ -106,7 +99,7 @@
                                    salmon-enter="memberService.invite($event)"
                                    type="text" class="form-control input-sm" placeholder="email@gmail.com"/>
                             <span class="input-group-btn">
-                                <button ng-click="memberService.invite($event)" class="btn btn-default btn-sm" type="button"><i class="fa fa-plus fa-fw"></i> Invite</button>
+                                <button ng-click="memberService.invite($event)" class="btn btn-default btn-sm" type="button"><i class="fa fa-plus fa-fw"></i> <span salmon-lang>Invite</span></button>
                             </span>
                         </div>
                     </div>

@@ -67,6 +67,12 @@ angular.module 'salmon.provider', []
                 @http
                     method: 'get'
                     url: '/settings/projects'
+                    params:
+                        index: index
+            getProject: (projectId) =>
+                @http
+                    method: 'get'
+                    url: "/settings/projects/#{projectId}"
             addProject: (project) =>
                 @http
                     method: 'post'
@@ -76,6 +82,17 @@ angular.module 'salmon.provider', []
                 @http
                     method: 'delete'
                     url: "/settings/projects/#{projectId}"
+            updateProject: (project) =>
+                @http
+                    method: 'put'
+                    url: "/settings/projects/#{project.id}"
+                    data: project
+            addProjectMember: (projectId, email) =>
+                @http
+                    method: 'post'
+                    url: "/settings/projects/#{projectId}/members"
+                    data:
+                        email: email
         user:
             getUsers: (index=0, keyword) =>
                 @http

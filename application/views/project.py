@@ -30,8 +30,8 @@ def get_projects(request):
     return JsonResponse(PageList(index, size, total, projects))
 
 @authorization(UserPermission.root, UserPermission.normal)
-def get_project(request, application_id):
-    project = ProjectModel.get_by_id(long(application_id))
+def get_project(request, project_id):
+    project = ProjectModel.get_by_id(long(project_id))
     if project is None:
         raise Http404
     if request.user.permission != UserPermission.root and\
@@ -42,11 +42,11 @@ def get_project(request, application_id):
     return JsonResponse(result)
 
 @authorization(UserPermission.root, UserPermission.normal)
-def add_project_member(request, application_id):
+def add_project_member(request, project_id):
     form = UserForm(name='invite', **json.loads(request.body))
     if not form.validate():
         raise Http400
-    project = ProjectModel.get_by_id(long(application_id))
+    project = ProjectModel.get_by_id(long(project_id))
     if project is None:
         raise Http404
     if request.user.permission != UserPermission.root and\
@@ -75,12 +75,12 @@ def add_project(request):
     return JsonResponse(project)
 
 @authorization(UserPermission.root, UserPermission.normal)
-def update_project(request, application_id):
+def update_project(request, project_id):
     form = ProjectForm(**json.loads(request.body))
     if not form.validate():
         raise Http400
 
-    project = ProjectModel.get_by_id(long(application_id))
+    project = ProjectModel.get_by_id(long(project_id))
     if project is None:
         raise Http404
     if request.user.permission != UserPermission.root and\
