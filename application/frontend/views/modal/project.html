@@ -24,7 +24,7 @@
                 <div class="form-group">
                     <label salmon-lang class="col-sm-2 control-label" for="input-floors">Floors</label>
                     <div class="col-sm-3">
-                        <select ng-model="project.lowest"
+                        <select ng-model="project.floor_lowest"
                                 ng-options="option.value as option.label for option in options.lowest"
                                 id="input-floors" class="form-control">
                         </select>
@@ -34,7 +34,7 @@
                         <p class="form-control-static">～</p>
                     </div>
                     <div class="col-sm-3">
-                        <select ng-model="project.highest"
+                        <select ng-model="project.floor_highest"
                                 ng-options="option.value as option.label for option in options.highest"
                                 class="form-control">
                         </select>

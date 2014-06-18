@@ -1,5 +1,6 @@
-from wtforms import Form, StringField, BooleanField, validators
+from wtforms import Form, StringField, IntegerField, validators
 from application.forms import ArrayField
+from application import utils
 
 
 class ProjectForm(Form):
@@ -15,5 +16,10 @@ class ProjectForm(Form):
     )
     member_ids = ArrayField()
     root_ids = ArrayField()
-    floor_options = ArrayField()
+    floor_lowest = IntegerField(
+        filters=[utils.int_filter],
+    )
+    floor_highest = IntegerField(
+        filters=[utils.int_filter],
+    )
     room_options = ArrayField()

@@ -68,7 +68,8 @@ def add_project(request):
         description=form.description.data,
         root_ids=[request.user.key().id()],
         member_ids=[request.user.key().id()],
-        floor_options=form.floor_options.data,
+        floor_lowest=form.floor_lowest.data,
+        floor_highest=form.floor_highest.data,
         room_options=form.room_options.data,
     )
     project.put()
@@ -90,7 +91,8 @@ def update_project(request, project_id):
     project.description = form.description.data
     project.member_ids = form.member_ids.data
     project.root_ids = form.root_ids.data
-    project.floor_options = form.floor_options.data
+    project.floor_lowest = form.floor_lowest.data
+    project.floor_highest = form.floor_highest.data
     project.room_options = form.room_options.data
     project.put()
     return JsonResponse(project)

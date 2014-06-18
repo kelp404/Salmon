@@ -158,8 +158,8 @@
       $timeout = $injector.get('$timeout');
       $scope.mode = 'new';
       $scope.project = {
-        lowest: 1,
-        highest: 12,
+        floor_lowest: 1,
+        floor_highest: 12,
         room_options: []
       };
       $scope.modal = {
@@ -186,20 +186,6 @@
       return $scope.submit = function() {
         return $validator.validate($scope, 'project').success(function() {
           NProgress.start();
-          $scope.project.floor_options = (function() {
-            var index, result, _i, _ref, _ref1;
-            result = [];
-            for (index = _i = _ref = $scope.project.lowest, _ref1 = $scope.project.highest; _i <= _ref1; index = _i += 1) {
-              if (index !== 0) {
-                if (index < 0) {
-                  result.push("B" + (index * -1));
-                } else {
-                  result.push("" + index);
-                }
-              }
-            }
-            return result;
-          })();
           return $salmon.api.project.addProject($scope.project).success(function() {
             return $scope.modal.hide();
           });

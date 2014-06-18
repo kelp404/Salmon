@@ -53,8 +53,8 @@ angular.module 'salmon.controllers.settings', []
 
     $scope.mode = 'new'
     $scope.project =
-        lowest: 1
-        highest: 12
+        floor_lowest: 1
+        floor_highest: 12
         room_options: []
     $scope.modal =
         autoShow: yes
@@ -71,14 +71,6 @@ angular.module 'salmon.controllers.settings', []
     $scope.submit = ->
         $validator.validate($scope, 'project').success ->
             NProgress.start()
-            $scope.project.floor_options = do ->
-                result = []
-                for index in [$scope.project.lowest..$scope.project.highest] by 1 when index isnt 0
-                    if index < 0
-                        result.push "B#{index * -1}"
-                    else
-                        result.push "#{index}"
-                result
             $salmon.api.project.addProject($scope.project).success ->
                 $scope.modal.hide()
 ]
