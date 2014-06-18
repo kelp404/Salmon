@@ -4,3 +4,6 @@
 [submodule "submodules/wtforms"]
 	path = submodules/wtforms
 	url = https://github.com/wtforms/wtforms.git
+[submodule "submodules/imperavi-redactor-widget"]
+	path = submodules/imperavi-redactor-widget
+	url = https://github.com/yiiext/imperavi-redactor-widget.git

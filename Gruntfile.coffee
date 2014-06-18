@@ -61,6 +61,7 @@ module.exports = (grunt) ->
                         'bower_components/font-awesome/css/font-awesome.css'
                         'bower_components/AlertView/dist/alert_view.css'
                         'application/frontend/css/nprogress.css'
+                        'application/frontend/css/redactor.css'
                         'application/frontend/css/site.css'
                     ]
 
@@ -73,6 +74,7 @@ module.exports = (grunt) ->
                         'bower_components/bootstrap/dist/js/bootstrap.js'
                         'bower_components/AlertView/dist/alert_view.js'
                         'bower_components/nprogress/nprogress.js'
+                        'application/frontend/javascript/redactor.js'
                         # angular
                         'bower_components/angular/angular.js'
                         'bower_components/angular-ui-router/release/angular-ui-router.js'

@@ -1,0 +1,1 @@
+../../../submodules/imperavi-redactor-widget/assets/redactor.js

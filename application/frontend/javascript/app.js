@@ -836,7 +836,7 @@
             }
           ]
         },
-        templateUrl: '/views/projects/issues.html',
+        templateUrl: '/views/issue/list.html',
         controller: 'IssuesController'
       });
       $stateProvider.state('salmon.settings', {
