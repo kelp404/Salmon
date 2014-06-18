@@ -95,6 +95,13 @@ angular.module 'salmon.controllers.settings', []
         hide: ->
         hiddenCallback: ->
             $state.go 'salmon.settings-projects', null, reload: yes
+    $scope.room =
+        roomTitle: ''
+        addRoomOption: ->
+            $validator.validate($scope, 'room').success ->
+                $scope.project.room_options.push $scope.room.roomTitle
+                $scope.room.roomTitle = ''
+                $timeout -> $validator.reset($scope, 'room')
     $scope.submit = ->
         $validator.validate($scope, 'project').success ->
             NProgress.start()

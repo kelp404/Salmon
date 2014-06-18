@@ -227,6 +227,18 @@
           });
         }
       };
+      $scope.room = {
+        roomTitle: '',
+        addRoomOption: function() {
+          return $validator.validate($scope, 'room').success(function() {
+            $scope.project.room_options.push($scope.room.roomTitle);
+            $scope.room.roomTitle = '';
+            return $timeout(function() {
+              return $validator.reset($scope, 'room');
+            });
+          });
+        }
+      };
       $scope.submit = function() {
         return $validator.validate($scope, 'project').success(function() {
           NProgress.start();

@@ -46,7 +46,7 @@
                     <div class="col-sm-10">
                         <table class="table table-condensed table-hover">
                             <tbody>
-                            <tr ng-repeat="room in project.room_options">
+                            <tr ng-repeat="room in project.room_options track by $index">
                                 <td>{{ room }}</td>
                                 <td width="36px">
                                     <button ng-click="project.room_options.splice($index, 1)"
