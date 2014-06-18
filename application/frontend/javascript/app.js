@@ -41,12 +41,32 @@
     }
   ]).controller('NewIssueController', [
     '$scope', '$injector', 'project', function($scope, $injector, project) {
+      var $validator;
+      $validator = $injector.get('$validator');
       $scope.allProjects.current = project;
+      $scope.floorOptions = (function() {
+        var index, _i, _ref, _ref1, _results;
+        _results = [];
+        for (index = _i = _ref = project.floor_lowest, _ref1 = project.floor_highest; _i <= _ref1; index = _i += 1) {
+          if (index !== 0) {
+            _results.push({
+              label: index < 0 ? "B" + (index * -1) : "" + index,
+              value: index
+            });
+          }
+        }
+        return _results;
+      })();
       $scope.issue = {
-        title: ''
+        title: '',
+        floor: $scope.floorOptions[0].value,
+        room: project.room_options[0]
       };
       return $scope.submit = function($event) {
-        return $event.preventDefault();
+        $event.preventDefault();
+        return $validator.validate($scope, 'issue').success(function() {
+          return console.log($scope.issue);
+        });
       };
     }
   ]);
