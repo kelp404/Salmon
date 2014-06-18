@@ -39,6 +39,16 @@
     '$scope', '$injector', 'project', function($scope, $injector, project) {
       return $scope.allProjects.current = project;
     }
+  ]).controller('NewIssueController', [
+    '$scope', '$injector', 'project', function($scope, $injector, project) {
+      $scope.allProjects.current = project;
+      $scope.issue = {
+        title: ''
+      };
+      return $scope.submit = function($event) {
+        return $event.preventDefault();
+      };
+    }
   ]);
 
 }).call(this);
@@ -836,6 +846,23 @@
         },
         templateUrl: '/views/issue/list.html',
         controller: 'IssuesController'
+      });
+      $stateProvider.state('salmon.projects-issues-new', {
+        url: '/projects/:projectId/issues/new',
+        resolve: {
+          title: function() {
+            return "" + (_('Issues')) + " - ";
+          },
+          project: [
+            '$salmon', '$stateParams', function($salmon, $stateParams) {
+              return $salmon.api.project.getProject($stateParams.projectId).then(function(response) {
+                return response.data;
+              });
+            }
+          ]
+        },
+        templateUrl: '/views/issue/new.html',
+        controller: 'NewIssueController'
       });
       $stateProvider.state('salmon.settings', {
         url: '/settings',

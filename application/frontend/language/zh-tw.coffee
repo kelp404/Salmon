@@ -38,3 +38,4 @@ window.languageResource =
     'go to project list': '前往專案列表'
     'Issues': '問題清單'
     'New Issue': '新增問題'
+    'Create a new issue': '新增問題'
