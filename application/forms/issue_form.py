@@ -3,6 +3,29 @@ from application import utils
 from application.forms import ArrayField
 
 
+class IssueSearchForm(Form):
+    """
+    The form for search issues.
+    """
+    keyword = StringField(
+        filters=[lambda x: x.strip() if isinstance(x, basestring) else None],
+    )
+    floor_lowest = IntegerField(
+        default=0,
+        filters=[utils.int_filter],
+    )
+    floor_highest = IntegerField(
+        default=0,
+        filters=[utils.int_filter],
+    )
+    room = StringField(
+        filters=[lambda x: x.strip() if isinstance(x, basestring) else None],
+    )
+    index = IntegerField(
+        default=0,
+        filters=[utils.int_filter],
+    )
+
 class IssueForm(Form):
     """
     The form for update the issue.

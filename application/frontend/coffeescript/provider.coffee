@@ -69,6 +69,12 @@ angular.module 'salmon.provider', []
                     method: 'post'
                     url: "/projects/#{projectId}/issues"
                     data: issue
+            getIssues: (projectId, index=0) =>
+                @http
+                    method: 'get'
+                    url: "/projects/#{projectId}/issues"
+                    params:
+                        index: index
         project:
             getProjects: (index=0, all=no) =>
                 @http

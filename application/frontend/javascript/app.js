@@ -36,8 +36,9 @@
 
 (function() {
   angular.module('salmon.controllers.issues', []).controller('IssuesController', [
-    '$scope', '$injector', 'project', function($scope, $injector, project) {
-      return $scope.allProjects.current = project;
+    '$scope', '$injector', 'project', 'issues', function($scope, $injector, project, issues) {
+      $scope.allProjects.current = project;
+      return $scope.issues = issues;
     }
   ]).controller('NewIssueController', [
     '$scope', '$injector', 'project', function($scope, $injector, project) {
@@ -759,6 +760,20 @@
               data: issue
             });
           };
+        })(this),
+        getIssues: (function(_this) {
+          return function(projectId, index) {
+            if (index == null) {
+              index = 0;
+            }
+            return _this.http({
+              method: 'get',
+              url: "/projects/" + projectId + "/issues",
+              params: {
+                index: index
+              }
+            });
+          };
         })(this)
       },
       project: {
@@ -942,6 +957,11 @@
               return $salmon.api.project.getProject($stateParams.projectId).then(function(response) {
                 return response.data;
               });
+            }
+          ],
+          issues: [
+            '$salmon', '$stateParams', function($salmon, $stateParams) {
+              return $salmon.api.issue.getIssues($stateParams.projectId, $stateParams.index);
             }
           ]
         },

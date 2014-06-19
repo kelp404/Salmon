@@ -54,6 +54,9 @@ angular.module 'salmon.router', [
                 $salmon.api.project.getProject($stateParams.projectId).then (response) ->
                     response.data
             ]
+            issues: ['$salmon', '$stateParams', ($salmon, $stateParams) ->
+                $salmon.api.issue.getIssues($stateParams.projectId, $stateParams.index)
+            ]
         templateUrl: '/views/issue/list.html'
         controller: 'IssuesController'
     # ---------------------------------------------------------

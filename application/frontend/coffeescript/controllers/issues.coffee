@@ -1,7 +1,8 @@
 angular.module 'salmon.controllers.issues', []
 
-.controller 'IssuesController', ['$scope', '$injector', 'project', ($scope, $injector, project) ->
+.controller 'IssuesController', ['$scope', '$injector', 'project', 'issues', ($scope, $injector, project, issues) ->
     $scope.allProjects.current = project
+    $scope.issues = issues
 ]
 
 .controller 'NewIssueController', ['$scope', '$injector', 'project', ($scope, $injector, project) ->
