@@ -25,7 +25,7 @@
         $state.go('salmon.login');
       }
       if ($scope.allProjects.items.length) {
-        return $state.go('salmon.projects-issues', {
+        return $state.go('salmon.issues', {
           projectId: $scope.allProjects.items[0].id
         });
       }
@@ -850,7 +850,7 @@
         templateUrl: '/views/login.html',
         controller: 'LoginController'
       });
-      $stateProvider.state('salmon.projects-issues', {
+      $stateProvider.state('salmon.issues', {
         url: '/projects/:projectId/issues',
         resolve: {
           title: function() {
@@ -867,7 +867,7 @@
         templateUrl: '/views/issue/list.html',
         controller: 'IssuesController'
       });
-      $stateProvider.state('salmon.projects-issues-new', {
+      $stateProvider.state('salmon.issues-new', {
         url: '/projects/:projectId/issues/new',
         resolve: {
           title: function() {
