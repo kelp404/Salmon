@@ -137,6 +137,7 @@
       $salmon = $injector.get('$salmon');
       $state = $injector.get('$state');
       $stateParams = $injector.get('$stateParams');
+      $scope.user = $salmon.user;
       $scope.options = {
         lowest: (function() {
           var index, _i, _results;
@@ -620,6 +621,7 @@
     this.user = (_ref = window.user) != null ? _ref : {};
     this.user.isLogin = this.user.id != null;
     this.user.isRoot = this.user.permission === 1;
+    this.user.isAdvanced = this.user.permission === 3;
     this.url = window.url;
     this.alert = {
       saved: function(message) {

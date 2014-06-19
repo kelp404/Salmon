@@ -12,7 +12,7 @@ from application.models.datastore.user_model import UserModel, UserPermission
 from application.models.datastore.project_model import ProjectModel
 
 
-@authorization(UserPermission.root, UserPermission.normal)
+@authorization(UserPermission.root, UserPermission.advanced, UserPermission.normal)
 def get_projects(request):
     form = SearchForm(**request.GET.dict())
     if form.all.data:
@@ -29,7 +29,7 @@ def get_projects(request):
     projects = query.fetch(size, index * size)
     return JsonResponse(PageList(index, size, total, projects))
 
-@authorization(UserPermission.root, UserPermission.normal)
+@authorization(UserPermission.root, UserPermission.advanced, UserPermission.normal)
 def get_project(request, project_id):
     project = ProjectModel.get_by_id(long(project_id))
     if project is None:
@@ -41,7 +41,7 @@ def get_project(request, project_id):
     result['members'] = [x.dict() for x in UserModel.get_by_id(project.member_ids) if not x is None]
     return JsonResponse(result)
 
-@authorization(UserPermission.root, UserPermission.normal)
+@authorization(UserPermission.root, UserPermission.advanced)
 def add_project_member(request, project_id):
     form = UserForm(name='invite', **json.loads(request.body))
     if not form.validate():
@@ -57,7 +57,7 @@ def add_project_member(request, project_id):
     project.save()
     return JsonResponse(user)
 
-@authorization(UserPermission.root, UserPermission.normal)
+@authorization(UserPermission.root, UserPermission.advanced)
 def add_project(request):
     form = ProjectForm(**json.loads(request.body))
     if not form.validate():
@@ -75,7 +75,7 @@ def add_project(request):
     project.put()
     return JsonResponse(project)
 
-@authorization(UserPermission.root, UserPermission.normal)
+@authorization(UserPermission.root, UserPermission.advanced)
 def update_project(request, project_id):
     form = ProjectForm(**json.loads(request.body))
     if not form.validate():
@@ -97,7 +97,7 @@ def update_project(request, project_id):
     project.put()
     return JsonResponse(project)
 
-@authorization(UserPermission.root, UserPermission.normal)
+@authorization(UserPermission.root, UserPermission.advanced)
 def delete_project(request, project_id):
     project = ProjectModel.get_by_id(long(project_id))
     if project is None:

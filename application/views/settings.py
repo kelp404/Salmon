@@ -6,11 +6,11 @@ from application.models.datastore.user_model import UserPermission, UserModel
 from application.forms.profile_form import ProfileForm
 
 
-@authorization(UserPermission.root, UserPermission.normal)
+@authorization(UserPermission.root, UserPermission.advanced, UserPermission.normal)
 def get_profile(request):
     return JsonResponse(request.user.dict())
 
-@authorization(UserPermission.root, UserPermission.normal)
+@authorization(UserPermission.root, UserPermission.advanced, UserPermission.normal)
 def update_profile(request):
     form = ProfileForm(**json.loads(request.body))
     if not form.validate():
