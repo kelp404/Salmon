@@ -6,6 +6,8 @@ angular.module 'salmon.controllers.issues', []
 
 .controller 'NewIssueController', ['$scope', '$injector', 'project', ($scope, $injector, project) ->
     $validator = $injector.get '$validator'
+    $salmon = $injector.get '$salmon'
+    $state = $injector.get '$state'
 
     $scope.allProjects.current = project
     $scope.floorOptions = do ->
@@ -19,6 +21,11 @@ angular.module 'salmon.controllers.issues', []
     $scope.submit = ($event) ->
         $event.preventDefault()
         $validator.validate($scope, 'issue').success ->
-            console.log $scope.issue
+            NProgress.start()
+            $salmon.api.issue.addIssue(project.id, $scope.issue).success ->
+                $state.go 'salmon.issues',
+                    projectId: project.id
+                    index: 0
+                , reload: yes
 ]
 

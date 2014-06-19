@@ -63,6 +63,12 @@ angular.module 'salmon.provider', []
                     method: 'put'
                     url: '/settings/profile'
                     data: profile
+        issue:
+            addIssue: (projectId, issue) =>
+                @http
+                    method: 'post'
+                    url: "/projects/#{projectId}/issues"
+                    data: issue
         project:
             getProjects: (index=0, all=no) =>
                 @http

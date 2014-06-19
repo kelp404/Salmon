@@ -41,8 +41,10 @@
     }
   ]).controller('NewIssueController', [
     '$scope', '$injector', 'project', function($scope, $injector, project) {
-      var $validator;
+      var $salmon, $state, $validator;
       $validator = $injector.get('$validator');
+      $salmon = $injector.get('$salmon');
+      $state = $injector.get('$state');
       $scope.allProjects.current = project;
       $scope.floorOptions = (function() {
         var index, _i, _ref, _ref1, _results;
@@ -65,7 +67,15 @@
       return $scope.submit = function($event) {
         $event.preventDefault();
         return $validator.validate($scope, 'issue').success(function() {
-          return console.log($scope.issue);
+          NProgress.start();
+          return $salmon.api.issue.addIssue(project.id, $scope.issue).success(function() {
+            return $state.go('salmon.issues', {
+              projectId: project.id,
+              index: 0
+            }, {
+              reload: true
+            });
+          });
         });
       };
     }
@@ -682,6 +692,17 @@
           };
         })(this)
       },
+      issue: {
+        addIssue: (function(_this) {
+          return function(projectId, issue) {
+            return _this.http({
+              method: 'post',
+              url: "/projects/" + projectId + "/issues",
+              data: issue
+            });
+          };
+        })(this)
+      },
       project: {
         getProjects: (function(_this) {
           return function(index, all) {
@@ -853,7 +874,7 @@
         controller: 'LoginController'
       });
       $stateProvider.state('salmon.issues', {
-        url: '/projects/:projectId/issues',
+        url: '/projects/:projectId/issues?index',
         resolve: {
           title: function() {
             return "" + (_('Issues')) + " - ";

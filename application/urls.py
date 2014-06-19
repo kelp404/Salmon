@@ -23,6 +23,7 @@ urlpatterns = patterns('',
     # /projects/<project_id>/issues
     url(r'^projects/(?P<project_id>[0-9]{1,32})/issues$', api_dispatch(
         GET=get_issues,
+        POST=add_issue,
     )),
     # /projects/<project_id>/issues/new
     url(r'^projects/(?P<project_id>[0-9]{1,32})/issues/new$', api_dispatch(

@@ -47,7 +47,7 @@ angular.module 'salmon.router', [
     # /projects/{projectId}/issues
     # ---------------------------------------------------------
     $stateProvider.state 'salmon.issues',
-        url: '/projects/:projectId/issues'
+        url: '/projects/:projectId/issues?index'
         resolve:
             title: -> "#{_ 'Issues'} - "
             project: ['$salmon', '$stateParams', ($salmon, $stateParams) ->
