@@ -54,7 +54,16 @@ angular.module 'salmon.directive', []
                 'zh-tw': 'zh_tw'
             result = lang[_('code')]
             if result then result else _('code')
+        options.changeCallback = (html) -> scope.$apply ->
+            scope.ngModel = html
         $(element).redactor(options)
+        $(element).next('textarea').on 'input propertychange', (e) ->
+            console.log 'change'
+        console.log $(element).next('textarea')[0]
+
+        scope.$watch 'ngModel', (value) ->
+            return if not value?
+            $(element).redactor 'set', value
 
 # ---------------------------------------------------------
 # salmon-modal

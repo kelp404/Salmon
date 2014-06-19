@@ -491,7 +491,22 @@
             return _('code');
           }
         })();
-        return $(element).redactor(options);
+        options.changeCallback = function(html) {
+          return scope.$apply(function() {
+            return scope.ngModel = html;
+          });
+        };
+        $(element).redactor(options);
+        $(element).next('textarea').on('input propertychange', function(e) {
+          return console.log('change');
+        });
+        console.log($(element).next('textarea')[0]);
+        return scope.$watch('ngModel', function(value) {
+          if (value == null) {
+            return;
+          }
+          return $(element).redactor('set', value);
+        });
       }
     };
   }).directive('salmonModal', function() {
