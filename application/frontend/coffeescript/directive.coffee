@@ -48,21 +48,30 @@ angular.module 'salmon.directive', []
     scope:
         ngModel: '=ngModel'
     link: (scope, element, attrs) ->
+        disableWatch = no
         options = scope.$eval attrs.salmonRedactor
         options.lang = do ->
             lang =
                 'zh-tw': 'zh_tw'
             result = lang[_('code')]
             if result then result else _('code')
-        options.changeCallback = (html) -> scope.$apply ->
-            scope.ngModel = html
+        options.changeCallback = (html) ->
+            return if scope.$root.$$phase
+            disableWatch = yes
+            scope.$apply ->
+                scope.ngModel = html
         $(element).redactor(options)
-        $(element).next('textarea').on 'input propertychange', (e) ->
-            console.log 'change'
-        console.log $(element).next('textarea')[0]
+        $(element).next('textarea').on 'input propertychange', ->
+            return if scope.$root.$$phase
+            disableWatch = yes
+            scope.$apply ->
+                scope.ngModel = $(element).next('textarea').val()
 
         scope.$watch 'ngModel', (value) ->
             return if not value?
+            if disableWatch
+                disableWatch = no
+                return
             $(element).redactor 'set', value
 
 # ---------------------------------------------------------

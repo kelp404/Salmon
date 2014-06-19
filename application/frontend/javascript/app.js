@@ -477,7 +477,8 @@
         ngModel: '=ngModel'
       },
       link: function(scope, element, attrs) {
-        var options;
+        var disableWatch, options;
+        disableWatch = false;
         options = scope.$eval(attrs.salmonRedactor);
         options.lang = (function() {
           var lang, result;
@@ -492,17 +493,30 @@
           }
         })();
         options.changeCallback = function(html) {
+          if (scope.$root.$$phase) {
+            return;
+          }
+          disableWatch = true;
           return scope.$apply(function() {
             return scope.ngModel = html;
           });
         };
         $(element).redactor(options);
-        $(element).next('textarea').on('input propertychange', function(e) {
-          return console.log('change');
+        $(element).next('textarea').on('input propertychange', function() {
+          if (scope.$root.$$phase) {
+            return;
+          }
+          disableWatch = true;
+          return scope.$apply(function() {
+            return scope.ngModel = $(element).next('textarea').val();
+          });
         });
-        console.log($(element).next('textarea')[0]);
         return scope.$watch('ngModel', function(value) {
           if (value == null) {
+            return;
+          }
+          if (disableWatch) {
+            disableWatch = false;
             return;
           }
           return $(element).redactor('set', value);
