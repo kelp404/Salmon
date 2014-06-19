@@ -465,6 +465,35 @@
         });
       }
     };
+  }).directive('salmonRedactor', function() {
+    return {
+
+      /*
+      Redactor.
+       */
+      restrict: 'A',
+      require: 'ngModel',
+      scope: {
+        ngModel: '=ngModel'
+      },
+      link: function(scope, element, attrs) {
+        var options;
+        options = scope.$eval(attrs.salmonRedactor);
+        options.lang = (function() {
+          var lang, result;
+          lang = {
+            'zh-tw': 'zh_tw'
+          };
+          result = lang[_('code')];
+          if (result) {
+            return result;
+          } else {
+            return _('code');
+          }
+        })();
+        return $(element).redactor(options);
+      }
+    };
   }).directive('salmonModal', function() {
     return {
 

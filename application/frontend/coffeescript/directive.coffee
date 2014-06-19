@@ -36,6 +36,26 @@ angular.module 'salmon.directive', []
                 scope.$eval attrs.salmonEnter,
                     $event: e
 
+# ----------------------------------------
+# salmon-redactor
+# ----------------------------------------
+.directive 'salmonRedactor', ->
+    ###
+    Redactor.
+    ###
+    restrict: 'A'
+    require: 'ngModel'
+    scope:
+        ngModel: '=ngModel'
+    link: (scope, element, attrs) ->
+        options = scope.$eval attrs.salmonRedactor
+        options.lang = do ->
+            lang =
+                'zh-tw': 'zh_tw'
+            result = lang[_('code')]
+            if result then result else _('code')
+        $(element).redactor(options)
+
 # ---------------------------------------------------------
 # salmon-modal
 # ---------------------------------------------------------

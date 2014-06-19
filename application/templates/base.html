@@ -29,6 +29,9 @@
             <link type="text/css" rel="stylesheet" href="/css/site.min.css"/>
             <script type="text/javascript" src="/javascript/site.min.js"></script>
         {% endif %}
+        {% if lang_code_redactor %}
+            <script type="text/javascript" src="/javascript/language/redactor/{{ lang_code_redactor }}.js"></script>
+        {% endif %}
         <script type="text/javascript">
             var user = {{ user|json }};
             var url = {{ url|json }};

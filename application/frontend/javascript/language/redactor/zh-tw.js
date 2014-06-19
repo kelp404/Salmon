@@ -1,0 +1,1 @@
+../../../../../submodules/imperavi-redactor-widget/assets/lang/zh_tw.js

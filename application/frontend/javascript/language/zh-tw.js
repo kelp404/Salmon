@@ -1,5 +1,6 @@
 (function() {
   window.languageResource = {
+    'code': 'zh-tw',
     'Salmon': 'Salmon',
     'Salmon issue tracker': 'Salmon 項目追蹤',
     'Sign in': '登入',
@@ -41,7 +42,8 @@
     'go to project list': '前往專案列表',
     'Issues': '問題清單',
     'New Issue': '新增問題',
-    'Create a new issue': '新增問題'
+    'Create a new issue': '新增問題',
+    'Content': '內容'
   };
 
 }).call(this);
