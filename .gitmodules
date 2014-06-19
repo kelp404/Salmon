@@ -7,3 +7,12 @@
 [submodule "submodules/imperavi-redactor-widget"]
 	path = submodules/imperavi-redactor-widget
 	url = https://github.com/yiiext/imperavi-redactor-widget.git
+[submodule "submodules/bleach"]
+	path = submodules/bleach
+	url = https://github.com/jsocol/bleach.git
+[submodule "submodules/html5lib-python"]
+	path = submodules/html5lib-python
+	url = https://github.com/html5lib/html5lib-python.git
+[submodule "submodules/six"]
+	path = submodules/six
+	url = https://github.com/kelp404/six.git

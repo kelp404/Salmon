@@ -15,7 +15,7 @@ class IssueForm(Form):
         filters=[utils.int_filter],
     )
     room = StringField(
-        validators=[validators.required()],
+        default='-',
         filters=[lambda x: x.strip() if isinstance(x, basestring) else None],
     )
     content = StringField(

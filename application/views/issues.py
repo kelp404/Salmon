@@ -1,4 +1,5 @@
 import json
+import bleach
 from application.exceptions import Http400, Http404
 from application.responses import JsonResponse
 from application.decorators import authorization
@@ -26,7 +27,7 @@ def add_issue(request, project_id):
         title=form.title.data,
         floor=form.floor.data,
         room=form.room.data,
-        content=form.content.data,
+        content=bleach.clean(form.content.data),
         label_ids=form.label_ids.data,
         author=request.user,
         project=project,
