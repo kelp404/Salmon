@@ -19,6 +19,8 @@ angular.module 'salmon.router', [
         url: ''
         resolve:
             projects: ['$salmon', ($salmon) ->
+                if not $salmon.user.isLogin
+                    return items: []
                 $salmon.api.project.getProjects(0, yes).then (response) ->
                     response.data
             ]

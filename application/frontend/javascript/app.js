@@ -924,6 +924,11 @@
         resolve: {
           projects: [
             '$salmon', function($salmon) {
+              if (!$salmon.user.isLogin) {
+                return {
+                  items: []
+                };
+              }
               return $salmon.api.project.getProjects(0, true).then(function(response) {
                 return response.data;
               });
