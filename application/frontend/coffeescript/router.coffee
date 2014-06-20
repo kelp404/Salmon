@@ -57,7 +57,8 @@ angular.module 'salmon.router', [
                     response.data
             ]
             issues: ['$salmon', '$stateParams', ($salmon, $stateParams) ->
-                $salmon.api.issue.getIssues($stateParams.projectId, $stateParams.index)
+                $salmon.api.issue.getIssues($stateParams.projectId, $stateParams.index).then (response) ->
+                    response.data
             ]
         templateUrl: '/views/issue/list.html'
         controller: 'IssuesController'
@@ -74,6 +75,22 @@ angular.module 'salmon.router', [
             ]
         templateUrl: '/views/issue/new.html'
         controller: 'NewIssueController'
+    # ---------------------------------------------------------
+    # /projects/{projectId}/issues/{issueId}
+    # ---------------------------------------------------------
+    $stateProvider.state 'salmon.issues-detail',
+        url: '/projects/:projectId/issues/:issueId'
+        resolve:
+            title: -> "#{_ 'Issues'} - "
+            project: ['$salmon', '$stateParams', ($salmon, $stateParams) ->
+                $salmon.api.project.getProject($stateParams.projectId).then (response) ->
+                    response.data
+            ]
+            issue: ['$salmon', '$stateParams', ($salmon, $stateParams) ->
+                null
+            ]
+        templateUrl: '/views/issue/detail.html'
+        controller: 'IssueController'
 
     # ---------------------------------------------------------
     # /settings

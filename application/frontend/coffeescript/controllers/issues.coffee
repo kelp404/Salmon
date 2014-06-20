@@ -3,6 +3,10 @@ angular.module 'salmon.controllers.issues', []
 .controller 'IssuesController', ['$scope', '$injector', 'project', 'issues', ($scope, $injector, project, issues) ->
     $scope.$allProjects.current = project
     $scope.issues = issues
+    $scope.showDetail = (projectId, issueId) ->
+        $scope.$state.go 'salmon.issues-detail',
+            projectId: projectId
+            issueId: issueId
 ]
 
 .controller 'NewIssueController', ['$scope', '$injector', 'project', ($scope, $injector, project) ->
@@ -30,3 +34,6 @@ angular.module 'salmon.controllers.issues', []
                 , reload: yes
 ]
 
+.controller 'IssueController', ['$scope', '$injector', 'issue', ($scope, $injector, issue) ->
+    $scope.issue = issue
+]

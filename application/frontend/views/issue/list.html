@@ -1,5 +1,38 @@
 <div class="row">
     <div class="col-sm-12">
-        <h2>issues</h2>
+        <form class="input-group col-sm-3">
+            <input v-focus ng-model="keyword" type="text" class="form-control"/>
+            <span class="input-group-btn">
+                <button ng-click="search($event, keyword)" class="btn btn-default" type="submit"><i class="fa fa-search fa-fw"></i> Search</button>
+            </span>
+        </form>
+    </div>
+
+    <div class="col-sm-12">
+        <table class="table table-hover table-striped">
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th width="100px">Count</th>
+                    <th width="160px">Last Occurred</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-if="!issues.items.length">
+                    <td colspan="3" class="text-center text-muted">empty</td>
+                </tr>
+                <tr ng-click="showDetail($allProjects.current.id, issue.id)" ng-repeat="issue in issues.items" style="cursor: pointer;">
+                    <td>
+                        <span ng-if="!log.is_close" class="text-danger"><i class="fa fa-exclamation-circle fa-fw"></i></span>
+                        <span ng-if="log.is_close" class="text-success"><i class="fa fa-check-circle fa-fw"></i></span>
+                        {{ issue.title }}
+                    </td>
+                    <td>{{ issue.count }}</td>
+                    <td>{{ issue.update_time|date:'yyyy-MM-dd HH:mm' }}</td>
+                </tr>
+            </tbody>
+        </table>
+        <ul salmon-pager="issues" pager-url-template="/projects/{{ $allProjects.current.id }}/issues?index=#{index}"
+            class="pull-right" style="margin-top: 0"></ul>
     </div>
 </div>

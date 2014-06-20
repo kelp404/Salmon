@@ -40,7 +40,13 @@
   angular.module('salmon.controllers.issues', []).controller('IssuesController', [
     '$scope', '$injector', 'project', 'issues', function($scope, $injector, project, issues) {
       $scope.$allProjects.current = project;
-      return $scope.issues = issues;
+      $scope.issues = issues;
+      return $scope.showDetail = function(projectId, issueId) {
+        return $scope.$state.go('salmon.issues-detail', {
+          projectId: projectId,
+          issueId: issueId
+        });
+      };
     }
   ]).controller('NewIssueController', [
     '$scope', '$injector', 'project', function($scope, $injector, project) {
@@ -81,6 +87,10 @@
           });
         });
       };
+    }
+  ]).controller('IssueController', [
+    '$scope', '$injector', 'issue', function($scope, $injector, issue) {
+      return $scope.issue = issue;
     }
   ]);
 
@@ -975,7 +985,9 @@
           ],
           issues: [
             '$salmon', '$stateParams', function($salmon, $stateParams) {
-              return $salmon.api.issue.getIssues($stateParams.projectId, $stateParams.index);
+              return $salmon.api.issue.getIssues($stateParams.projectId, $stateParams.index).then(function(response) {
+                return response.data;
+              });
             }
           ]
         },
@@ -998,6 +1010,28 @@
         },
         templateUrl: '/views/issue/new.html',
         controller: 'NewIssueController'
+      });
+      $stateProvider.state('salmon.issues-detail', {
+        url: '/projects/:projectId/issues/:issueId',
+        resolve: {
+          title: function() {
+            return "" + (_('Issues')) + " - ";
+          },
+          project: [
+            '$salmon', '$stateParams', function($salmon, $stateParams) {
+              return $salmon.api.project.getProject($stateParams.projectId).then(function(response) {
+                return response.data;
+              });
+            }
+          ],
+          issue: [
+            '$salmon', '$stateParams', function($salmon, $stateParams) {
+              return null;
+            }
+          ]
+        },
+        templateUrl: '/views/issue/detail.html',
+        controller: 'IssueController'
       });
       $stateProvider.state('salmon.settings', {
         url: '/settings',
