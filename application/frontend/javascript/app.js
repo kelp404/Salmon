@@ -1,9 +1,11 @@
 (function() {
   angular.module('salmon.controllers.base', []).controller('BaseController', [
-    '$scope', 'projects', function($scope, projects) {
-      $scope.allProjects = projects;
-      if ($scope.allProjects.items) {
-        return $scope.allProjects.current = $scope.allProjects.items[0];
+    '$scope', '$injector', 'projects', function($scope, $injector, projects) {
+      var $rootScope;
+      $rootScope = $injector.get('$rootScope');
+      $rootScope.$allProjects = projects;
+      if ($scope.$allProjects.items) {
+        return $scope.$allProjects.current = $scope.$allProjects.items[0];
       }
     }
   ]);
@@ -24,9 +26,9 @@
       if (!$salmon.user.isLogin) {
         $state.go('salmon.login');
       }
-      if ($scope.allProjects.items.length) {
+      if ($scope.$allProjects.items.length) {
         return $state.go('salmon.issues', {
-          projectId: $scope.allProjects.items[0].id
+          projectId: $scope.$allProjects.items[0].id
         });
       }
     }
@@ -37,7 +39,7 @@
 (function() {
   angular.module('salmon.controllers.issues', []).controller('IssuesController', [
     '$scope', '$injector', 'project', 'issues', function($scope, $injector, project, issues) {
-      $scope.allProjects.current = project;
+      $scope.$allProjects.current = project;
       return $scope.issues = issues;
     }
   ]).controller('NewIssueController', [
@@ -46,7 +48,7 @@
       $validator = $injector.get('$validator');
       $salmon = $injector.get('$salmon');
       $state = $injector.get('$state');
-      $scope.allProjects.current = project;
+      $scope.$allProjects.current = project;
       $scope.floorOptions = (function() {
         var index, _i, _ref, _ref1, _results;
         _results = [];

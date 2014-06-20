@@ -1,7 +1,7 @@
 angular.module 'salmon.controllers.issues', []
 
 .controller 'IssuesController', ['$scope', '$injector', 'project', 'issues', ($scope, $injector, project, issues) ->
-    $scope.allProjects.current = project
+    $scope.$allProjects.current = project
     $scope.issues = issues
 ]
 
@@ -10,7 +10,7 @@ angular.module 'salmon.controllers.issues', []
     $salmon = $injector.get '$salmon'
     $state = $injector.get '$state'
 
-    $scope.allProjects.current = project
+    $scope.$allProjects.current = project
     $scope.floorOptions = do ->
         for index in [project.floor_lowest..project.floor_highest] by 1 when index isnt 0
             label: if index < 0 then "B#{index * -1}" else "#{index}"

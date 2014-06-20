@@ -6,7 +6,7 @@ angular.module 'salmon.controllers.index', []
 
     if not $salmon.user.isLogin
         $state.go 'salmon.login'
-    if $scope.allProjects.items.length
+    if $scope.$allProjects.items.length
         $state.go 'salmon.issues',
-            projectId: $scope.allProjects.items[0].id
+            projectId: $scope.$allProjects.items[0].id
 ]
