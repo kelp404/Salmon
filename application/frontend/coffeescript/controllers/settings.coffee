@@ -27,7 +27,6 @@ angular.module 'salmon.controllers.settings', []
     $state = $injector.get '$state'
     $stateParams = $injector.get '$stateParams'
 
-    $scope.user = $salmon.user
     $scope.options =
         lowest: do ->
             for index in [-10..10] by 1 when index isnt 0
@@ -141,7 +140,6 @@ angular.module 'salmon.controllers.settings', []
     $validator = $injector.get '$validator'
 
     $scope.users = users
-    $scope.currentUser = $salmon.user
     $scope.keyword = $stateParams.keyword
     $scope.removeUser = (user, $event) ->
         $event.preventDefault()
@@ -170,7 +168,7 @@ angular.module 'salmon.controllers.settings', []
         hiddenCallback: ->
             $state.go 'salmon.settings-users', null, reload: yes
     $scope.submit = ->
-        $validator.validate($scope, 'user').success ->
+        $validator.validate($scope, 'new').success ->
             NProgress.start()
             $salmon.api.user.inviteUser($scope.user.email).success ->
                 $scope.modal.hide()
@@ -188,7 +186,7 @@ angular.module 'salmon.controllers.settings', []
         hiddenCallback: ->
             $state.go 'salmon.settings-users', null, reload: yes
     $scope.submit = ->
-        $validator.validate($scope, 'user').success ->
+        $validator.validate($scope, 'edit').success ->
             NProgress.start()
             $salmon.api.user.updateUser($scope.user).success ->
                 $scope.modal.hide()

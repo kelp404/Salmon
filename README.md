@@ -27,13 +27,11 @@ $rootScope =
         message: {string}
         callback: (result) ->
         isShow: {bool}
-```
-```coffee
-# BaseController's $scope
-$scope =
-    allProjects:
+    $allProjects:   # from BaseController
         items: []
         current: {}
+    $user:
+        # the user object
 ```
 
 

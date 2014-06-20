@@ -11,7 +11,7 @@
         </div>
         <div class="collapse navbar-collapse" id="navbar-collapse">
             <ul class="nav navbar-nav navbar-right">
-                <li ng-if="user.isLogin && allProjects.items.length" class="dropdown">
+                <li ng-if="$user.isLogin && allProjects.items.length" class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ allProjects.current.title }} <b class="caret"></b></a>
                     <ul class="dropdown-menu">
                         <li ng-repeat="project in allProjects.items">
@@ -19,15 +19,15 @@
                         </li>
                     </ul>
                 </li>
-                <li ng-if="user.isLogin && allProjects.items.length"
+                <li ng-if="$user.isLogin && allProjects.items.length"
                     ng-class="{active: $state.current.name.indexOf('salmon.issues-new')==0}">
                     <a href="/projects/{{ allProjects.current.id }}/issues/new"><i class="fa fa-plus fa-fw"></i> <span salmon-lang>New Issue</span></a>
                 </li>
-                <li ng-if="user.isLogin && allProjects.items.length"
+                <li ng-if="$user.isLogin && allProjects.items.length"
                     ng-class="{active: $state.current.name.indexOf('salmon.issues')==0 && $state.current.name!='salmon.issues-new'}">
                     <a salmon-lang href="/projects/{{ allProjects.current.id }}/issues">Issues</a>
                 </li>
-                <li ng-if="user.isLogin" ng-class="{active: $state.current.name.indexOf('salmon.settings')==0}" class="dropdown">
+                <li ng-if="$user.isLogin" ng-class="{active: $state.current.name.indexOf('salmon.settings')==0}" class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span salmon-lang>Settings</span> <b class="caret"></b></a>
                     <ul class="dropdown-menu">
                         <li ng-class="{active: $state.current.name.indexOf('salmon.settings-profile')==0}">
@@ -36,15 +36,15 @@
                         <li ng-class="{active: $state.current.name.indexOf('salmon.settings-projects')==0}">
                             <a salmon-lang href="/settings/projects">Projects</a>
                         </li>
-                        <li ng-if="user.isRoot" ng-class="{active: $state.current.name.indexOf('salmon.settings-users')==0}">
+                        <li ng-if="$user.isRoot" ng-class="{active: $state.current.name.indexOf('salmon.settings-users')==0}">
                             <a salmon-lang href="/settings/users">Users</a>
                         </li>
                     </ul>
                 </li>
-                <li ng-if="!user.isLogin">
+                <li ng-if="!$user.isLogin">
                     <a href="{{url.login}}" salmon-lang target="_self">Sign in</a>
                 </li>
-                <li ng-if="user.isLogin">
+                <li ng-if="$user.isLogin">
                     <a href="{{url.logout}}" salmon-lang target="_self">Sign out</a>
                 </li>
             </ul>

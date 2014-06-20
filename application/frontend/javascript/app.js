@@ -100,7 +100,6 @@
     '$scope', '$injector', function($scope, $injector) {
       var $salmon;
       $salmon = $injector.get('$salmon');
-      $scope.user = $salmon.user;
       return $scope.url = $salmon.url;
     }
   ]);
@@ -148,7 +147,6 @@
       $salmon = $injector.get('$salmon');
       $state = $injector.get('$state');
       $stateParams = $injector.get('$stateParams');
-      $scope.user = $salmon.user;
       $scope.options = {
         lowest: (function() {
           var index, _i, _results;
@@ -341,7 +339,6 @@
       $stateParams = $injector.get('$stateParams');
       $validator = $injector.get('$validator');
       $scope.users = users;
-      $scope.currentUser = $salmon.user;
       $scope.keyword = $stateParams.keyword;
       $scope.removeUser = function(user, $event) {
         $event.preventDefault();
@@ -386,7 +383,7 @@
         }
       };
       return $scope.submit = function() {
-        return $validator.validate($scope, 'user').success(function() {
+        return $validator.validate($scope, 'new').success(function() {
           NProgress.start();
           return $salmon.api.user.inviteUser($scope.user.email).success(function() {
             return $scope.modal.hide();
@@ -412,7 +409,7 @@
         }
       };
       return $scope.submit = function() {
-        return $validator.validate($scope, 'user').success(function() {
+        return $validator.validate($scope, 'edit').success(function() {
           NProgress.start();
           return $salmon.api.user.updateUser($scope.user).success(function() {
             return $scope.modal.hide();
@@ -681,12 +678,15 @@
     $injector = null;
     $http = null;
     $rootScope = null;
-    this.setupProviders = function(injector) {
-      $injector = injector;
-      $http = $injector.get('$http');
-      $rootScope = $injector.get('$rootScope');
-      return $rootScope.$confirmModal = {};
-    };
+    this.setupProviders = (function(_this) {
+      return function(injector) {
+        $injector = injector;
+        $http = $injector.get('$http');
+        $rootScope = $injector.get('$rootScope');
+        $rootScope.$confirmModal = {};
+        return $rootScope.$user = _this.user;
+      };
+    })(this);
     this.user = (_ref = window.user) != null ? _ref : {};
     this.user.isLogin = this.user.id != null;
     this.user.isRoot = this.user.permission === 1;

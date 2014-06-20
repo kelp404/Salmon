@@ -7,18 +7,18 @@
                 <h4 ng-if="mode=='edit'" salmon-lang class="modal-title">Update the user</h4>
             </div>
             <div class="modal-body">
-                <div ng-if="mode=='new'" class="form-group">
+                <div ng-show="mode=='new'" class="form-group">
                     <label salmon-lang class="col-sm-2 control-label" for="input-email">Email</label>
                     <div class="col-sm-10">
-                        <input ng-model="user.email" validator="[required, email]"
+                        <input ng-model="user.email" validator="[required, email]" validator-group="new"
                                class="form-control" id="input-email" type="text" placeholder="email@gmail.com"/>
                     </div>
                 </div>
-                <div ng-if="mode=='edit'">
+                <div ng-show="mode=='edit'">
                     <div class="form-group">
                         <label salmon-lang class="col-sm-2 control-label" for="input-name">Name</label>
                         <div class="col-sm-10">
-                            <input ng-model="user.name" validator="[required]"
+                            <input ng-model="user.name" validator="[required]" validator-group="edit"
                                    class="form-control" id="input-name" type="text"/>
                         </div>
                     </div>
