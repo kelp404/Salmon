@@ -37,6 +37,8 @@ angular.module 'salmon.controllers.settings', []
                 value: index
                 label: "#{index}"
     $scope.projects = projects
+    for project in $scope.projects
+        project.isRoot = $scope.$user.id in project.root_ids
     $scope.removeProject = (project, $event) ->
         $event.preventDefault()
         $salmon.alert.confirm "Do you want to delete the project #{project.title}?", (result) ->
@@ -56,6 +58,7 @@ angular.module 'salmon.controllers.settings', []
         floor_lowest: 1
         floor_highest: 12
         room_options: []
+        isRoot: yes
     $scope.modal =
         autoShow: yes
         hide: ->
@@ -82,6 +85,7 @@ angular.module 'salmon.controllers.settings', []
 
     $scope.mode = 'edit'
     $scope.project = project
+    $scope.project.isRoot = $scope.$user.id in project.root_ids
     for member in project.members
         member.isRoot = member.id in project.root_ids
     $scope.$watch 'project.members', ->

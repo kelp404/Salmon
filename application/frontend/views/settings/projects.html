@@ -24,8 +24,8 @@
                             <td>{{ project.description }}</td>
                             <td>{{ project.create_time|date:'yyyy-MM-dd HH:mm' }}</td>
                             <td>
-                                <a ng-if="$user.isRoot || $user.isAdvanced" href="/settings/projects/{{ project.id }}" class="btn btn-default btn-xs"><i class="fa fa-pencil"></i></a>
-                                <a ng-if="$user.isRoot || $user.isAdvanced" ng-click="removeProject(project, $event)"
+                                <a href="/settings/projects/{{ project.id }}" class="btn btn-default btn-xs"><i class="fa fa-pencil"></i></a>
+                                <a ng-if="$user.isRoot || project.isRoot" ng-click="removeProject(project, $event)"
                                         href="/settings/projects/{{ project.id }}" class="btn btn-danger btn-xs"><i class="fa fa-times"></i></a>
                             </td>
                         </tr>

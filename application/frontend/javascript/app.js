@@ -145,7 +145,7 @@
     }
   ]).controller('SettingsProjectsController', [
     '$scope', '$injector', 'projects', function($scope, $injector, projects) {
-      var $salmon, $state, $stateParams;
+      var $salmon, $state, $stateParams, project, _i, _len, _ref, _ref1;
       $salmon = $injector.get('$salmon');
       $state = $injector.get('$state');
       $stateParams = $injector.get('$stateParams');
@@ -176,6 +176,11 @@
         })()
       };
       $scope.projects = projects;
+      _ref = $scope.projects;
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        project = _ref[_i];
+        project.isRoot = (_ref1 = $scope.$user.id, __indexOf.call(project.root_ids, _ref1) >= 0);
+      }
       return $scope.removeProject = function(project, $event) {
         $event.preventDefault();
         return $salmon.alert.confirm("Do you want to delete the project " + project.title + "?", function(result) {
@@ -202,7 +207,8 @@
       $scope.project = {
         floor_lowest: 1,
         floor_highest: 12,
-        room_options: []
+        room_options: [],
+        isRoot: true
       };
       $scope.modal = {
         autoShow: true,
@@ -236,24 +242,25 @@
     }
   ]).controller('SettingsProjectController', [
     '$scope', '$injector', 'project', function($scope, $injector, project) {
-      var $salmon, $state, $timeout, $validator, member, _i, _len, _ref, _ref1;
+      var $salmon, $state, $timeout, $validator, member, _i, _len, _ref, _ref1, _ref2;
       $salmon = $injector.get('$salmon');
       $validator = $injector.get('$validator');
       $state = $injector.get('$state');
       $timeout = $injector.get('$timeout');
       $scope.mode = 'edit';
       $scope.project = project;
-      _ref = project.members;
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        member = _ref[_i];
-        member.isRoot = (_ref1 = member.id, __indexOf.call(project.root_ids, _ref1) >= 0);
+      $scope.project.isRoot = (_ref = $scope.$user.id, __indexOf.call(project.root_ids, _ref) >= 0);
+      _ref1 = project.members;
+      for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
+        member = _ref1[_i];
+        member.isRoot = (_ref2 = member.id, __indexOf.call(project.root_ids, _ref2) >= 0);
       }
       $scope.$watch('project.members', function() {
-        var root_ids, _j, _len1, _ref2;
+        var root_ids, _j, _len1, _ref3;
         root_ids = [];
-        _ref2 = $scope.project.members;
-        for (_j = 0, _len1 = _ref2.length; _j < _len1; _j++) {
-          member = _ref2[_j];
+        _ref3 = $scope.project.members;
+        for (_j = 0, _len1 = _ref3.length; _j < _len1; _j++) {
+          member = _ref3[_j];
           if (member.isRoot) {
             root_ids.push(member.id);
           }
@@ -307,23 +314,23 @@
           });
         },
         removeMember: function($event, memberId) {
-          var index, _j, _k, _l, _ref2, _ref3, _ref4;
+          var index, _j, _k, _l, _ref3, _ref4, _ref5;
           $event.preventDefault();
-          for (index = _j = 0, _ref2 = $scope.project.members.length; 0 <= _ref2 ? _j < _ref2 : _j > _ref2; index = 0 <= _ref2 ? ++_j : --_j) {
+          for (index = _j = 0, _ref3 = $scope.project.members.length; 0 <= _ref3 ? _j < _ref3 : _j > _ref3; index = 0 <= _ref3 ? ++_j : --_j) {
             if (!($scope.project.members[index].id === memberId)) {
               continue;
             }
             $scope.project.members.splice(index, 1);
             break;
           }
-          for (index = _k = 0, _ref3 = $scope.project.member_ids.length; 0 <= _ref3 ? _k < _ref3 : _k > _ref3; index = 0 <= _ref3 ? ++_k : --_k) {
+          for (index = _k = 0, _ref4 = $scope.project.member_ids.length; 0 <= _ref4 ? _k < _ref4 : _k > _ref4; index = 0 <= _ref4 ? ++_k : --_k) {
             if (!($scope.project.member_ids[index] === memberId)) {
               continue;
             }
             $scope.project.member_ids.splice(index, 1);
             break;
           }
-          for (index = _l = 0, _ref4 = $scope.project.root_ids.length; 0 <= _ref4 ? _l < _ref4 : _l > _ref4; index = 0 <= _ref4 ? ++_l : --_l) {
+          for (index = _l = 0, _ref5 = $scope.project.root_ids.length; 0 <= _ref5 ? _l < _ref5 : _l > _ref5; index = 0 <= _ref5 ? ++_l : --_l) {
             if (!($scope.project.root_ids[index] === memberId)) {
               continue;
             }
