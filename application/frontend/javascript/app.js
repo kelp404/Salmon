@@ -334,7 +334,6 @@
       $scope.project = {
         floor_lowest: 1,
         floor_highest: 12,
-        room_options: [],
         isRoot: true
       };
       $scope.modal = {
@@ -343,18 +342,6 @@
         hiddenCallback: function() {
           return $state.go('salmon.settings-projects', null, {
             reload: true
-          });
-        }
-      };
-      $scope.room = {
-        roomTitle: '',
-        addRoomOption: function() {
-          return $validator.validate($scope, 'room').success(function() {
-            $scope.project.room_options.push($scope.room.roomTitle);
-            $scope.room.roomTitle = '';
-            return $timeout(function() {
-              return $validator.reset($scope, 'room');
-            });
           });
         }
       };
@@ -400,18 +387,6 @@
         hiddenCallback: function() {
           return $state.go('salmon.settings-projects', null, {
             reload: true
-          });
-        }
-      };
-      $scope.room = {
-        roomTitle: '',
-        addRoomOption: function() {
-          return $validator.validate($scope, 'room').success(function() {
-            $scope.project.room_options.push($scope.room.roomTitle);
-            $scope.room.roomTitle = '';
-            return $timeout(function() {
-              return $validator.reset($scope, 'room');
-            });
           });
         }
       };

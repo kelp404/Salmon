@@ -47,34 +47,6 @@
                         <small salmon-lang class="text-muted">Highest floor</small>
                     </div>
                 </div>
-                <div class="form-group">
-                    <label salmon-lang class="col-sm-2 control-label">Rooms</label>
-                    <div class="col-sm-10">
-                        <table class="table table-condensed table-hover">
-                            <tbody>
-                            <tr ng-repeat="room in project.room_options track by $index">
-                                <td>{{ room }}</td>
-                                <td width="36px">
-                                    <button ng-show="$user.isRoot || project.isRoot" ng-click="project.room_options.splice($index, 1)"
-                                       class="btn btn-danger btn-xs" type="button"><i class="fa fa-times"></i></button>
-                                </td>
-                            </tr>
-                            </tbody>
-                        </table>
-
-                        <div ng-show="$user.isRoot || project.isRoot" class="input-group col-sm-6 form-group" style="padding-left: 15px;">
-                            <input ng-model="room.roomTitle"
-                                   validator='/.+/'
-                                   salmon-enter="room.addRoomOption()"
-                                   type="text" class="form-control input-sm"/>
-                            <span class="input-group-btn">
-                                <button ng-click="room.addRoomOption()"
-                                        class="btn btn-default btn-sm" type="button"><i class="fa fa-plus fa-fw"></i> <span salmon-lang>Add</span></button>
-                            </span>
-                        </div>
-                    </div>
-                </div>
-
                 <div ng-show="mode=='edit'" class="form-group">
                     <label salmon-lang class="col-sm-2 control-label">Members</label>
                     <div class="col-sm-10">

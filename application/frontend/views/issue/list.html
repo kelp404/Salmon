@@ -100,14 +100,13 @@
                         <tr>
                             <th salmon-lang>Title</th>
                             <th salmon-lang>Floor</th>
-                            <th salmon-lang>Room</th>
                             <th salmon-lang>Author</th>
                             <th salmon-lang class="hidden-xs hidden-sm" width="160px">Create time</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr ng-if="!issues.items.length">
-                            <td salmon-lang colspan="5" class="text-center text-muted">empty</td>
+                            <td salmon-lang colspan="4" class="text-center text-muted">empty</td>
                         </tr>
                         <tr ng-repeat="issue in issues.items">
                             <td>
@@ -119,7 +118,6 @@
                                 <a href="/projects/{{ $projects.current.id }}/issues/{{ issue.id }}">{{ issue.title }}</a>
                             </td>
                             <td>{{ issue.floor }}</td>
-                            <td>{{ issue.room }}</td>
                             <td><a href="">{{ issue.author.name }}</a></td>
                             <td class="hidden-xs hidden-sm">{{ issue.create_time|date:'yyyy-MM-dd HH:mm' }}</td>
                         </tr>

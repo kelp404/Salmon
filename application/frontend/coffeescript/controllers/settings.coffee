@@ -57,20 +57,12 @@ angular.module 'salmon.controllers.settings', []
     $scope.project =
         floor_lowest: 1
         floor_highest: 12
-        room_options: []
         isRoot: yes
     $scope.modal =
         autoShow: yes
         hide: ->
         hiddenCallback: ->
             $state.go 'salmon.settings-projects', null, reload: yes
-    $scope.room =
-        roomTitle: ''
-        addRoomOption: ->
-            $validator.validate($scope, 'room').success ->
-                $scope.project.room_options.push $scope.room.roomTitle
-                $scope.room.roomTitle = ''
-                $timeout -> $validator.reset($scope, 'room')
     $scope.submit = ->
         $validator.validate($scope, 'project').success ->
             NProgress.start()
@@ -99,13 +91,6 @@ angular.module 'salmon.controllers.settings', []
         hide: ->
         hiddenCallback: ->
             $state.go 'salmon.settings-projects', null, reload: yes
-    $scope.room =
-        roomTitle: ''
-        addRoomOption: ->
-            $validator.validate($scope, 'room').success ->
-                $scope.project.room_options.push $scope.room.roomTitle
-                $scope.room.roomTitle = ''
-                $timeout -> $validator.reset($scope, 'room')
     $scope.submit = ->
         $validator.validate($scope, 'project').success ->
             NProgress.start()
