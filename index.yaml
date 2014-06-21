@@ -21,6 +21,11 @@ indexes:
   - name: project
   - name: create_time
 
+- kind: LabelModel
+  properties:
+  - name: project
+  - name: title
+
 - kind: ProjectModel
   properties:
   - name: member_ids
