@@ -34,15 +34,14 @@ pre {
 
 /* line 25, ../sass/site/site.sass */
 table {
-  table-layout: fixed;
   word-wrap: break-word;
 }
 
-/* line 30, ../sass/site/site.sass */
+/* line 29, ../sass/site/site.sass */
 ul.label-select > li.active > a {
   background-color: #d0d0d0;
 }
-/* line 32, ../sass/site/site.sass */
+/* line 31, ../sass/site/site.sass */
 ul.label-select > li.active > a:hover {
   background-color: #d0d0d0;
 }

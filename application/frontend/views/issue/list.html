@@ -135,11 +135,16 @@
                                 </label>
                                 <span ng-if="!log.is_close" class="text-danger"><i class="fa fa-exclamation-circle fa-fw"></i></span>
                                 <span ng-if="log.is_close" class="text-success"><i class="fa fa-check-circle fa-fw"></i></span>
-                                <a href="/projects/{{ $projects.current.id }}/issues/{{ issue.id }}" style="padding: 7px;">
-                                    {{ issue.title }}
-                                </a>
-                                <span ng-repeat="label in issue.labels">
-                                    <span class="label label-default">{{ label.title }}</span>
+                                <h5 style="display: inline;">
+                                    <a href="/projects/{{ $projects.current.id }}/issues/{{ issue.id }}" style="padding: 7px;">
+                                        {{ issue.title }}
+                                    </a>
+                                </h5>
+                                <!-- labels -->
+                                <span ng-repeat="label in issue.labels" style="line-height: 27px;">
+                                    <h5 style="display: inline;">
+                                        <span class="label label-primary">{{ label.title }}</span>
+                                    </h5>
                                 </span>
                             </td>
                             <td>{{ issue.floor }}</td>
