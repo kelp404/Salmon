@@ -16,7 +16,7 @@
                 <button ng-class="{active: !$stateParams.status || $stateParams.status=='all'}"
                     ng-click="updateStatusFilter('all')"
                     type="button" class="btn btn-default btn-sm">
-                    <span>All</span>
+                    <strong salmon-lang>All</strong>
                     <span ng-show="count">({{ count.all }})</span>
                 </button>
             </div>
@@ -24,7 +24,7 @@
                 <button ng-class="{active: $stateParams.status=='open'}"
                     ng-click="updateStatusFilter('open')"
                     type="button" class="btn btn-default btn-sm">
-                    <span>Open</span>
+                    <strong salmon-lang>Open</strong>
                     <span ng-show="count">({{ count.open }})</span>
                 </button>
             </div>
@@ -32,7 +32,7 @@
                 <button ng-class="{active: $stateParams.status=='closed'}"
                     ng-click="updateStatusFilter('closed')"
                     type="button" class="btn btn-default btn-sm">
-                    <span>Closed</span>
+                    <strong salmon-lang>Closed</strong>
                     <span ng-show="count">({{ count.closed }})</span>
                 </button>
             </div>
@@ -65,7 +65,7 @@
         <hr/>
 
         <!-- label filter -->
-        <h5>Labels</h5>
+        <h5><strong salmon-lang>Labels</strong></h5>
         <ul class="nav nav-pills nav-stacked">
             <div ng-show="labelService.manageMode" class="col-sm-12">
                 <div ng-repeat="label in labelService.labels" class="input-group">
@@ -87,15 +87,16 @@
             </li>
         </ul>
         <button ng-click="labelService.manageLabels()"
+                ng-show="$user.isRoot || $projects.current.isRoot"
                 ng-class="{active: labelService.manageMode}" class="col-sm-12 btn btn-default btn-sm" style="margin-top: 10px;">
-            Manage labels
+            <strong salmon-lang>Manage labels</strong>
         </button>
         <div class="clearfix"></div>
         <hr/>
 
         <!-- new label -->
         <div ng-show="$user.isRoot || $projects.current.isRoot" class="form-group">
-            <label class="control-label" for="input-new-label">New label</label>
+            <label salmon-lang class="control-label" for="input-new-label">New label</label>
             <input ng-model="labelService.newLabel"
                    validator="[required]"
                    salmon-enter="labelService.addLabel()"
@@ -130,11 +131,13 @@
                         <tr ng-repeat="issue in issues.items">
                             <td>
                                 <label class="checkbox-inline">
-                                    <input type="checkbox"/>
+                                    <input type="checkbox" style="margin: 0 0 0 -20px;"/>
                                 </label>
                                 <span ng-if="!log.is_close" class="text-danger"><i class="fa fa-exclamation-circle fa-fw"></i></span>
                                 <span ng-if="log.is_close" class="text-success"><i class="fa fa-check-circle fa-fw"></i></span>
-                                <a href="/projects/{{ $projects.current.id }}/issues/{{ issue.id }}">{{ issue.title }}</a>
+                                <a href="/projects/{{ $projects.current.id }}/issues/{{ issue.id }}" style="padding: 7px;">
+                                    {{ issue.title }}
+                                </a>
                                 <span ng-repeat="label in issue.labels">
                                     <span class="label label-default">{{ label.title }}</span>
                                 </span>

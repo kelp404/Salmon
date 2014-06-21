@@ -43,7 +43,13 @@
     'Create a new issue': '新增問題',
     'Content': '內容',
     'Author': '建立人',
-    'Add Labels': '設定標籤'
+    'Add Labels': '設定標籤',
+    'Labels': '標籤',
+    'Manage labels': '管理標籤',
+    'New label': '新增標籤',
+    'All': '全部',
+    'Open': '未關閉',
+    'Closed': '已關閉'
   };
 
 }).call(this);
