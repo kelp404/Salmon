@@ -41,11 +41,27 @@
 
   angular.module('salmon.controllers.issues', []).controller('IssuesController', [
     '$scope', '$injector', 'issues', function($scope, $injector, issues) {
-      var $salmon, $timeout, $validator;
+      var $salmon, $timeout, $validator, issue, _i, _len, _ref;
       $validator = $injector.get('$validator');
       $salmon = $injector.get('$salmon');
       $timeout = $injector.get('$timeout');
       $scope.issues = issues;
+      _ref = $scope.issues.items;
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        issue = _ref[_i];
+        issue.labels = (function() {
+          var label, result, _j, _len1, _ref1, _ref2;
+          result = [];
+          _ref1 = $scope.$projects.current.labels;
+          for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
+            label = _ref1[_j];
+            if (_ref2 = label.id, __indexOf.call(issue.label_ids, _ref2) >= 0) {
+              result.push(label);
+            }
+          }
+          return result;
+        })();
+      }
       $scope.updateStatusFilter = function(status) {
         $scope.$stateParams.status = status;
         return $scope.$state.go($scope.$state.current, $scope.$stateParams);
@@ -71,18 +87,18 @@
       return $scope.labelService = {
         newLabel: '',
         isActive: function(labelId) {
-          var _ref;
+          var _ref1;
           labelId = "" + labelId;
           if ($scope.$stateParams.label_ids == null) {
             return false;
           } else if (typeof $scope.$stateParams.label_ids === 'string') {
-            return ((_ref = $scope.$stateParams.label_ids) != null ? _ref.indexOf(labelId) : void 0) >= 0;
+            return ((_ref1 = $scope.$stateParams.label_ids) != null ? _ref1.indexOf(labelId) : void 0) >= 0;
           } else {
             return __indexOf.call($scope.$stateParams.label_ids, labelId) >= 0;
           }
         },
         updateLabelFilter: function(labelId, $event) {
-          var exist, index, _base, _i, _ref;
+          var exist, index, _base, _j, _ref1;
           $event.preventDefault();
           labelId = "" + labelId;
           if ((_base = $scope.$stateParams).label_ids == null) {
@@ -92,7 +108,7 @@
             $scope.$stateParams.label_ids = $scope.$stateParams.label_ids.split(',');
           }
           exist = false;
-          for (index = _i = 0, _ref = $scope.$stateParams.label_ids.length; _i <= _ref; index = _i += 1) {
+          for (index = _j = 0, _ref1 = $scope.$stateParams.label_ids.length; _j <= _ref1; index = _j += 1) {
             if ($scope.$stateParams.label_ids[index] === labelId) {
               $scope.$stateParams.label_ids.splice(index, 1);
               exist = true;

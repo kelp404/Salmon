@@ -13,6 +13,14 @@ indexes:
 - kind: IssueModel
   properties:
   - name: is_close
+  - name: label_ids
+  - name: project
+  - name: create_time
+    direction: desc
+
+- kind: IssueModel
+  properties:
+  - name: is_close
   - name: project
   - name: create_time
 
@@ -28,6 +36,13 @@ indexes:
   - name: is_close
   - name: project
   - name: floor
+  - name: create_time
+    direction: desc
+
+- kind: IssueModel
+  properties:
+  - name: label_ids
+  - name: project
   - name: create_time
     direction: desc
 

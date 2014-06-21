@@ -22,13 +22,11 @@ class IssueSearchForm(Form):
         default=0,
         filters=[utils.int_filter],
     )
-    room = StringField(
-        filters=[lambda x: x.strip() if isinstance(x, basestring) else None],
-    )
     index = IntegerField(
         default=0,
         filters=[utils.int_filter],
     )
+    label_ids = ArrayField()
 
 class IssueForm(Form):
     """

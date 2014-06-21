@@ -6,6 +6,13 @@ angular.module 'salmon.controllers.issues', []
     $timeout = $injector.get '$timeout'
 
     $scope.issues = issues
+    for issue in $scope.issues.items
+        issue.labels = do ->
+            result = []
+            for label in $scope.$projects.current.labels
+                if label.id in issue.label_ids
+                    result.push label
+            result
     $scope.updateStatusFilter = (status) ->
         $scope.$stateParams.status = status
         $scope.$state.go $scope.$state.current, $scope.$stateParams

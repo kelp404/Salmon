@@ -70,6 +70,7 @@
             <li ng-repeat="label in $projects.current.labels" ng-class="{active: labelService.isActive(label.id)}">
                 <a ng-click="labelService.updateLabelFilter(label.id, $event)" href="#">
                     <span ng-hide="$stateParams.keyword" class="badge pull-right">{{ label.count }}</span>
+                    <span class="badge pull-right">0</span>
                     {{ label.title }}
                 </a>
             </li>
@@ -116,6 +117,9 @@
                                 <span ng-if="!log.is_close" class="text-danger"><i class="fa fa-exclamation-circle fa-fw"></i></span>
                                 <span ng-if="log.is_close" class="text-success"><i class="fa fa-check-circle fa-fw"></i></span>
                                 <a href="/projects/{{ $projects.current.id }}/issues/{{ issue.id }}">{{ issue.title }}</a>
+                                <span ng-repeat="label in issue.labels">
+                                    <span class="label label-default">{{ label.title }}</span>
+                                </span>
                             </td>
                             <td>{{ issue.floor }}</td>
                             <td><a href="">{{ issue.author.name }}</a></td>

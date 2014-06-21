@@ -14,7 +14,10 @@ from application import utils
 
 @authorization(UserPermission.root, UserPermission.advanced, UserPermission.normal)
 def get_issues(request, project_id):
-    form = IssueSearchForm(**request.GET.dict())
+    request_dict = request.GET.dict()
+    if 'label_ids' in request_dict:
+        del request_dict['label_ids']
+    form = IssueSearchForm(label_ids=request.GET.getlist('label_ids'), **request_dict)
     project = ProjectModel.get_by_id(long(project_id))
     if project is None:
         raise Http404
@@ -35,6 +38,11 @@ def get_issues(request, project_id):
             query = query.filter('floor >=', form.floor_lowest.data)
         if form.floor_highest.data != 0:
             query = query.filter('floor <=', form.floor_highest.data)
+
+        # label filter
+        form.label_ids.data = [long(x) for x in form.label_ids.data if x]
+        for label_id in form.label_ids.data:
+            query = query.filter('label_ids in', [label_id])
 
         # order
         if form.floor_lowest.data | form.floor_highest.data == 0:
