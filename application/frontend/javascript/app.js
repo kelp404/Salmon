@@ -37,8 +37,14 @@
 }).call(this);
 
 (function() {
+  var __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
+
   angular.module('salmon.controllers.issues', []).controller('IssuesController', [
     '$scope', '$injector', 'issues', function($scope, $injector, issues) {
+      var $salmon, $timeout, $validator;
+      $validator = $injector.get('$validator');
+      $salmon = $injector.get('$salmon');
+      $timeout = $injector.get('$timeout');
       $scope.issues = issues;
       $scope.updateStatusFilter = function(status) {
         $scope.$stateParams.status = status;
@@ -54,7 +60,7 @@
         lowest: $scope.$stateParams.floor_lowest,
         highest: $scope.$stateParams.floor_highest
       };
-      return $scope.$watch('floorOptions', function(newValue, oldValue) {
+      $scope.$watch('floorOptions', function(newValue, oldValue) {
         if (newValue === oldValue) {
           return;
         }
@@ -62,6 +68,60 @@
         $scope.$stateParams.floor_highest = $scope.floorOptions.highest;
         return $scope.$state.go($scope.$state.current, $scope.$stateParams);
       }, true);
+      return $scope.labelService = {
+        newLabel: '',
+        isActive: function(labelId) {
+          var _ref;
+          labelId = "" + labelId;
+          if ($scope.$stateParams.label_ids == null) {
+            return false;
+          } else if (typeof $scope.$stateParams.label_ids === 'string') {
+            return ((_ref = $scope.$stateParams.label_ids) != null ? _ref.indexOf(labelId) : void 0) >= 0;
+          } else {
+            return __indexOf.call($scope.$stateParams.label_ids, labelId) >= 0;
+          }
+        },
+        updateLabelFilter: function(labelId, $event) {
+          var exist, index, _base, _i, _ref;
+          $event.preventDefault();
+          labelId = "" + labelId;
+          if ((_base = $scope.$stateParams).label_ids == null) {
+            _base.label_ids = [];
+          }
+          if (typeof $scope.$stateParams.label_ids === 'string') {
+            $scope.$stateParams.label_ids = $scope.$stateParams.label_ids.split(',');
+          }
+          exist = false;
+          for (index = _i = 0, _ref = $scope.$stateParams.label_ids.length; _i <= _ref; index = _i += 1) {
+            if ($scope.$stateParams.label_ids[index] === labelId) {
+              $scope.$stateParams.label_ids.splice(index, 1);
+              exist = true;
+              break;
+            }
+          }
+          if (!exist) {
+            $scope.$stateParams.label_ids.push(labelId);
+          }
+          return $scope.$state.go($scope.$state.current, $scope.$stateParams);
+        },
+        addLabel: function() {
+          return $validator.validate($scope, 'labelService').success(function() {
+            NProgress.start();
+            return $salmon.api.label.addLabel($scope.$allProjects.current.id, {
+              title: $scope.labelService.newLabel
+            }).success(function() {
+              return $salmon.api.label.getLabels($scope.$allProjects.current.id).success(function(result) {
+                NProgress.done();
+                $scope.$allProjects.current.labels = result;
+                $scope.labelService.newLabel = '';
+                return $timeout(function() {
+                  return $validator.reset($scope, 'labelService');
+                });
+              });
+            });
+          });
+        }
+      };
     }
   ]).controller('NewIssueController', [
     '$scope', '$injector', 'project', function($scope, $injector, project) {
@@ -134,13 +194,17 @@
 }).call(this);
 
 (function() {
+  var __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
+
   angular.module('salmon.controllers.projects', []).controller('ProjectController', [
     '$scope', 'project', function($scope, project) {
+      var _ref;
       $scope.$allProjects.current = project;
+      $scope.$allProjects.current.isRoot = (_ref = $scope.$user.id, __indexOf.call(project.root_ids, _ref) >= 0);
       $scope.$allProjects.current.floor_options = (function() {
-        var index, _i, _ref, _ref1, _results;
+        var index, _i, _ref1, _ref2, _results;
         _results = [];
-        for (index = _i = _ref = project.floor_lowest, _ref1 = project.floor_highest; _i <= _ref1; index = _i += 1) {
+        for (index = _i = _ref1 = project.floor_lowest, _ref2 = project.floor_highest; _i <= _ref2; index = _i += 1) {
           if (index !== 0) {
             _results.push({
               value: "" + index,
@@ -805,6 +869,25 @@
           };
         })(this)
       },
+      label: {
+        getLabels: (function(_this) {
+          return function(projectId) {
+            return _this.http({
+              method: 'get',
+              url: "/projects/" + projectId + "/labels"
+            });
+          };
+        })(this),
+        addLabel: (function(_this) {
+          return function(projectId, label) {
+            return _this.http({
+              method: 'post',
+              url: "/projects/" + projectId + "/labels",
+              data: label
+            });
+          };
+        })(this)
+      },
       issue: {
         addIssue: (function(_this) {
           return function(projectId, issue) {
@@ -834,7 +917,8 @@
                 keyword: query.keyword,
                 status: query.status,
                 floor_lowest: query.floor_lowest,
-                floor_highest: query.floor_highest
+                floor_highest: query.floor_highest,
+                label_ids: query.label_ids
               }
             });
           };
@@ -1033,18 +1117,20 @@
         controller: 'ProjectController'
       });
       $stateProvider.state('salmon.project.issues', {
-        url: '/issues?index?keyword?status?floor_lowest?floor_highest',
+        url: '/issues?index?keyword?status?floor_lowest?floor_highest?label_ids',
         resolve: {
           title: function() {
             return "" + (_('Issues')) + " - ";
           },
           issues: [
             '$salmon', '$stateParams', function($salmon, $stateParams) {
+              var _ref;
               return $salmon.api.issue.getIssues($stateParams.projectId, $stateParams.index, {
                 keyword: $stateParams.keyword,
                 status: $stateParams.status,
                 floor_lowest: $stateParams.floor_lowest,
-                floor_highest: $stateParams.floor_highest
+                floor_highest: $stateParams.floor_highest,
+                label_ids: (_ref = $stateParams.label_ids) != null ? _ref.split(',') : void 0
               }).then(function(response) {
                 return response.data;
               });

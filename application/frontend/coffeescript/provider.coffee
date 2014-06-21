@@ -64,6 +64,16 @@ angular.module 'salmon.provider', []
                     method: 'put'
                     url: '/settings/profile'
                     data: profile
+        label:
+            getLabels: (projectId) =>
+                @http
+                    method: 'get'
+                    url: "/projects/#{projectId}/labels"
+            addLabel: (projectId, label) =>
+                @http
+                    method: 'post'
+                    url: "/projects/#{projectId}/labels"
+                    data: label
         issue:
             addIssue: (projectId, issue) =>
                 @http
@@ -82,6 +92,7 @@ angular.module 'salmon.provider', []
                         status: query.status
                         floor_lowest: query.floor_lowest
                         floor_highest: query.floor_highest
+                        label_ids: query.label_ids
         project:
             getProjects: (index=0, all=no) =>
                 @http

@@ -6,6 +6,7 @@ from application.views.settings import *
 from application.views.users import *
 from application.views.projects import *
 from application.views.issues import *
+from application.views.labels import *
 
 
 # error handlers
@@ -23,6 +24,11 @@ urlpatterns = patterns('',
     # /projects/<project_id>
     url(r'^projects/(?P<project_id>[0-9]{1,32})$', api_dispatch(
         GET=base_view,
+    )),
+    # /projects/<project_id>/labels
+    url(r'^projects/(?P<project_id>[0-9]{1,32})/labels$', api_dispatch(
+        GET=get_labels,
+        POST=add_label,
     )),
     # /projects/<project_id>/issues
     url(r'^projects/(?P<project_id>[0-9]{1,32})/issues$', api_dispatch(

@@ -64,7 +64,7 @@ angular.module 'salmon.router', [
     # /projects/{projectId}/issues
     # ---------------------------------------------------------
     $stateProvider.state 'salmon.project.issues',
-        url: '/issues?index?keyword?status?floor_lowest?floor_highest'
+        url: '/issues?index?keyword?status?floor_lowest?floor_highest?label_ids'
         resolve:
             title: -> "#{_ 'Issues'} - "
             issues: ['$salmon', '$stateParams', ($salmon, $stateParams) ->
@@ -73,6 +73,7 @@ angular.module 'salmon.router', [
                     status: $stateParams.status
                     floor_lowest: $stateParams.floor_lowest
                     floor_highest: $stateParams.floor_highest
+                    label_ids: $stateParams.label_ids?.split(',')
                 .then (response) ->
                     response.data
             ]
