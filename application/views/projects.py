@@ -10,6 +10,7 @@ from application.forms.user_form import UserForm
 from application.models.dto.page_list import PageList
 from application.models.datastore.user_model import UserModel, UserPermission
 from application.models.datastore.project_model import ProjectModel
+from application.models.datastore.issue_model import IssueModel
 
 
 @authorization(UserPermission.root, UserPermission.advanced, UserPermission.normal)
@@ -37,8 +38,13 @@ def get_project(request, project_id):
     if request.user.permission != UserPermission.root and\
                     request.user.key().id() not in project.member_ids:
         raise Http403
+    issue_query = IssueModel.all().filter('project =', project.key())
     result = project.dict()
     result['members'] = [x.dict() for x in UserModel.get_by_id(project.member_ids) if not x is None]
+    result['issue_count'] = {
+        'open': issue_query.filter('is_close', False).count(),
+        'closed': issue_query.filter('is_close', True).count(),
+    }
     return JsonResponse(result)
 
 @authorization(UserPermission.root, UserPermission.advanced)

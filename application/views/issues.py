@@ -18,13 +18,20 @@ def get_issues(request, project_id):
     project = ProjectModel.get_by_id(long(project_id))
     if project is None:
         raise Http404
-    query = IssueModel.all().filter('project =', project.key())
-    if form.status.data == 'open':
-        query = query.filter('is_close =', False)
-    elif form.status.data == 'closed':
-        query = query.filter('is_close =', True)
-    total = query.count()
-    issues = query.order('create_time').fetch(utils.default_page_size, form.index.data * utils.default_page_size)
+    if form.keyword.data:
+        # search by keyword
+        total = 0
+        issues = []
+    else:
+        query = IssueModel.all().filter('project =', project.key())
+        # is_close filter
+        if form.status.data == 'open':
+            query = query.filter('is_close =', False)
+        elif form.status.data == 'closed':
+            query = query.filter('is_close =', True)
+
+        total = query.count()
+        issues = query.order('create_time').fetch(utils.default_page_size, form.index.data * utils.default_page_size)
     return JsonResponse(PageList(form.index.data, utils.default_page_size, total, issues))
 
 @authorization(UserPermission.root, UserPermission.advanced, UserPermission.normal)
