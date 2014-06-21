@@ -13,6 +13,18 @@ angular.module 'salmon.controllers.issues', []
                 if label.id in issue.label_ids
                     result.push label
             result
+    # count issues
+    if $scope.$stateParams.keyword
+        $scope.$parent.count = null
+    else
+        $salmon.api.issue.countIssues $scope.$projects.current.id,
+            status: $scope.$stateParams.status
+            floor_lowest: $scope.$stateParams.floor_lowest
+            floor_highest: $scope.$stateParams.floor_highest
+            label_ids: $scope.$stateParams.label_ids?.split(',')
+        .success (result) ->
+            $scope.$parent.count = result
+
     $scope.updateStatusFilter = (status) ->
         $scope.$stateParams.status = status
         $scope.$state.go $scope.$state.current, $scope.$stateParams

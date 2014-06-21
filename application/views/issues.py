@@ -9,6 +9,7 @@ from application.models.datastore.user_model import UserPermission
 from application.models.datastore.project_model import ProjectModel
 from application.models.datastore.issue_model import IssueModel
 from application.models.datastore.comment_model import CommentModel
+from application.models.datastore.label_model import LabelModel
 from application import utils
 
 
@@ -52,6 +53,63 @@ def get_issues(request, project_id):
         total = query.count()
         issues = query.fetch(utils.default_page_size, form.index.data * utils.default_page_size)
     return JsonResponse(PageList(form.index.data, utils.default_page_size, total, issues))
+
+@authorization(UserPermission.root, UserPermission.advanced, UserPermission.normal)
+def count_issues(request, project_id):
+    request_dict = request.GET.dict()
+    if 'label_ids' in request_dict:
+        del request_dict['label_ids']
+    form = IssueSearchForm(label_ids=request.GET.getlist('label_ids'), **request_dict)
+    project = ProjectModel.get_by_id(long(project_id))
+    if project is None:
+        raise Http404
+    labels = LabelModel.all().filter('project =', project.key()).fetch(100)
+
+    def append_floor_query(query):
+        # floor filter
+        if form.floor_lowest.data != 0:
+            query = query.filter('floor >=', form.floor_lowest.data)
+        if form.floor_highest.data != 0:
+            query = query.filter('floor <=', form.floor_highest.data)
+        return query
+    def append_label_query(query):
+        # label filter
+        form.label_ids.data = [long(x) for x in form.label_ids.data if x]
+        for label_id in form.label_ids.data:
+            query = query.filter('label_ids in', [label_id])
+        return query
+    def append_close_query(query):
+        # is_close filter
+        if form.status.data == 'open':
+            query = query.filter('is_close =', False)
+        elif form.status.data == 'closed':
+            query = query.filter('is_close =', True)
+        return query
+
+    query = IssueModel.all().filter('project =', project.key())
+    query = append_floor_query(query)
+    query = append_label_query(query)
+    count_closed = query.filter('is_close =', True).count()
+
+    query = IssueModel.all().filter('project =', project.key())
+    query = append_floor_query(query)
+    query = append_label_query(query)
+    count_open = query.filter('is_close =', False).count()
+
+    count_labels = {}
+    for label in labels:
+        query = IssueModel.all().filter('project =', project.key())
+        query = append_floor_query(query)
+        query = append_close_query(query)
+        count_labels[str(label.key().id())] = query.filter('label_ids in', [label.key().id()]).count()
+
+    result = {
+        'all': count_open + count_closed,
+        'open': count_open,
+        'closed': count_closed,
+        'labels': count_labels,
+    }
+    return JsonResponse(result)
 
 @authorization(UserPermission.root, UserPermission.advanced, UserPermission.normal)
 def get_issue(request, project_id, issue_id):
