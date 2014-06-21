@@ -15,6 +15,12 @@ indexes:
   - name: is_close
   - name: project
   - name: create_time
+
+- kind: IssueModel
+  properties:
+  - name: is_close
+  - name: project
+  - name: create_time
     direction: desc
 
 - kind: IssueModel
@@ -29,7 +35,17 @@ indexes:
   properties:
   - name: project
   - name: create_time
+
+- kind: IssueModel
+  properties:
+  - name: project
+  - name: create_time
     direction: desc
+
+- kind: IssueModel
+  properties:
+  - name: project
+  - name: floor
 
 - kind: IssueModel
   properties:
