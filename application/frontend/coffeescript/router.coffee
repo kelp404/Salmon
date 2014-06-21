@@ -64,15 +64,16 @@ angular.module 'salmon.router', [
     # /projects/{projectId}/issues
     # ---------------------------------------------------------
     $stateProvider.state 'salmon.project.issues',
-        url: '/issues?index?status'
+        url: '/issues?index?keyword?status?floor_lowest?floor_highest'
         resolve:
             title: -> "#{_ 'Issues'} - "
             issues: ['$salmon', '$stateParams', ($salmon, $stateParams) ->
-                $salmon.api.issue.getIssues(
-                    $stateParams.projectId
-                    $stateParams.index
-                    $stateParams.status
-                ).then (response) ->
+                $salmon.api.issue.getIssues $stateParams.projectId, $stateParams.index,
+                    keyword: $stateParams.keyword
+                    status: $stateParams.status
+                    floor_lowest: $stateParams.floor_lowest
+                    floor_highest: $stateParams.floor_highest
+                .then (response) ->
                     response.data
             ]
         templateUrl: '/views/issue/list.html'

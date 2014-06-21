@@ -30,8 +30,19 @@ def get_issues(request, project_id):
         elif form.status.data == 'closed':
             query = query.filter('is_close =', True)
 
+        # floor filter
+        if form.floor_lowest.data != 0:
+            query = query.filter('floor >=', form.floor_lowest.data)
+        if form.floor_highest.data != 0:
+            query = query.filter('floor <=', form.floor_highest.data)
+
+        # order
+        if form.floor_lowest.data | form.floor_highest.data == 0:
+            query = query.order('-create_time')
+        else:
+            query = query.order('floor').order('-create_time')
         total = query.count()
-        issues = query.order('create_time').fetch(utils.default_page_size, form.index.data * utils.default_page_size)
+        issues = query.fetch(utils.default_page_size, form.index.data * utils.default_page_size)
     return JsonResponse(PageList(form.index.data, utils.default_page_size, total, issues))
 
 @authorization(UserPermission.root, UserPermission.advanced, UserPermission.normal)

@@ -1,15 +1,23 @@
 angular.module 'salmon.controllers.issues', []
 
-.controller 'IssuesController', ['$scope', '$injector', 'project', 'issues', ($scope, $injector, project, issues) ->
-    $scope.$allProjects.current = project
+.controller 'IssuesController', ['$scope', '$injector', 'issues', ($scope, $injector, issues) ->
     $scope.issues = issues
     $scope.updateStatusFilter = (status) ->
         $scope.$stateParams.status = status
-        $scope.$state.go 'salmon.project.issues', $scope.$stateParams
+        $scope.$state.go $scope.$state.current, $scope.$stateParams
     $scope.showDetail = (projectId, issueId) ->
         $scope.$state.go 'salmon.project.issue',
             projectId: projectId
             issueId: issueId
+    $scope.floorOptions =
+        lowest: $scope.$stateParams.floor_lowest
+        highest: $scope.$stateParams.floor_highest
+    $scope.$watch 'floorOptions', (newValue, oldValue) ->
+        return if newValue is oldValue
+        $scope.$stateParams.floor_lowest = $scope.floorOptions.lowest
+        $scope.$stateParams.floor_highest = $scope.floorOptions.highest
+        $scope.$state.go $scope.$state.current, $scope.$stateParams
+    , yes
 ]
 
 .controller 'NewIssueController', ['$scope', '$injector', 'project', ($scope, $injector, project) ->

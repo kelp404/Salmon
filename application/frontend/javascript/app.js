@@ -38,19 +38,30 @@
 
 (function() {
   angular.module('salmon.controllers.issues', []).controller('IssuesController', [
-    '$scope', '$injector', 'project', 'issues', function($scope, $injector, project, issues) {
-      $scope.$allProjects.current = project;
+    '$scope', '$injector', 'issues', function($scope, $injector, issues) {
       $scope.issues = issues;
       $scope.updateStatusFilter = function(status) {
         $scope.$stateParams.status = status;
-        return $scope.$state.go('salmon.project.issues', $scope.$stateParams);
+        return $scope.$state.go($scope.$state.current, $scope.$stateParams);
       };
-      return $scope.showDetail = function(projectId, issueId) {
+      $scope.showDetail = function(projectId, issueId) {
         return $scope.$state.go('salmon.project.issue', {
           projectId: projectId,
           issueId: issueId
         });
       };
+      $scope.floorOptions = {
+        lowest: $scope.$stateParams.floor_lowest,
+        highest: $scope.$stateParams.floor_highest
+      };
+      return $scope.$watch('floorOptions', function(newValue, oldValue) {
+        if (newValue === oldValue) {
+          return;
+        }
+        $scope.$stateParams.floor_lowest = $scope.floorOptions.lowest;
+        $scope.$stateParams.floor_highest = $scope.floorOptions.highest;
+        return $scope.$state.go($scope.$state.current, $scope.$stateParams);
+      }, true);
     }
   ]).controller('NewIssueController', [
     '$scope', '$injector', 'project', function($scope, $injector, project) {
@@ -124,7 +135,21 @@
 
 (function() {
   angular.module('salmon.controllers.projects', []).controller('ProjectController', [
-    '$scope', function($scope) {
+    '$scope', 'project', function($scope, project) {
+      $scope.$allProjects.current = project;
+      $scope.$allProjects.current.floor_options = (function() {
+        var index, _i, _ref, _ref1, _results;
+        _results = [];
+        for (index = _i = _ref = project.floor_lowest, _ref1 = project.floor_highest; _i <= _ref1; index = _i += 1) {
+          if (index !== 0) {
+            _results.push({
+              value: "" + index,
+              label: index < 0 ? "B" + (index * -1) : index
+            });
+          }
+        }
+        return _results;
+      })();
       if ($scope.$state.current.name === 'salmon.project') {
         return $scope.$state.go('salmon.project.issues');
       }
@@ -791,19 +816,25 @@
           };
         })(this),
         getIssues: (function(_this) {
-          return function(projectId, index, status) {
+          return function(projectId, index, query) {
             if (index == null) {
               index = 0;
             }
-            if (status == null) {
-              status = 'all';
+            if (query == null) {
+              query = {};
+            }
+            if (query.status == null) {
+              query.status = 'all';
             }
             return _this.http({
               method: 'get',
               url: "/projects/" + projectId + "/issues",
               params: {
                 index: index,
-                status: status
+                keyword: query.keyword,
+                status: query.status,
+                floor_lowest: query.floor_lowest,
+                floor_highest: query.floor_highest
               }
             });
           };
@@ -1002,14 +1033,19 @@
         controller: 'ProjectController'
       });
       $stateProvider.state('salmon.project.issues', {
-        url: '/issues?index?status',
+        url: '/issues?index?keyword?status?floor_lowest?floor_highest',
         resolve: {
           title: function() {
             return "" + (_('Issues')) + " - ";
           },
           issues: [
             '$salmon', '$stateParams', function($salmon, $stateParams) {
-              return $salmon.api.issue.getIssues($stateParams.projectId, $stateParams.index, $stateParams.status).then(function(response) {
+              return $salmon.api.issue.getIssues($stateParams.projectId, $stateParams.index, {
+                keyword: $stateParams.keyword,
+                status: $stateParams.status,
+                floor_lowest: $stateParams.floor_lowest,
+                floor_highest: $stateParams.floor_highest
+              }).then(function(response) {
                 return response.data;
               });
             }

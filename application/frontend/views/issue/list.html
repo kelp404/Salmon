@@ -1,5 +1,6 @@
 <div class="row">
     <div class="col-sm-3">
+        <!-- keyword -->
         <form>
             <div class="input-group">
                 <input salmon-focus ng-model="keyword" type="text" class="form-control"/>
@@ -9,6 +10,7 @@
             </div>
         </form>
 
+        <!-- status filter -->
         <div class="btn-group btn-group-justified" style="padding-top: 15px;">
             <div class="btn-group">
                 <button ng-class="{active: !$stateParams.status || $stateParams.status=='all'}"
@@ -33,6 +35,30 @@
                     <span>Closed</span>
                     <span ng-hide="$stateParams.keyword">({{ $allProjects.current.issue_count.closed }})</span>
                 </button>
+            </div>
+        </div>
+
+        <!-- floor filter -->
+        <div class="col-sm-12" style="padding: 15px 0 0 0;">
+            <div class="col-sm-2" style="padding: 4px 0;">
+                <label salmon-lang for="input-floors">Floor</label>
+            </div>
+            <div class="col-sm-4" style="padding: 0">
+                <select ng-model="floorOptions.lowest"
+                        ng-options="option.value as option.label for option in $allProjects.current.floor_options"
+                        id="input-floors" class="form-control input-sm">
+                    <option value="">---</option>
+                </select>
+            </div>
+            <div class="col-sm-1" style="padding: 5px 7px;">
+                <p class="form-control-static">～</p>
+            </div>
+            <div class="col-sm-4" style="padding: 0">
+                <select ng-model="floorOptions.highest"
+                        ng-options="option.value as option.label for option in $allProjects.current.floor_options"
+                        class="form-control input-sm">
+                    <option value="">---</option>
+                </select>
             </div>
         </div>
     </div>

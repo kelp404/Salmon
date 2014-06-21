@@ -70,13 +70,18 @@ angular.module 'salmon.provider', []
                     method: 'post'
                     url: "/projects/#{projectId}/issues"
                     data: issue
-            getIssues: (projectId, index=0, status='all') =>
+            getIssues: (projectId, index=0, query) =>
+                query ?= {}
+                query.status ?= 'all'
                 @http
                     method: 'get'
                     url: "/projects/#{projectId}/issues"
                     params:
                         index: index
-                        status: status
+                        keyword: query.keyword
+                        status: query.status
+                        floor_lowest: query.floor_lowest
+                        floor_highest: query.floor_highest
         project:
             getProjects: (index=0, all=no) =>
                 @http
