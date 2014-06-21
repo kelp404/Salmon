@@ -41,10 +41,6 @@ class IssueForm(Form):
     floor = IntegerField(
         filters=[utils.int_filter],
     )
-    room = StringField(
-        default='-',
-        filters=[lambda x: x.strip() if isinstance(x, basestring) else None],
-    )
     content = StringField(
         filters=[lambda x: x.strip() if isinstance(x, basestring) else None],
     )

@@ -32,8 +32,6 @@
     'Floor': '樓層',
     'Lowest floor': '最低樓層',
     'Highest floor': '最高樓層',
-    'Rooms': '戶名',
-    'Room': '戶名',
     'Search': '搜尋',
     'Add': '加入',
     'Members': '成員',
@@ -44,7 +42,8 @@
     'New Issue': '新增問題',
     'Create a new issue': '新增問題',
     'Content': '內容',
-    'Author': '建立人'
+    'Author': '建立人',
+    'Add Labels': '設定標籤'
   };
 
 }).call(this);

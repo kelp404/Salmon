@@ -146,7 +146,25 @@
       $scope.issue = {
         title: '',
         floor: $scope.floorOptions[0].value,
-        room: project.room_options[0]
+        label_ids: []
+      };
+      $scope.isActiveLabel = function(labelId) {
+        return __indexOf.call($scope.issue.label_ids, labelId) >= 0;
+      };
+      $scope.toggleLabel = function(labelId, $event) {
+        var exist, index, _i, _ref;
+        $event.preventDefault();
+        exist = false;
+        for (index = _i = 0, _ref = $scope.issue.label_ids.length; _i <= _ref; index = _i += 1) {
+          if ($scope.issue.label_ids[index] === labelId) {
+            $scope.issue.label_ids.splice(index, 1);
+            exist = true;
+            break;
+          }
+        }
+        if (!exist) {
+          return $scope.issue.label_ids.push(labelId);
+        }
       };
       return $scope.submit = function($event) {
         $event.preventDefault();

@@ -39,15 +39,10 @@ def get_project(request, project_id):
     if request.user.permission != UserPermission.root and\
                     request.user.key().id() not in project.member_ids:
         raise Http403
-    issue_query = IssueModel.all().filter('project =', project.key())
     labels = LabelModel.all().filter('project =', project.key()).order('title').fetch(100)
 
     result = project.dict()
     result['members'] = [x.dict() for x in UserModel.get_by_id(project.member_ids) if not x is None]
-    result['issue_count'] = {
-        'open': issue_query.filter('is_close', False).count(),
-        'closed': issue_query.filter('is_close', True).count(),
-    }
     result['labels'] = [x.dict() for x in labels]
     return JsonResponse(result)
 

@@ -8,7 +8,6 @@ from application.models.datastore.project_model import ProjectModel
 class IssueModel(BaseModel):
     title = db.StringProperty(required=True, indexed=False)
     floor = db.IntegerProperty(required=True)
-    room = db.StringProperty(required=True)
     content = db.TextProperty()
     label_ids = db.ListProperty(long, default=[])
     author = db.ReferenceProperty(reference_class=UserModel, required=True)
@@ -21,7 +20,6 @@ class IssueModel(BaseModel):
             'id': self.key().id() if self.has_key() else None,
             'title': self.title,
             'floor': self.floor,
-            'room': self.room,
             'content': self.content,
             'label_ids': self.label_ids,
             'author': self.author.dict(),

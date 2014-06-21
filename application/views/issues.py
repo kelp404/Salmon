@@ -68,7 +68,6 @@ def add_issue(request, project_id):
     issue = IssueModel(
         title=form.title.data,
         floor=form.floor.data,
-        room=form.room.data,
         content=bleach.clean(form.content.data),
         label_ids=form.label_ids.data,
         author=request.user,

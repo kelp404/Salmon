@@ -71,7 +71,18 @@ angular.module 'salmon.controllers.issues', []
     $scope.issue =
         title: ''
         floor: $scope.floorOptions[0].value
-        room: project.room_options[0]
+        label_ids: []
+    $scope.isActiveLabel = (labelId) -> labelId in $scope.issue.label_ids
+    $scope.toggleLabel = (labelId, $event) ->
+        $event.preventDefault()
+        exist = no
+        for index in [0..$scope.issue.label_ids.length] by 1
+            if $scope.issue.label_ids[index] is labelId
+                $scope.issue.label_ids.splice(index, 1)
+                exist = yes
+                break
+        if not exist
+            $scope.issue.label_ids.push labelId
     $scope.submit = ($event) ->
         $event.preventDefault()
         $validator.validate($scope, 'issue').success ->
