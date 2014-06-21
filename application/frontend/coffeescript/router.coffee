@@ -46,16 +46,27 @@ angular.module 'salmon.router', [
         controller: 'LoginController'
 
     # ---------------------------------------------------------
-    # /projects/{projectId}/issues
+    # /projects/{projectId}
     # ---------------------------------------------------------
-    $stateProvider.state 'salmon.issues',
-        url: '/projects/:projectId/issues?index?status'
+    $stateProvider.state 'salmon.project',
+        url: '/projects/:projectId'
         resolve:
             title: -> "#{_ 'Issues'} - "
             project: ['$salmon', '$stateParams', ($salmon, $stateParams) ->
                 $salmon.api.project.getProject($stateParams.projectId).then (response) ->
                     response.data
             ]
+        templateUrl: '/views/project/detail.html'
+        controller: 'ProjectController'
+
+
+    # ---------------------------------------------------------
+    # /projects/{projectId}/issues
+    # ---------------------------------------------------------
+    $stateProvider.state 'salmon.project.issues',
+        url: '/issues?index?status'
+        resolve:
+            title: -> "#{_ 'Issues'} - "
             issues: ['$salmon', '$stateParams', ($salmon, $stateParams) ->
                 $salmon.api.issue.getIssues(
                     $stateParams.projectId
@@ -69,27 +80,19 @@ angular.module 'salmon.router', [
     # ---------------------------------------------------------
     # /projects/{projectId}/issues/new
     # ---------------------------------------------------------
-    $stateProvider.state 'salmon.issues-new',
-        url: '/projects/:projectId/issues/new'
+    $stateProvider.state 'salmon.project.issues-new',
+        url: '/issues/new'
         resolve:
             title: -> "#{_ 'Issues'} - "
-            project: ['$salmon', '$stateParams', ($salmon, $stateParams) ->
-                $salmon.api.project.getProject($stateParams.projectId).then (response) ->
-                    response.data
-            ]
         templateUrl: '/views/issue/new.html'
         controller: 'NewIssueController'
     # ---------------------------------------------------------
     # /projects/{projectId}/issues/{issueId}
     # ---------------------------------------------------------
-    $stateProvider.state 'salmon.issues-detail',
-        url: '/projects/:projectId/issues/:issueId'
+    $stateProvider.state 'salmon.project.issue',
+        url: '/issues/:issueId'
         resolve:
             title: -> "#{_ 'Issues'} - "
-            project: ['$salmon', '$stateParams', ($salmon, $stateParams) ->
-                $salmon.api.project.getProject($stateParams.projectId).then (response) ->
-                    response.data
-            ]
             issue: ['$salmon', '$stateParams', ($salmon, $stateParams) ->
                 null
             ]

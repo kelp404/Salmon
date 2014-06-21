@@ -20,6 +20,10 @@ urlpatterns = patterns('',
     url(r'^login$', dispatch(GET=base_view)),
 
 
+    # /projects/<project_id>
+    url(r'^projects/(?P<project_id>[0-9]{1,32})$', api_dispatch(
+        GET=base_view,
+    )),
     # /projects/<project_id>/issues
     url(r'^projects/(?P<project_id>[0-9]{1,32})/issues$', api_dispatch(
         GET=get_issues,

@@ -20,11 +20,11 @@
                     </ul>
                 </li>
                 <li ng-if="$user.isLogin && $allProjects.items.length"
-                    ng-class="{active: $state.current.name.indexOf('salmon.issues-new')==0}">
+                    ng-class="{active: $state.current.name.indexOf('salmon.project.issues-new')==0}">
                     <a href="/projects/{{ $allProjects.current.id }}/issues/new"><i class="fa fa-plus fa-fw"></i> <span salmon-lang>New Issue</span></a>
                 </li>
                 <li ng-if="$user.isLogin && $allProjects.items.length"
-                    ng-class="{active: $state.current.name.indexOf('salmon.issues')==0 && $state.current.name!='salmon.issues-new'}">
+                    ng-class="{active: $state.current.name.indexOf('salmon.project.issues')==0 && $state.current.name!='salmon.project.issues-new'}">
                     <a salmon-lang href="/projects/{{ $allProjects.current.id }}/issues">Issues</a>
                 </li>
                 <li ng-if="$user.isLogin" ng-class="{active: $state.current.name.indexOf('salmon.settings')==0}" class="dropdown">

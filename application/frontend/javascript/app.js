@@ -27,7 +27,7 @@
         $state.go('salmon.login');
       }
       if ($scope.$allProjects.items.length) {
-        return $state.go('salmon.issues', {
+        return $state.go('salmon.project', {
           projectId: $scope.$allProjects.items[0].id
         });
       }
@@ -43,12 +43,10 @@
       $scope.issues = issues;
       $scope.updateStatusFilter = function(status) {
         $scope.$stateParams.status = status;
-        return $scope.$state.go('salmon.issues', $scope.$stateParams, {
-          reload: true
-        });
+        return $scope.$state.go('salmon.project.issues', $scope.$stateParams);
       };
       return $scope.showDetail = function(projectId, issueId) {
-        return $scope.$state.go('salmon.issues-detail', {
+        return $scope.$state.go('salmon.project.issue', {
           projectId: projectId,
           issueId: issueId
         });
@@ -84,7 +82,7 @@
         return $validator.validate($scope, 'issue').success(function() {
           NProgress.start();
           return $salmon.api.issue.addIssue(project.id, $scope.issue).success(function() {
-            return $state.go('salmon.issues', {
+            return $state.go('salmon.project.issues', {
               projectId: project.id,
               index: 0
             }, {
@@ -125,7 +123,13 @@
 }).call(this);
 
 (function() {
-  angular.module('salmon.controllers.projects', []);
+  angular.module('salmon.controllers.projects', []).controller('ProjectController', [
+    '$scope', function($scope) {
+      if ($scope.$state.current.name === 'salmon.project') {
+        return $scope.$state.go('salmon.project.issues');
+      }
+    }
+  ]);
 
 }).call(this);
 
@@ -980,8 +984,8 @@
         templateUrl: '/views/login.html',
         controller: 'LoginController'
       });
-      $stateProvider.state('salmon.issues', {
-        url: '/projects/:projectId/issues?index?status',
+      $stateProvider.state('salmon.project', {
+        url: '/projects/:projectId',
         resolve: {
           title: function() {
             return "" + (_('Issues')) + " - ";
@@ -992,7 +996,17 @@
                 return response.data;
               });
             }
-          ],
+          ]
+        },
+        templateUrl: '/views/project/detail.html',
+        controller: 'ProjectController'
+      });
+      $stateProvider.state('salmon.project.issues', {
+        url: '/issues?index?status',
+        resolve: {
+          title: function() {
+            return "" + (_('Issues')) + " - ";
+          },
           issues: [
             '$salmon', '$stateParams', function($salmon, $stateParams) {
               return $salmon.api.issue.getIssues($stateParams.projectId, $stateParams.index, $stateParams.status).then(function(response) {
@@ -1004,36 +1018,22 @@
         templateUrl: '/views/issue/list.html',
         controller: 'IssuesController'
       });
-      $stateProvider.state('salmon.issues-new', {
-        url: '/projects/:projectId/issues/new',
+      $stateProvider.state('salmon.project.issues-new', {
+        url: '/issues/new',
         resolve: {
           title: function() {
             return "" + (_('Issues')) + " - ";
-          },
-          project: [
-            '$salmon', '$stateParams', function($salmon, $stateParams) {
-              return $salmon.api.project.getProject($stateParams.projectId).then(function(response) {
-                return response.data;
-              });
-            }
-          ]
+          }
         },
         templateUrl: '/views/issue/new.html',
         controller: 'NewIssueController'
       });
-      $stateProvider.state('salmon.issues-detail', {
-        url: '/projects/:projectId/issues/:issueId',
+      $stateProvider.state('salmon.project.issue', {
+        url: '/issues/:issueId',
         resolve: {
           title: function() {
             return "" + (_('Issues')) + " - ";
           },
-          project: [
-            '$salmon', '$stateParams', function($salmon, $stateParams) {
-              return $salmon.api.project.getProject($stateParams.projectId).then(function(response) {
-                return response.data;
-              });
-            }
-          ],
           issue: [
             '$salmon', '$stateParams', function($salmon, $stateParams) {
               return null;

@@ -5,9 +5,9 @@ angular.module 'salmon.controllers.issues', []
     $scope.issues = issues
     $scope.updateStatusFilter = (status) ->
         $scope.$stateParams.status = status
-        $scope.$state.go 'salmon.issues', $scope.$stateParams, reload: yes
+        $scope.$state.go 'salmon.project.issues', $scope.$stateParams
     $scope.showDetail = (projectId, issueId) ->
-        $scope.$state.go 'salmon.issues-detail',
+        $scope.$state.go 'salmon.project.issue',
             projectId: projectId
             issueId: issueId
 ]
@@ -31,7 +31,7 @@ angular.module 'salmon.controllers.issues', []
         $validator.validate($scope, 'issue').success ->
             NProgress.start()
             $salmon.api.issue.addIssue(project.id, $scope.issue).success ->
-                $state.go 'salmon.issues',
+                $state.go 'salmon.project.issues',
                     projectId: project.id
                     index: 0
                 , reload: yes
