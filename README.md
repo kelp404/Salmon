@@ -27,7 +27,7 @@ $rootScope =
         message: {string}
         callback: (result) ->
         isShow: {bool}
-    $allProjects:   # from BaseController
+    $projects:   # from BaseController
         items: []
         current: {}
     $user:

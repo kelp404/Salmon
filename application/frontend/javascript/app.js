@@ -3,9 +3,9 @@
     '$scope', '$injector', 'projects', function($scope, $injector, projects) {
       var $rootScope;
       $rootScope = $injector.get('$rootScope');
-      $rootScope.$allProjects = projects;
-      if ($scope.$allProjects.items) {
-        return $scope.$allProjects.current = $scope.$allProjects.items[0];
+      $rootScope.$projects = projects;
+      if ($scope.$projects.items) {
+        return $scope.$projects.current = $scope.$projects.items[0];
       }
     }
   ]);
@@ -26,9 +26,9 @@
       if (!$salmon.user.isLogin) {
         $state.go('salmon.login');
       }
-      if ($scope.$allProjects.items.length) {
+      if ($scope.$projects.items.length) {
         return $state.go('salmon.project', {
-          projectId: $scope.$allProjects.items[0].id
+          projectId: $scope.$projects.items[0].id
         });
       }
     }
@@ -107,12 +107,12 @@
         addLabel: function() {
           return $validator.validate($scope, 'labelService').success(function() {
             NProgress.start();
-            return $salmon.api.label.addLabel($scope.$allProjects.current.id, {
+            return $salmon.api.label.addLabel($scope.$projects.current.id, {
               title: $scope.labelService.newLabel
             }).success(function() {
-              return $salmon.api.label.getLabels($scope.$allProjects.current.id).success(function(result) {
+              return $salmon.api.label.getLabels($scope.$projects.current.id).success(function(result) {
                 NProgress.done();
-                $scope.$allProjects.current.labels = result;
+                $scope.$projects.current.labels = result;
                 $scope.labelService.newLabel = '';
                 return $timeout(function() {
                   return $validator.reset($scope, 'labelService');
@@ -129,7 +129,7 @@
       $validator = $injector.get('$validator');
       $salmon = $injector.get('$salmon');
       $state = $injector.get('$state');
-      $scope.$allProjects.current = project;
+      $scope.$projects.current = project;
       $scope.floorOptions = (function() {
         var index, _i, _ref, _ref1, _results;
         _results = [];
@@ -199,9 +199,9 @@
   angular.module('salmon.controllers.projects', []).controller('ProjectController', [
     '$scope', 'project', function($scope, project) {
       var _ref;
-      $scope.$allProjects.current = project;
-      $scope.$allProjects.current.isRoot = (_ref = $scope.$user.id, __indexOf.call(project.root_ids, _ref) >= 0);
-      $scope.$allProjects.current.floor_options = (function() {
+      $scope.$projects.current = project;
+      $scope.$projects.current.isRoot = (_ref = $scope.$user.id, __indexOf.call(project.root_ids, _ref) >= 0);
+      $scope.$projects.current.floor_options = (function() {
         var index, _i, _ref1, _ref2, _results;
         _results = [];
         for (index = _i = _ref1 = project.floor_lowest, _ref2 = project.floor_highest; _i <= _ref2; index = _i += 1) {

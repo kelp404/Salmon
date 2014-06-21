@@ -50,10 +50,10 @@ angular.module 'salmon.controllers.issues', []
             $scope.$state.go $scope.$state.current, $scope.$stateParams
         addLabel: -> $validator.validate($scope, 'labelService').success ->
             NProgress.start()
-            $salmon.api.label.addLabel($scope.$allProjects.current.id, title: $scope.labelService.newLabel).success ->
-                $salmon.api.label.getLabels($scope.$allProjects.current.id).success (result) ->
+            $salmon.api.label.addLabel($scope.$projects.current.id, title: $scope.labelService.newLabel).success ->
+                $salmon.api.label.getLabels($scope.$projects.current.id).success (result) ->
                     NProgress.done()
-                    $scope.$allProjects.current.labels = result
+                    $scope.$projects.current.labels = result
                     $scope.labelService.newLabel = ''
                     $timeout -> $validator.reset $scope, 'labelService'
 ]
@@ -63,7 +63,7 @@ angular.module 'salmon.controllers.issues', []
     $salmon = $injector.get '$salmon'
     $state = $injector.get '$state'
 
-    $scope.$allProjects.current = project
+    $scope.$projects.current = project
     $scope.floorOptions = do ->
         for index in [project.floor_lowest..project.floor_highest] by 1 when index isnt 0
             label: if index < 0 then "B#{index * -1}" else "#{index}"
