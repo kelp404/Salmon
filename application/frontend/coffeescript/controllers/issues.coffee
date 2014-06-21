@@ -13,17 +13,19 @@ angular.module 'salmon.controllers.issues', []
                 if label.id in issue.label_ids
                     result.push label
             result
-    # count issues
-    if $scope.$stateParams.keyword
-        $scope.$parent.count = null
-    else
-        $salmon.api.issue.countIssues $scope.$projects.current.id,
-            status: $scope.$stateParams.status
-            floor_lowest: $scope.$stateParams.floor_lowest
-            floor_highest: $scope.$stateParams.floor_highest
-            label_ids: $scope.$stateParams.label_ids?.split(',')
-        .success (result) ->
-            $scope.$parent.count = result
+
+    countIssues = ->
+        if $scope.$stateParams.keyword
+            $scope.$parent.count = null
+        else
+            $salmon.api.issue.countIssues $scope.$projects.current.id,
+                status: $scope.$stateParams.status
+                floor_lowest: $scope.$stateParams.floor_lowest
+                floor_highest: $scope.$stateParams.floor_highest
+                label_ids: $scope.$stateParams.label_ids?.split(',')
+            .success (result) ->
+                $scope.$parent.count = result
+    countIssues()
 
     $scope.updateStatusFilter = (status) ->
         $scope.$stateParams.status = status
@@ -44,6 +46,28 @@ angular.module 'salmon.controllers.issues', []
 
     $scope.labelService =
         newLabel: ''
+        manageMode: no
+        labels: []
+        manageLabels: ->
+            if @manageMode
+                # submit change to server
+                changedLabels = {}
+                for x in @labels
+                    changedLabels["#{x.id}"] = x.title
+                newLabels = []
+                for label in $scope.$projects.current.labels
+                    if changedLabels["#{label.id}"]?
+                        if label.title isnt changedLabels["#{label.id}"] and changedLabels["#{label.id}"]
+                            label.title = changedLabels["#{label.id}"]
+                            $salmon.api.label.updateLabel($scope.$projects.current.id, label)
+                        newLabels.push label
+                    else
+                        $salmon.api.label.removeLabel($scope.$projects.current.id, label.id)
+                $scope.$projects.current.labels = newLabels
+            else
+                @labels = angular.copy($scope.$projects.current.labels)
+            @manageMode = !@manageMode
+
         isActive: (labelId) ->
             labelId = "#{labelId}"
             if not $scope.$stateParams.label_ids?
@@ -72,6 +96,7 @@ angular.module 'salmon.controllers.issues', []
             $salmon.api.label.addLabel($scope.$projects.current.id, title: $scope.labelService.newLabel).success ->
                 $salmon.api.label.getLabels($scope.$projects.current.id).success (result) ->
                     NProgress.done()
+                    countIssues()
                     $scope.$projects.current.labels = result
                     $scope.labelService.newLabel = ''
                     $timeout -> $validator.reset $scope, 'labelService'

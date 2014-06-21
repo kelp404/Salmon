@@ -41,7 +41,7 @@
 
   angular.module('salmon.controllers.issues', []).controller('IssuesController', [
     '$scope', '$injector', 'issues', function($scope, $injector, issues) {
-      var $salmon, $timeout, $validator, issue, _i, _len, _ref, _ref1;
+      var $salmon, $timeout, $validator, countIssues, issue, _i, _len, _ref;
       $validator = $injector.get('$validator');
       $salmon = $injector.get('$salmon');
       $timeout = $injector.get('$timeout');
@@ -62,18 +62,22 @@
           return result;
         })();
       }
-      if ($scope.$stateParams.keyword) {
-        $scope.$parent.count = null;
-      } else {
-        $salmon.api.issue.countIssues($scope.$projects.current.id, {
-          status: $scope.$stateParams.status,
-          floor_lowest: $scope.$stateParams.floor_lowest,
-          floor_highest: $scope.$stateParams.floor_highest,
-          label_ids: (_ref1 = $scope.$stateParams.label_ids) != null ? _ref1.split(',') : void 0
-        }).success(function(result) {
-          return $scope.$parent.count = result;
-        });
-      }
+      countIssues = function() {
+        var _ref1;
+        if ($scope.$stateParams.keyword) {
+          return $scope.$parent.count = null;
+        } else {
+          return $salmon.api.issue.countIssues($scope.$projects.current.id, {
+            status: $scope.$stateParams.status,
+            floor_lowest: $scope.$stateParams.floor_lowest,
+            floor_highest: $scope.$stateParams.floor_highest,
+            label_ids: (_ref1 = $scope.$stateParams.label_ids) != null ? _ref1.split(',') : void 0
+          }).success(function(result) {
+            return $scope.$parent.count = result;
+          });
+        }
+      };
+      countIssues();
       $scope.updateStatusFilter = function(status) {
         $scope.$stateParams.status = status;
         return $scope.$state.go($scope.$state.current, $scope.$stateParams);
@@ -98,19 +102,50 @@
       }, true);
       return $scope.labelService = {
         newLabel: '',
+        manageMode: false,
+        labels: [],
+        manageLabels: function() {
+          var changedLabels, label, newLabels, x, _j, _k, _len1, _len2, _ref1, _ref2;
+          if (this.manageMode) {
+            changedLabels = {};
+            _ref1 = this.labels;
+            for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
+              x = _ref1[_j];
+              changedLabels["" + x.id] = x.title;
+            }
+            newLabels = [];
+            _ref2 = $scope.$projects.current.labels;
+            for (_k = 0, _len2 = _ref2.length; _k < _len2; _k++) {
+              label = _ref2[_k];
+              if (changedLabels["" + label.id] != null) {
+                if (label.title !== changedLabels["" + label.id] && changedLabels["" + label.id]) {
+                  label.title = changedLabels["" + label.id];
+                  $salmon.api.label.updateLabel($scope.$projects.current.id, label);
+                }
+                newLabels.push(label);
+              } else {
+                $salmon.api.label.removeLabel($scope.$projects.current.id, label.id);
+              }
+            }
+            $scope.$projects.current.labels = newLabels;
+          } else {
+            this.labels = angular.copy($scope.$projects.current.labels);
+          }
+          return this.manageMode = !this.manageMode;
+        },
         isActive: function(labelId) {
-          var _ref2;
+          var _ref1;
           labelId = "" + labelId;
           if ($scope.$stateParams.label_ids == null) {
             return false;
           } else if (typeof $scope.$stateParams.label_ids === 'string') {
-            return ((_ref2 = $scope.$stateParams.label_ids) != null ? _ref2.indexOf(labelId) : void 0) >= 0;
+            return ((_ref1 = $scope.$stateParams.label_ids) != null ? _ref1.indexOf(labelId) : void 0) >= 0;
           } else {
             return __indexOf.call($scope.$stateParams.label_ids, labelId) >= 0;
           }
         },
         updateLabelFilter: function(labelId, $event) {
-          var exist, index, _base, _j, _ref2;
+          var exist, index, _base, _j, _ref1;
           $event.preventDefault();
           labelId = "" + labelId;
           if ((_base = $scope.$stateParams).label_ids == null) {
@@ -120,7 +155,7 @@
             $scope.$stateParams.label_ids = $scope.$stateParams.label_ids.split(',');
           }
           exist = false;
-          for (index = _j = 0, _ref2 = $scope.$stateParams.label_ids.length; _j <= _ref2; index = _j += 1) {
+          for (index = _j = 0, _ref1 = $scope.$stateParams.label_ids.length; _j <= _ref1; index = _j += 1) {
             if ($scope.$stateParams.label_ids[index] === labelId) {
               $scope.$stateParams.label_ids.splice(index, 1);
               exist = true;
@@ -140,6 +175,7 @@
             }).success(function() {
               return $salmon.api.label.getLabels($scope.$projects.current.id).success(function(result) {
                 NProgress.done();
+                countIssues();
                 $scope.$projects.current.labels = result;
                 $scope.labelService.newLabel = '';
                 return $timeout(function() {
@@ -904,6 +940,23 @@
             return _this.http({
               method: 'post',
               url: "/projects/" + projectId + "/labels",
+              data: label
+            });
+          };
+        })(this),
+        removeLabel: (function(_this) {
+          return function(projectId, labelId) {
+            return _this.http({
+              method: 'delete',
+              url: "/projects/" + projectId + "/labels/" + labelId
+            });
+          };
+        })(this),
+        updateLabel: (function(_this) {
+          return function(projectId, label) {
+            return _this.http({
+              method: 'put',
+              url: "/projects/" + projectId + "/labels/" + label.id,
               data: label
             });
           };

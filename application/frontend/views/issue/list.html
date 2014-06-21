@@ -67,13 +67,30 @@
         <!-- label filter -->
         <h5>Labels</h5>
         <ul class="nav nav-pills nav-stacked">
-            <li ng-repeat="label in $projects.current.labels" ng-class="{active: labelService.isActive(label.id)}">
+            <div ng-show="labelService.manageMode" class="col-sm-12">
+                <div ng-repeat="label in labelService.labels" class="input-group">
+                    <input ng-model="label.title"
+                           salmon-enter="labelService.manageLabels()"
+                           class="form-control" type="text"/>
+                    <span class="input-group-btn">
+                        <button ng-click="labelService.labels.splice($index, 1)"
+                                class="btn btn-default" type="button"><i class="fa fa-trash-o fa-fw"></i></button>
+                    </span>
+                </div>
+            </div>
+            <li ng-hide="labelService.manageMode"
+                ng-repeat="label in $projects.current.labels" ng-class="{active: labelService.isActive(label.id)}">
                 <a ng-click="labelService.updateLabelFilter(label.id, $event)" href="#">
                     <span class="badge pull-right">{{ count.labels[label.id] }}</span>
                     {{ label.title }}
                 </a>
             </li>
         </ul>
+        <button ng-click="labelService.manageLabels()"
+                ng-class="{active: labelService.manageMode}" class="col-sm-12 btn btn-default btn-sm" style="margin-top: 10px;">
+            Manage labels
+        </button>
+        <div class="clearfix"></div>
         <hr/>
 
         <!-- new label -->
@@ -82,10 +99,12 @@
             <input ng-model="labelService.newLabel"
                    validator="[required]"
                    salmon-enter="labelService.addLabel()"
+                   ng-disabled="labelService.manageMode"
                    type="text" class="form-control" id="input-new-label">
         </div>
     </div>
 
+    <!-- issues -->
     <div class="col-sm-9">
         <div class="panel panel-default">
             <div class="panel-heading">

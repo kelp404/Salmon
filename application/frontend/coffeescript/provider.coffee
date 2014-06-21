@@ -74,6 +74,15 @@ angular.module 'salmon.provider', []
                     method: 'post'
                     url: "/projects/#{projectId}/labels"
                     data: label
+            removeLabel: (projectId, labelId) =>
+                @http
+                    method: 'delete'
+                    url: "/projects/#{projectId}/labels/#{labelId}"
+            updateLabel: (projectId, label) =>
+                @http
+                    method: 'put'
+                    url: "/projects/#{projectId}/labels/#{label.id}"
+                    data: label
         issue:
             addIssue: (projectId, issue) =>
                 @http

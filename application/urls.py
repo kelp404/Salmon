@@ -30,6 +30,11 @@ urlpatterns = patterns('',
         GET=get_labels,
         POST=add_label,
     )),
+    # /projects/<project_id>/labels/<label_id>
+    url(r'^projects/(?P<project_id>[0-9]{1,32})/labels/(?P<label_id>[0-9]{1,32})$', api_dispatch(
+        PUT=update_label,
+        DELETE=delete_label,
+    )),
     # /projects/<project_id>/issues
     url(r'^projects/(?P<project_id>[0-9]{1,32})/issues$', api_dispatch(
         GET=get_issues,
