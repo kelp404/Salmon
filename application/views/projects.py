@@ -54,7 +54,7 @@ def add_project_member(request, project_id):
         raise Http403
     user = UserModel.invite_user(request, form.email.data)
     project.member_ids.append(user.key().id())
-    project.save()
+    project.put()
     return JsonResponse(user)
 
 @authorization(UserPermission.root, UserPermission.advanced)

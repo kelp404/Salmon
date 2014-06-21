@@ -10,6 +10,17 @@ indexes:
 # automatically uploaded to the admin console when you next deploy
 # your application using appcfg.py.
 
+- kind: IssueModel
+  properties:
+  - name: is_close
+  - name: project
+  - name: create_time
+
+- kind: IssueModel
+  properties:
+  - name: project
+  - name: create_time
+
 - kind: ProjectModel
   properties:
   - name: member_ids

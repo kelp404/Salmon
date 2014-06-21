@@ -3,6 +3,9 @@ angular.module 'salmon.controllers.issues', []
 .controller 'IssuesController', ['$scope', '$injector', 'project', 'issues', ($scope, $injector, project, issues) ->
     $scope.$allProjects.current = project
     $scope.issues = issues
+    $scope.updateStatusFilter = (status) ->
+        $scope.$stateParams.status = status
+        $scope.$state.go 'salmon.issues', $scope.$stateParams, reload: yes
     $scope.showDetail = (projectId, issueId) ->
         $scope.$state.go 'salmon.issues-detail',
             projectId: projectId

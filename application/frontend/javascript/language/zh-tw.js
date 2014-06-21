@@ -43,7 +43,8 @@
     'Issues': '問題清單',
     'New Issue': '新增問題',
     'Create a new issue': '新增問題',
-    'Content': '內容'
+    'Content': '內容',
+    'Author': '建立人'
   };
 
 }).call(this);

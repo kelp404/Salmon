@@ -49,7 +49,7 @@ angular.module 'salmon.router', [
     # /projects/{projectId}/issues
     # ---------------------------------------------------------
     $stateProvider.state 'salmon.issues',
-        url: '/projects/:projectId/issues?index'
+        url: '/projects/:projectId/issues?index?status'
         resolve:
             title: -> "#{_ 'Issues'} - "
             project: ['$salmon', '$stateParams', ($salmon, $stateParams) ->
@@ -57,7 +57,11 @@ angular.module 'salmon.router', [
                     response.data
             ]
             issues: ['$salmon', '$stateParams', ($salmon, $stateParams) ->
-                $salmon.api.issue.getIssues($stateParams.projectId, $stateParams.index).then (response) ->
+                $salmon.api.issue.getIssues(
+                    $stateParams.projectId
+                    $stateParams.index
+                    $stateParams.status
+                ).then (response) ->
                     response.data
             ]
         templateUrl: '/views/issue/list.html'

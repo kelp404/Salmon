@@ -1,38 +1,75 @@
 <div class="row">
-    <div class="col-sm-12">
-        <form class="input-group col-sm-3">
-            <input v-focus ng-model="keyword" type="text" class="form-control"/>
-            <span class="input-group-btn">
-                <button ng-click="search($event, keyword)" class="btn btn-default" type="submit"><i class="fa fa-search fa-fw"></i> Search</button>
-            </span>
+    <div class="col-sm-3">
+        <form>
+            <div class="input-group">
+                <input salmon-focus ng-model="keyword" type="text" class="form-control"/>
+                <span class="input-group-btn">
+                    <button ng-click="search($event, keyword)" class="btn btn-default" type="submit"><i class="fa fa-search fa-fw"></i> <span salmon-lang>Search</span></button>
+                </span>
+            </div>
         </form>
+
+        <div class="btn-group btn-group-justified" style="padding-top: 15px;">
+            <div class="btn-group">
+                <button ng-class="{active: !$stateParams.status || $stateParams.status=='all'}"
+                    ng-click="updateStatusFilter('all')"
+                    type="button" class="btn btn-default btn-sm">All</button>
+            </div>
+            <div class="btn-group">
+                <button ng-class="{active: $stateParams.status=='open'}"
+                    ng-click="updateStatusFilter('open')"
+                    type="button" class="btn btn-default btn-sm">Open</button>
+            </div>
+            <div class="btn-group">
+                <button ng-class="{active: $stateParams.status=='closed'}"
+                    ng-click="updateStatusFilter('closed')"
+                    type="button" class="btn btn-default btn-sm">Closed</button>
+            </div>
+        </div>
     </div>
 
-    <div class="col-sm-12">
-        <table class="table table-hover table-striped">
-            <thead>
-                <tr>
-                    <th>Title</th>
-                    <th width="100px">Count</th>
-                    <th width="160px">Last Occurred</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr ng-if="!issues.items.length">
-                    <td colspan="3" class="text-center text-muted">empty</td>
-                </tr>
-                <tr ng-click="showDetail($allProjects.current.id, issue.id)" ng-repeat="issue in issues.items" style="cursor: pointer;">
-                    <td>
-                        <span ng-if="!log.is_close" class="text-danger"><i class="fa fa-exclamation-circle fa-fw"></i></span>
-                        <span ng-if="log.is_close" class="text-success"><i class="fa fa-check-circle fa-fw"></i></span>
-                        {{ issue.title }}
-                    </td>
-                    <td>{{ issue.count }}</td>
-                    <td>{{ issue.update_time|date:'yyyy-MM-dd HH:mm' }}</td>
-                </tr>
-            </tbody>
-        </table>
-        <ul salmon-pager="issues" pager-url-template="/projects/{{ $allProjects.current.id }}/issues?index=#{index}"
-            class="pull-right" style="margin-top: 0"></ul>
+    <div class="col-sm-9">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <label class="checkbox-inline">
+                    <input type="checkbox"/> all
+                </label>
+                <button class="btn btn-default btn-sm" style="margin-left: 10px;">Close</button>
+            </div>
+            <div class="panel-body">
+                <table class="table table-hover table-striped">
+                    <thead>
+                        <tr>
+                            <th salmon-lang>Title</th>
+                            <th salmon-lang>Floor</th>
+                            <th salmon-lang>Room</th>
+                            <th salmon-lang>Author</th>
+                            <th salmon-lang class="hidden-xs hidden-sm" width="160px">Create time</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-if="!issues.items.length">
+                            <td salmon-lang colspan="5" class="text-center text-muted">empty</td>
+                        </tr>
+                        <tr ng-repeat="issue in issues.items">
+                            <td>
+                                <label class="checkbox-inline">
+                                    <input type="checkbox"/>
+                                </label>
+                                <span ng-if="!log.is_close" class="text-danger"><i class="fa fa-exclamation-circle fa-fw"></i></span>
+                                <span ng-if="log.is_close" class="text-success"><i class="fa fa-check-circle fa-fw"></i></span>
+                                <a href="/projects/{{ $allProjects.current.id }}/issues/{{ issue.id }}">{{ issue.title }}</a>
+                            </td>
+                            <td>{{ issue.floor }}</td>
+                            <td>{{ issue.room }}</td>
+                            <td><a href="">{{ issue.author.name }}</a></td>
+                            <td class="hidden-xs hidden-sm">{{ issue.create_time|date:'yyyy-MM-dd HH:mm' }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <ul salmon-pager="issues" pager-url-template="/projects/{{ $allProjects.current.id }}/issues?index=#{index}"
+                    class="pull-right" style="margin-top: 0"></ul>
+            </div>
+        </div>
     </div>
 </div>

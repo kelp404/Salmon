@@ -41,6 +41,12 @@
     '$scope', '$injector', 'project', 'issues', function($scope, $injector, project, issues) {
       $scope.$allProjects.current = project;
       $scope.issues = issues;
+      $scope.updateStatusFilter = function(status) {
+        $scope.$stateParams.status = status;
+        return $scope.$state.go('salmon.issues', $scope.$stateParams, {
+          reload: true
+        });
+      };
       return $scope.showDetail = function(projectId, issueId) {
         return $scope.$state.go('salmon.issues-detail', {
           projectId: projectId,
@@ -781,15 +787,19 @@
           };
         })(this),
         getIssues: (function(_this) {
-          return function(projectId, index) {
+          return function(projectId, index, status) {
             if (index == null) {
               index = 0;
+            }
+            if (status == null) {
+              status = 'all';
             }
             return _this.http({
               method: 'get',
               url: "/projects/" + projectId + "/issues",
               params: {
-                index: index
+                index: index,
+                status: status
               }
             });
           };
@@ -971,7 +981,7 @@
         controller: 'LoginController'
       });
       $stateProvider.state('salmon.issues', {
-        url: '/projects/:projectId/issues?index',
+        url: '/projects/:projectId/issues?index?status',
         resolve: {
           title: function() {
             return "" + (_('Issues')) + " - ";
@@ -985,7 +995,7 @@
           ],
           issues: [
             '$salmon', '$stateParams', function($salmon, $stateParams) {
-              return $salmon.api.issue.getIssues($stateParams.projectId, $stateParams.index).then(function(response) {
+              return $salmon.api.issue.getIssues($stateParams.projectId, $stateParams.index, $stateParams.status).then(function(response) {
                 return response.data;
               });
             }

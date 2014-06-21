@@ -10,6 +10,10 @@ class IssueSearchForm(Form):
     keyword = StringField(
         filters=[lambda x: x.strip() if isinstance(x, basestring) else None],
     )
+    status = StringField(
+        default='all',
+        filters=[lambda x: x.strip() if isinstance(x, basestring) else None],
+    )
     floor_lowest = IntegerField(
         default=0,
         filters=[utils.int_filter],
