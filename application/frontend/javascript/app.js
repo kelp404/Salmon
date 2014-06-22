@@ -312,8 +312,9 @@
     }
   ]).controller('IssueController', [
     '$scope', '$injector', 'issue', function($scope, $injector, issue) {
-      var $salmon;
+      var $salmon, $state;
       $salmon = $injector.get('$salmon');
+      $state = $injector.get('$state');
       $scope.issue = issue;
       $scope.issue.floorText = issue.floor < 0 ? "B" + (issue.floor * -1) : "" + issue.floor;
       $scope.issue.labels = (function() {
@@ -328,6 +329,24 @@
         }
         return result;
       })();
+      $scope.comment = {
+        newComment: '',
+        submit: function() {
+          if (!$scope.comment.newComment) {
+            return;
+          }
+          NProgress.start();
+          return $salmon.api.comment.addComment($scope.$projects.current.id, issue.id, {
+            comment: $scope.comment.newComment
+          }).success(function() {
+            $scope.comment.newComment = '';
+            return $salmon.api.comment.getComments($scope.$projects.current.id, issue.id).success(function(result) {
+              NProgress.done();
+              return $scope.issue.comments = result;
+            });
+          });
+        }
+      };
       return $scope.closeIssue = function() {
         NProgress.start();
         $scope.issue.is_close = true;
@@ -1153,6 +1172,25 @@
               method: 'put',
               url: "/projects/" + projectId + "/issues/" + issue.id,
               data: issue
+            });
+          };
+        })(this)
+      },
+      comment: {
+        getComments: (function(_this) {
+          return function(projectId, issueId) {
+            return _this.http({
+              method: 'get',
+              url: "/projects/" + projectId + "/issues/" + issueId + "/comments"
+            });
+          };
+        })(this),
+        addComment: (function(_this) {
+          return function(projectId, issueId, comment) {
+            return _this.http({
+              method: 'post',
+              url: "/projects/" + projectId + "/issues/" + issueId + "/comments",
+              data: comment
             });
           };
         })(this)

@@ -122,6 +122,16 @@ angular.module 'salmon.provider', []
                     method: 'put'
                     url: "/projects/#{projectId}/issues/#{issue.id}"
                     data: issue
+        comment:
+            getComments: (projectId, issueId) =>
+                @http
+                    method: 'get'
+                    url: "/projects/#{projectId}/issues/#{issueId}/comments"
+            addComment: (projectId, issueId, comment) =>
+                @http
+                    method: 'post'
+                    url: "/projects/#{projectId}/issues/#{issueId}/comments"
+                    data: comment
         project:
             getProjects: (index=0, all=no) =>
                 @http

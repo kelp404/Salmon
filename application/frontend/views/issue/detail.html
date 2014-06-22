@@ -25,5 +25,30 @@
                 <div salmon-issue-content="issue.content"></div>
             </div>
         </div>
+
+        <!-- comments -->
+        <div ng-repeat="comment in issue.comments" class="panel panel-default">
+            <div class="panel-heading">
+                <span class="pull-right">{{ comment.create_time|date:'yyyy-MM-dd HH:mm' }}</span>
+                <a salmon-mail-to="issue.author.email">{{ issue.author.name }}</a>
+            </div>
+            <div class="panel-body">
+                <div salmon-issue-content="comment.comment"></div>
+            </div>
+        </div>
+
+        <!-- add a comment -->
+        <div class="panel panel-info">
+            <div class="panel-heading">
+                <a salmon-mail-to="$user.email">{{ $user.name }}</a>
+            </div>
+            <div class="panel-body">
+                <div ng-model="comment.newComment" salmon-redactor="{}"
+                     style="min-height: 120px;" id="input-content"></div>
+            </div>
+            <div class="panel-footer text-right">
+                <button ng-click="comment.submit()" class="btn btn-default"><i class="fa fa-check fa-fw text-success"></i> <span salmon-lang>Submit</span></button>
+            </div>
+        </div>
     </div>
 </div>

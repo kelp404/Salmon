@@ -6,6 +6,7 @@ from application.views.settings import *
 from application.views.users import *
 from application.views.projects import *
 from application.views.issues import *
+from application.views.comments import *
 from application.views.labels import *
 
 
@@ -48,6 +49,11 @@ urlpatterns = patterns('',
     # /projects/<project_id>/issues/<issue_id>/edit
     url(r'^projects/(?P<project_id>[0-9]{1,32})/issues/(?P<issue_id>[0-9]{1,32})/edit$', api_dispatch(
         GET=base_view,
+    )),
+    # /projects/<project_id>/issues/<issue_id>/comments
+    url(r'^projects/(?P<project_id>[0-9]{1,32})/issues/(?P<issue_id>[0-9]{1,32})/comments$', api_dispatch(
+        GET=get_comments,
+        POST=add_comment,
     )),
     # /projects/<project_id>/issues/count
     url(r'^projects/(?P<project_id>[0-9]{1,32})/issues/count$', api_dispatch(

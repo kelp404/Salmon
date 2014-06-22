@@ -13,6 +13,7 @@ window.languageResource =
     'Name': '姓名'
     'Email': '信箱'
     'Save': '儲存'
+    'Submit': '送出'
     'New user': '新增使用者'
     'New project': '新增專案'
     'Create a project': '新增專案'

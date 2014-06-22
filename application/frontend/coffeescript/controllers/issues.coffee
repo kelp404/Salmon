@@ -181,6 +181,7 @@ angular.module 'salmon.controllers.issues', []
 
 .controller 'IssueController', ['$scope', '$injector', 'issue', ($scope, $injector, issue) ->
     $salmon = $injector.get '$salmon'
+    $state = $injector.get '$state'
 
     $scope.issue = issue
     $scope.issue.floorText = if issue.floor < 0 then "B#{issue.floor * -1}" else "#{issue.floor}"
@@ -190,6 +191,21 @@ angular.module 'salmon.controllers.issues', []
             if label.id in issue.label_ids
                 result.push label
         result
+    $scope.comment =
+        newComment: ''
+        submit: ->
+            return if not $scope.comment.newComment
+            NProgress.start()
+            $salmon.api.comment.addComment(
+                $scope.$projects.current.id
+                issue.id
+                comment: $scope.comment.newComment
+            ).success ->
+                $scope.comment.newComment = ''
+                $salmon.api.comment.getComments($scope.$projects.current.id, issue.id).success (result) ->
+                    NProgress.done()
+                    $scope.issue.comments = result
+
     $scope.closeIssue = ->
         NProgress.start()
         $scope.issue.is_close = yes
