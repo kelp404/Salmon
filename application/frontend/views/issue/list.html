@@ -133,22 +133,24 @@
                                 <label class="checkbox-inline">
                                     <input type="checkbox" style="margin: 0 0 0 -20px;"/>
                                 </label>
-                                <span ng-if="!log.is_close" class="text-danger"><i class="fa fa-exclamation-circle fa-fw"></i></span>
-                                <span ng-if="log.is_close" class="text-success"><i class="fa fa-check-circle fa-fw"></i></span>
-                                <h5 style="display: inline;">
+                                <span ng-if="!issue.is_close" class="text-danger"><i class="fa fa-exclamation-circle fa-fw"></i></span>
+                                <span ng-if="issue.is_close" class="text-success"><i class="fa fa-check-circle fa-fw"></i></span>
+                                <h5 class="inline">
                                     <a href="/projects/{{ $projects.current.id }}/issues/{{ issue.id }}" style="padding: 7px;">
                                         {{ issue.title }}
                                     </a>
                                 </h5>
                                 <!-- labels -->
                                 <span ng-repeat="label in issue.labels" style="line-height: 27px;">
-                                    <h5 style="display: inline;">
+                                    <h5 class="inline">
                                         <span class="label label-primary">{{ label.title }}</span>
                                     </h5>
                                 </span>
                             </td>
                             <td>{{ issue.floor }}</td>
-                            <td><a href="">{{ issue.author.name }}</a></td>
+                            <td>
+                                <a href="https://mail.google.com/mail/?view=cm&fs=1&to={{ issue.author.email }}" target="_blank">{{ issue.author.name }}</a>
+                            </td>
                             <td class="hidden-xs hidden-sm">{{ issue.create_time|date:'yyyy-MM-dd HH:mm' }}</td>
                         </tr>
                     </tbody>

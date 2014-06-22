@@ -38,6 +38,7 @@ window.languageResource =
     'There are no projects. You could create a project at': '目前沒有任何專案，請到此頁面建立專案'
     'go to project list': '前往專案列表'
     'Issues': '問題清單'
+    'Issue': '問題'
     'New Issue': '新增問題'
     'Create a new issue': '新增問題'
     'Content': '內容'
@@ -49,3 +50,4 @@ window.languageResource =
     'All': '全部'
     'Open': '未關閉'
     'Closed': '已關閉'
+    'Close': '關閉'

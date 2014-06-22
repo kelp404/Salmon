@@ -1,3 +1,25 @@
 <div class="row">
-    <h2>detail</h2>
+    <div class="col-sm-12">
+        <h2>
+            <span>{{ issue.title }}</span>
+            <button ng-click="closeIssue()" ng-disabled="issue.is_close" class="btn btn-default pull-right"><i class="fa fa-check fa-fw text-success"></i> <span salmon-lang>Close</span></button>
+        </h2>
+        <div class="clearfix"></div>
+        <hr/>
+        <h4 ng-repeat="label in issue.labels" class="inline">
+            <span class="label label-primary">{{ label.title }}</span>
+        </h4>
+    </div>
+
+    <div class="col-sm-12" style="padding-top: 10px;">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <span class="pull-right">{{ issue.create_time|date:'yyyy-MM-dd HH:mm' }}</span>
+                <a href="https://mail.google.com/mail/?view=cm&fs=1&to={{ issue.author.email }}" target="_blank">{{ issue.author.name }}</a>
+            </div>
+            <div class="panel-body" style="min-height: 160px;">
+                <div salmon-issue-content="issue.content"></div>
+            </div>
+        </div>
+    </div>
 </div>

@@ -45,3 +45,8 @@ ul.label-select > li.active > a {
 ul.label-select > li.active > a:hover {
   background-color: #d0d0d0;
 }
+
+/* line 34, ../sass/site/site.sass */
+.inline {
+  display: inline;
+}

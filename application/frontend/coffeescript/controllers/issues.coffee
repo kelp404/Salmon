@@ -139,5 +139,18 @@ angular.module 'salmon.controllers.issues', []
 ]
 
 .controller 'IssueController', ['$scope', '$injector', 'issue', ($scope, $injector, issue) ->
+    $salmon = $injector.get '$salmon'
+
     $scope.issue = issue
+    $scope.issue.labels = do ->
+        result = []
+        for label in $scope.$projects.current.labels
+            if label.id in issue.label_ids
+                result.push label
+        result
+    $scope.closeIssue = ->
+        NProgress.start()
+        $scope.issue.is_close = yes
+        $salmon.api.issue.updateIssue($scope.$projects.current.id, $scope.issue).success ->
+            NProgress.done()
 ]

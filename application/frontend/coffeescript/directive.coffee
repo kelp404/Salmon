@@ -60,6 +60,23 @@ angular.module 'salmon.directive', []
             disableWatch = yes
             scope.$apply ->
                 scope.ngModel = html
+        # http://imperavi.com/redactor/docs/toolbar/
+        options.buttons = [
+            'html'
+            'formatting'
+            'bold'
+            'italic'
+            'deleted'
+            'unorderedlist'
+            'orderedlist'
+            'outdent'
+            'indent'
+            'image'
+            'file'
+            'link'
+            'alignment'
+            'horizontalrule'
+        ]
         $(element).redactor(options)
         $(element).next('textarea').on 'input propertychange', ->
             return if scope.$root.$$phase
@@ -73,6 +90,17 @@ angular.module 'salmon.directive', []
                 disableWatch = no
                 return
             $(element).redactor 'set', value
+
+# ---------------------------------------------------------
+# salmon-issue-content
+# ---------------------------------------------------------
+.directive 'salmonIssueContent', ->
+    restrict: 'A'
+    scope:
+        html: '=salmonIssueContent'
+    link: (scope, element) ->
+        $(element).html scope.html
+        $(element).find('img').addClass 'img-responsive'
 
 # ---------------------------------------------------------
 # salmon-modal

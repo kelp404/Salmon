@@ -19,6 +19,42 @@ def current_language(request):
     """
     return 'zh-tw'
 
+def get_bleach_allow_tags():
+    return [
+        'hr',
+        'img',
+        'p',
+        'a',
+        'del',
+        'br',
+        'table', 'thead', 'th', 'tbody', 'tr', 'td',
+        'b',
+        'blockquote',
+        'code',
+        'i',
+        'li',
+        'ol',
+        'strong',
+        'ul',
+        'div'
+    ]
+def get_bleach_allow_attributes():
+    return {
+        'a': ['href', 'title'],
+        'p': ['style'],
+        'img': ['src', 'style'],
+    }
+def get_bleach_allow_styles():
+    return [
+        'font-family',
+        'font-weight',
+        'text-align',
+        'color',
+        'width',
+        'margin-left',
+        'background-color',
+    ]
+
 def parse_keyword(keyword):
     """
     Parse keyword.

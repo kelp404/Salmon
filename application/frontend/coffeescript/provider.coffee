@@ -102,7 +102,7 @@ angular.module 'salmon.provider', []
                         floor_lowest: query.floor_lowest
                         floor_highest: query.floor_highest
                         label_ids: query.label_ids
-            countIssues: (projectId, query) =>
+            countIssues: (projectId, query) ->
                 query ?= {}
                 query.status ?= 'all'
                 $http
@@ -113,6 +113,15 @@ angular.module 'salmon.provider', []
                         floor_lowest: query.floor_lowest
                         floor_highest: query.floor_highest
                         label_ids: query.label_ids
+            getIssue: (projectId, issueId) =>
+                @http
+                    method: 'get'
+                    url: "/projects/#{projectId}/issues/#{issueId}"
+            updateIssue: (projectId, issue) =>
+                @http
+                    method: 'put'
+                    url: "/projects/#{projectId}/issues/#{issue.id}"
+                    data: issue
         project:
             getProjects: (index=0, all=no) =>
                 @http

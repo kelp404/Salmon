@@ -247,7 +247,28 @@
     }
   ]).controller('IssueController', [
     '$scope', '$injector', 'issue', function($scope, $injector, issue) {
-      return $scope.issue = issue;
+      var $salmon;
+      $salmon = $injector.get('$salmon');
+      $scope.issue = issue;
+      $scope.issue.labels = (function() {
+        var label, result, _i, _len, _ref, _ref1;
+        result = [];
+        _ref = $scope.$projects.current.labels;
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          label = _ref[_i];
+          if (_ref1 = label.id, __indexOf.call(issue.label_ids, _ref1) >= 0) {
+            result.push(label);
+          }
+        }
+        return result;
+      })();
+      return $scope.closeIssue = function() {
+        NProgress.start();
+        $scope.issue.is_close = true;
+        return $salmon.api.issue.updateIssue($scope.$projects.current.id, $scope.issue).success(function() {
+          return NProgress.done();
+        });
+      };
     }
   ]);
 
@@ -674,6 +695,7 @@
             return scope.ngModel = html;
           });
         };
+        options.buttons = ['html', 'formatting', 'bold', 'italic', 'deleted', 'unorderedlist', 'orderedlist', 'outdent', 'indent', 'image', 'file', 'link', 'alignment', 'horizontalrule'];
         $(element).redactor(options);
         $(element).next('textarea').on('input propertychange', function() {
           if (scope.$root.$$phase) {
@@ -694,6 +716,17 @@
           }
           return $(element).redactor('set', value);
         });
+      }
+    };
+  }).directive('salmonIssueContent', function() {
+    return {
+      restrict: 'A',
+      scope: {
+        html: '=salmonIssueContent'
+      },
+      link: function(scope, element) {
+        $(element).html(scope.html);
+        return $(element).find('img').addClass('img-responsive');
       }
     };
   }).directive('salmonModal', function() {
@@ -997,23 +1030,38 @@
             });
           };
         })(this),
-        countIssues: (function(_this) {
-          return function(projectId, query) {
-            if (query == null) {
-              query = {};
+        countIssues: function(projectId, query) {
+          if (query == null) {
+            query = {};
+          }
+          if (query.status == null) {
+            query.status = 'all';
+          }
+          return $http({
+            method: 'get',
+            url: "/projects/" + projectId + "/issues/count",
+            params: {
+              status: query.status,
+              floor_lowest: query.floor_lowest,
+              floor_highest: query.floor_highest,
+              label_ids: query.label_ids
             }
-            if (query.status == null) {
-              query.status = 'all';
-            }
-            return $http({
+          });
+        },
+        getIssue: (function(_this) {
+          return function(projectId, issueId) {
+            return _this.http({
               method: 'get',
-              url: "/projects/" + projectId + "/issues/count",
-              params: {
-                status: query.status,
-                floor_lowest: query.floor_lowest,
-                floor_highest: query.floor_highest,
-                label_ids: query.label_ids
-              }
+              url: "/projects/" + projectId + "/issues/" + issueId
+            });
+          };
+        })(this),
+        updateIssue: (function(_this) {
+          return function(projectId, issue) {
+            return _this.http({
+              method: 'put',
+              url: "/projects/" + projectId + "/issues/" + issue.id,
+              data: issue
             });
           };
         })(this)
@@ -1248,11 +1296,13 @@
         url: '/issues/:issueId',
         resolve: {
           title: function() {
-            return "" + (_('Issues')) + " - ";
+            return "" + (_('Issue')) + " - ";
           },
           issue: [
             '$salmon', '$stateParams', function($salmon, $stateParams) {
-              return null;
+              return $salmon.api.issue.getIssue($stateParams.projectId, $stateParams.issueId).then(function(response) {
+                return response.data;
+              });
             }
           ]
         },

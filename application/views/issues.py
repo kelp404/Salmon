@@ -1,6 +1,6 @@
 import json
 import bleach
-from application.exceptions import Http400, Http404
+from application.exceptions import Http400, Http403, Http404
 from application.responses import JsonResponse
 from application.decorators import authorization
 from application.forms.issue_form import IssueForm, IssueSearchForm
@@ -22,6 +22,10 @@ def get_issues(request, project_id):
     project = ProjectModel.get_by_id(long(project_id))
     if project is None:
         raise Http404
+    if request.user.permission != UserPermission.root and\
+                    request.user.key().id() not in project.member_ids:
+        raise Http403
+
     if form.keyword.data:
         # search by keyword
         total = 0
@@ -113,6 +117,12 @@ def count_issues(request, project_id):
 
 @authorization(UserPermission.root, UserPermission.advanced, UserPermission.normal)
 def get_issue(request, project_id, issue_id):
+    project = ProjectModel.get_by_id(long(project_id))
+    if project is None:
+        raise Http404
+    if request.user.permission != UserPermission.root and\
+                    request.user.key().id() not in project.member_ids:
+        raise Http403
     issue = IssueModel.get_by_id(long(issue_id))
     if issue is None:
         raise Http404
@@ -120,6 +130,32 @@ def get_issue(request, project_id, issue_id):
     result = issue.dict()
     result['comments'] = [x.dict() for x in comments]
     return JsonResponse(result)
+
+@authorization(UserPermission.root, UserPermission.advanced, UserPermission.normal)
+def update_issue(request, project_id, issue_id):
+    form = IssueForm(**json.loads(request.body))
+    if not form.validate():
+        raise Http400
+    project = ProjectModel.get_by_id(long(project_id))
+    if project is None:
+        raise Http404
+    if request.user.permission != UserPermission.root and\
+                    request.user.key().id() not in project.member_ids:
+        raise Http403
+    issue = IssueModel.get_by_id(long(issue_id))
+    if issue is None:
+        raise Http404
+
+    if not issue.is_close and form.is_close.data:
+        # close the issue
+        issue.is_close = True
+        issue.put()
+    else:
+        # update the issue
+        issue.title = form.title.data
+        issue.content = form.content.data
+        issue.put()
+    return JsonResponse(issue)
 
 @authorization(UserPermission.root, UserPermission.advanced, UserPermission.normal)
 def add_issue(request, project_id):
@@ -130,11 +166,19 @@ def add_issue(request, project_id):
     project = ProjectModel.get_by_id(long(project_id))
     if project is None:
         raise Http404
+    if request.user.permission != UserPermission.root and\
+                    request.user.key().id() not in project.member_ids:
+        raise Http403
 
     issue = IssueModel(
         title=form.title.data,
         floor=form.floor.data,
-        content=bleach.clean(form.content.data),
+        content=bleach.clean(
+            form.content.data,
+            tags=utils.get_bleach_allow_tags(),
+            attributes=utils.get_bleach_allow_attributes(),
+            styles=utils.get_bleach_allow_styles(),
+        ),
         label_ids=form.label_ids.data,
         author=request.user,
         project=project,
