@@ -179,7 +179,12 @@ def update_issue(request, project_id, issue_id):
     else:
         # update the issue
         issue.title = form.title.data
-        issue.content = form.content.data
+        issue.content = bleach.clean(
+            form.content.data,
+            tags=utils.get_bleach_allow_tags(),
+            attributes=utils.get_bleach_allow_attributes(),
+            styles=utils.get_bleach_allow_styles(),
+        )
         issue.floor = form.floor.data
         issue.label_ids = form.label_ids.data
         issue.put()
