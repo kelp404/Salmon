@@ -32,6 +32,7 @@ angular.module 'salmon.controllers.issues', []
 
     $scope.updateStatusFilter = (status) ->
         $scope.$stateParams.status = status
+        $scope.$stateParams.index = 0
         $scope.$state.go $scope.$state.current, $scope.$stateParams
     $scope.showDetail = (projectId, issueId) ->
         $scope.$state.go 'salmon.project.issue',
@@ -44,6 +45,7 @@ angular.module 'salmon.controllers.issues', []
         return if newValue is oldValue
         $scope.$stateParams.floor_lowest = $scope.floorOptions.lowest
         $scope.$stateParams.floor_highest = $scope.floorOptions.highest
+        $scope.$stateParams.index = 0
         $scope.$state.go $scope.$state.current, $scope.$stateParams
     , yes
 
@@ -113,6 +115,7 @@ angular.module 'salmon.controllers.issues', []
                     break
             if not exist
                 $scope.$stateParams.label_ids.push labelId
+            $scope.$stateParams.index = 0
             $scope.$state.go $scope.$state.current, $scope.$stateParams
         addLabel: -> $validator.validate($scope, 'labelService').success ->
             NProgress.start()
