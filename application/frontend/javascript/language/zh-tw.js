@@ -52,7 +52,10 @@
     'All': '全部',
     'Open': '未關閉',
     'Closed': '已關閉',
-    'Close': '關閉'
+    'Close': '關閉',
+    'all': '全選',
+    'This field is required.': '此欄位必填',
+    'This field should be the email.': '請輸入正確的信箱格式'
   };
 
 }).call(this);

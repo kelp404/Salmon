@@ -1589,11 +1589,11 @@
     '$validatorProvider', function($validatorProvider) {
       $validatorProvider.register('required', {
         validator: /.+/,
-        error: 'This field is required.'
+        error: _('This field is required.')
       });
       return $validatorProvider.register('email', {
         validator: /(^$)|(^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$)/,
-        error: 'This field should be the email.'
+        error: _('This field should be the email.')
       });
     }
   ]);
