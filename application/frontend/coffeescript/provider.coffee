@@ -41,13 +41,24 @@ angular.module 'salmon.provider', []
 
     @http = (args) =>
         $http args
-        .error ->
+        .error (data, status, headers, config) =>
             $.av.pop
                 title: 'Server Error'
                 message: 'Please try again or refresh this page.'
                 template: 'error'
                 expire: 3000
             NProgress.done()
+
+            # send error log
+            delete config.data?.password
+            document =
+                'Request Headers': config.headers
+                'Request Params': config.params
+                'Response Status': status
+            victorique.send
+                title: "#{config.method} #{location.origin}#{config.url} failed"
+                user: "#{@user.name} <#{@user.email}>"
+                document: document
 
     @api =
         settings:

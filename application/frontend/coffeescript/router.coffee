@@ -234,10 +234,22 @@ angular.module 'salmon.router', [
         NProgress.done()
         if not $salmon.user.isLogin and toState.name isnt 'salmon.login'
             $state.go 'salmon.login'
-    $rootScope.$on '$stateChangeError', (event, toState) ->
+    $rootScope.$on '$stateChangeError', (event, toState, toParams, fromState, fromParams) ->
         NProgress.done()
         if not $salmon.user.isLogin and toState.name isnt 'salmon.login'
             $state.go 'salmon.login'
+        # send error log
+        delete toState.resolve
+        delete fromState.resolve
+        document =
+            'toState': toState
+            'toParams': toParams
+            'fromState': fromState
+            'fromParams': fromParams
+        victorique.send
+            title: "state change error to #{toState.url}"
+            user: "#{$salmon.user.name} <#{$salmon.user.email}>"
+            document: document
     $rootScope.$on '$viewContentLoaded', ->
         return if changeStartEvent?.type is 'popstate'
         if fromStateName? and toStateName?

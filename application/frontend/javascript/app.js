@@ -1033,14 +1033,28 @@
     };
     this.http = (function(_this) {
       return function(args) {
-        return $http(args).error(function() {
+        return $http(args).error(function(data, status, headers, config) {
+          var document, _ref1;
           $.av.pop({
             title: 'Server Error',
             message: 'Please try again or refresh this page.',
             template: 'error',
             expire: 3000
           });
-          return NProgress.done();
+          NProgress.done();
+          if ((_ref1 = config.data) != null) {
+            delete _ref1.password;
+          }
+          document = {
+            'Request Headers': config.headers,
+            'Request Params': config.params,
+            'Response Status': status
+          };
+          return victorique.send({
+            title: "" + config.method + " " + location.origin + config.url + " failed",
+            user: "" + _this.user.name + " <" + _this.user.email + ">",
+            document: document
+          });
         });
       };
     })(this);
@@ -1597,11 +1611,25 @@
           return $state.go('salmon.login');
         }
       });
-      $rootScope.$on('$stateChangeError', function(event, toState) {
+      $rootScope.$on('$stateChangeError', function(event, toState, toParams, fromState, fromParams) {
+        var document;
         NProgress.done();
         if (!$salmon.user.isLogin && toState.name !== 'salmon.login') {
-          return $state.go('salmon.login');
+          $state.go('salmon.login');
         }
+        delete toState.resolve;
+        delete fromState.resolve;
+        document = {
+          'toState': toState,
+          'toParams': toParams,
+          'fromState': fromState,
+          'fromParams': fromParams
+        };
+        return victorique.send({
+          title: "state change error to " + toState.url,
+          user: "" + $salmon.user.name + " <" + $salmon.user.email + ">",
+          document: document
+        });
       });
       return $rootScope.$on('$viewContentLoaded', function() {
         if ((changeStartEvent != null ? changeStartEvent.type : void 0) === 'popstate') {
@@ -1635,5 +1663,26 @@
       });
     }
   ]);
+
+}).call(this);
+
+(function() {
+  window.victorique = {
+    send: function(args) {
+      if (args == null) {
+        args = {};
+      }
+      return $.ajax({
+        method: 'get',
+        dataType: 'jsonp',
+        url: 'https://victorique-demo.appspot.com/api/applications/24c1ce30-f9f5-11e3-99ab-4bfec4a2f6a3/logs',
+        data: {
+          title: args.title,
+          user: args.user,
+          document: JSON.stringify(args.document)
+        }
+      });
+    }
+  };
 
 }).call(this);
