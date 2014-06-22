@@ -49,11 +49,7 @@
       _ref = $scope.issues.items;
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         issue = _ref[_i];
-        if (issue.floor < 0) {
-          issue.floorText = "B" + (issue.floor * -1);
-        } else {
-          issue.floorText = "" + issue.floor;
-        }
+        issue.floorText = issue.floor < 0 ? "B" + (issue.floor * -1) : "" + issue.floor;
         issue.labels = (function() {
           var label, result, _j, _len1, _ref1, _ref2;
           result = [];
@@ -309,6 +305,7 @@
       var $salmon;
       $salmon = $injector.get('$salmon');
       $scope.issue = issue;
+      $scope.issue.floorText = issue.floor < 0 ? "B" + (issue.floor * -1) : "" + issue.floor;
       $scope.issue.labels = (function() {
         var label, result, _i, _len, _ref, _ref1;
         result = [];

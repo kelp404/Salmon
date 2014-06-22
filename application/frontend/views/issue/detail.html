@@ -2,6 +2,7 @@
     <div class="col-sm-12">
         <h2>
             <span>{{ issue.title }}</span>
+            <small>{{ issue.floorText }}</small>
             <button ng-click="closeIssue()" ng-disabled="issue.is_close" class="btn btn-default pull-right"><i class="fa fa-check fa-fw text-success"></i> <span salmon-lang>Close</span></button>
         </h2>
         <div class="clearfix"></div>
