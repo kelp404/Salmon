@@ -729,6 +729,19 @@
         return $(element).find('img').addClass('img-responsive');
       }
     };
+  }).directive('salmonMailTo', function() {
+    return {
+      restrict: 'A',
+      scope: {
+        email: '=salmonMailTo'
+      },
+      link: function(scope, element) {
+        $(element).attr('target', '_blank');
+        return scope.$watch('email', function(value) {
+          return $(element).attr('href', "https://mail.google.com/mail/?view=cm&fs=1&to=" + value);
+        });
+      }
+    };
   }).directive('salmonModal', function() {
     return {
 

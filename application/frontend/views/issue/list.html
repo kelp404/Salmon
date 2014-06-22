@@ -149,7 +149,7 @@
                             </td>
                             <td>{{ issue.floor }}</td>
                             <td>
-                                <a href="https://mail.google.com/mail/?view=cm&fs=1&to={{ issue.author.email }}" target="_blank">{{ issue.author.name }}</a>
+                                <a salmon-mail-to="issue.author.email">{{ issue.author.name }}</a>
                             </td>
                             <td class="hidden-xs hidden-sm">{{ issue.create_time|date:'yyyy-MM-dd HH:mm' }}</td>
                         </tr>

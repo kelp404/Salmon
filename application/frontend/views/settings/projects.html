@@ -20,7 +20,7 @@
                             <td salmon-lang colspan="4" class="text-center">empty</td>
                         </tr>
                         <tr ng-repeat="project in projects.items">
-                            <td>{{ project.title }}</td>
+                            <td><a href="/settings/projects/{{ project.id }}">{{ project.title }}</a></td>
                             <td>{{ project.description }}</td>
                             <td>{{ project.create_time|date:'yyyy-MM-dd HH:mm' }}</td>
                             <td>

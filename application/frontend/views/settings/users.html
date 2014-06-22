@@ -31,8 +31,8 @@
                             <td salmon-lang colspan="4" class="text-center">empty</td>
                         </tr>
                         <tr ng-repeat="user in users.items">
-                            <td>{{ user.name }}</td>
-                            <td>{{ user.email }}</td>
+                            <td><a href="/settings/users/{{ user.id }}">{{ user.name }}</a></td>
+                            <td><a salmon-mail-to="user.email">{{ user.email }}</a></td>
                             <td>{{ user.create_time|date:'yyyy-MM-dd HH:mm' }}</td>
                             <td>
                                 <a href="/settings/users/{{ user.id }}" class="btn btn-default btn-xs"><i class="fa fa-pencil"></i></a>

@@ -103,6 +103,18 @@ angular.module 'salmon.directive', []
         $(element).find('img').addClass 'img-responsive'
 
 # ---------------------------------------------------------
+# salmon-mail-to
+# ---------------------------------------------------------
+.directive 'salmonMailTo', ->
+    restrict: 'A'
+    scope:
+        email: '=salmonMailTo'
+    link: (scope, element) ->
+        $(element).attr 'target', '_blank'
+        scope.$watch 'email', (value) ->
+            $(element).attr 'href', "https://mail.google.com/mail/?view=cm&fs=1&to=#{value}"
+
+# ---------------------------------------------------------
 # salmon-modal
 # ---------------------------------------------------------
 .directive 'salmonModal', ->
