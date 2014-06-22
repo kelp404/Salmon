@@ -89,23 +89,36 @@ def count_issues(request, project_id):
         elif form.status.data == 'closed':
             query = query.filter('is_close =', True)
         return query
+    def append_order_query(query):
+        # order
+        if form.floor_lowest.data | form.floor_highest.data == 0:
+            query = query.order('-create_time')
+        else:
+            query = query.order('floor').order('-create_time')
+        return query
 
     query = IssueModel.all().filter('project =', project.key())
     query = append_floor_query(query)
     query = append_label_query(query)
-    count_closed = query.filter('is_close =', True).count()
+    query = query.filter('is_close =', True)
+    query = append_order_query(query)
+    count_closed = query.count()
 
     query = IssueModel.all().filter('project =', project.key())
     query = append_floor_query(query)
     query = append_label_query(query)
-    count_open = query.filter('is_close =', False).count()
+    query = query.filter('is_close =', False)
+    query = append_order_query(query)
+    count_open = query.count()
 
     count_labels = {}
     for label in labels:
         query = IssueModel.all().filter('project =', project.key())
         query = append_floor_query(query)
         query = append_close_query(query)
-        count_labels[str(label.key().id())] = query.filter('label_ids in', [label.key().id()]).count()
+        query = query.filter('label_ids in', [label.key().id()])
+        query = append_order_query(query)
+        count_labels[str(label.key().id())] = query.count()
 
     result = {
         'all': count_open + count_closed,

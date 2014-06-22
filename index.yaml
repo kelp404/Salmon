@@ -29,21 +29,8 @@ indexes:
   - name: label_ids
   - name: project
   - name: floor
-
-- kind: IssueModel
-  properties:
-  - name: is_close
-  - name: label_ids
-  - name: project
-  - name: floor
   - name: create_time
     direction: desc
-
-- kind: IssueModel
-  properties:
-  - name: is_close
-  - name: project
-  - name: create_time
 
 - kind: IssueModel
   properties:
@@ -91,17 +78,7 @@ indexes:
   properties:
   - name: project
   - name: create_time
-
-- kind: IssueModel
-  properties:
-  - name: project
-  - name: create_time
     direction: desc
-
-- kind: IssueModel
-  properties:
-  - name: project
-  - name: floor
 
 - kind: IssueModel
   properties:
