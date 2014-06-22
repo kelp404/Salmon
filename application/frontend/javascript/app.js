@@ -100,6 +100,48 @@
         $scope.$stateParams.floor_highest = $scope.floorOptions.highest;
         return $scope.$state.go($scope.$state.current, $scope.$stateParams);
       }, true);
+      $scope.multiService = {
+        all: false,
+        checked: [],
+        closeIssues: function() {
+          var index, _j, _ref1, _results;
+          _results = [];
+          for (index = _j = 0, _ref1 = $scope.issues.items.length; _j < _ref1; index = _j += 1) {
+            if (!$scope.multiService.checked[index]) {
+              continue;
+            }
+            issue = $scope.issues.items[index];
+            issue.is_close = true;
+            _results.push($salmon.api.issue.updateIssue($scope.$projects.current.id, issue));
+          }
+          return _results;
+        },
+        buttonEnabled: function() {
+          var index, _j, _ref1;
+          for (index = _j = 0, _ref1 = $scope.issues.items.length; _j < _ref1; index = _j += 1) {
+            if ($scope.multiService.checked[index]) {
+              return true;
+            }
+          }
+          return false;
+        }
+      };
+      $scope.$watch('multiService.all', function(value) {
+        var index, _j, _k, _ref1, _ref2, _results, _results1;
+        if (value) {
+          _results = [];
+          for (index = _j = 0, _ref1 = $scope.issues.items.length; _j < _ref1; index = _j += 1) {
+            _results.push($scope.multiService.checked[index] = true);
+          }
+          return _results;
+        } else {
+          _results1 = [];
+          for (index = _k = 0, _ref2 = $scope.issues.items.length; _k < _ref2; index = _k += 1) {
+            _results1.push($scope.multiService.checked[index] = false);
+          }
+          return _results1;
+        }
+      });
       return $scope.labelService = {
         newLabel: '',
         manageMode: false,

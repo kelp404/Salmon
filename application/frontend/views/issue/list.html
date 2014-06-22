@@ -110,9 +110,13 @@
         <div class="panel panel-default">
             <div class="panel-heading">
                 <label class="checkbox-inline">
-                    <input type="checkbox"/> all
+                    <input ng-model="multiService.all" type="checkbox"/> all
                 </label>
-                <button class="btn btn-default btn-sm" style="margin-left: 10px;">Close</button>
+                <button ng-disabled="!multiService.buttonEnabled()"
+                        ng-click="multiService.closeIssues()"
+                        class="btn btn-default btn-sm" style="margin-left: 10px;">
+                    <i class="fa fa-check fa-fw text-success"></i> <span salmon-lang>Close</span>
+                </button>
             </div>
             <div class="panel-body">
                 <table class="table table-hover table-striped">
@@ -131,7 +135,7 @@
                         <tr ng-repeat="issue in issues.items">
                             <td>
                                 <label class="checkbox-inline">
-                                    <input type="checkbox" style="margin: 0 0 0 -20px;"/>
+                                    <input ng-model="multiService.checked[$index]" type="checkbox" style="margin: 0 0 0 -20px;"/>
                                 </label>
                                 <span ng-if="!issue.is_close" class="text-danger"><i class="fa fa-exclamation-circle fa-fw"></i></span>
                                 <span ng-if="issue.is_close" class="text-success"><i class="fa fa-check-circle fa-fw"></i></span>

@@ -44,6 +44,26 @@ angular.module 'salmon.controllers.issues', []
         $scope.$state.go $scope.$state.current, $scope.$stateParams
     , yes
 
+    $scope.multiService =
+        all: no
+        checked: []
+        closeIssues: ->
+            for index in [0...$scope.issues.items.length] by 1 when $scope.multiService.checked[index]
+                issue = $scope.issues.items[index]
+                issue.is_close = yes
+                $salmon.api.issue.updateIssue($scope.$projects.current.id, issue)
+        buttonEnabled: ->
+            for index in [0...$scope.issues.items.length] by 1 when $scope.multiService.checked[index]
+                return yes
+            no
+    $scope.$watch 'multiService.all', (value) ->
+        if value
+            for index in [0...$scope.issues.items.length] by 1
+                $scope.multiService.checked[index] = yes
+        else
+            for index in [0...$scope.issues.items.length] by 1
+                $scope.multiService.checked[index] = no
+
     $scope.labelService =
         newLabel: ''
         manageMode: no
