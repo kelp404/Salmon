@@ -12,41 +12,42 @@ body {
 /* line 10, ../sass/site/site.sass */
 .footer {
   padding-top: 30px;
+  padding-bottom: 30px;
 }
 
-/* line 14, ../sass/site/site.sass */
+/* line 15, ../sass/site/site.sass */
 ul.nav-pills > li.active > a {
   background-color: #eeeeee;
   color: #2a6496;
 }
-/* line 17, ../sass/site/site.sass */
+/* line 18, ../sass/site/site.sass */
 ul.nav-pills > li.active > a:hover {
   background-color: #eeeeee;
   color: #2a6496;
 }
 
-/* line 21, ../sass/site/site.sass */
+/* line 22, ../sass/site/site.sass */
 pre {
   overflow: auto;
   word-wrap: normal;
   white-space: pre;
 }
 
-/* line 25, ../sass/site/site.sass */
+/* line 26, ../sass/site/site.sass */
 table {
   word-wrap: break-word;
 }
 
-/* line 29, ../sass/site/site.sass */
+/* line 30, ../sass/site/site.sass */
 ul.label-select > li.active > a {
   background-color: #d0d0d0;
 }
-/* line 31, ../sass/site/site.sass */
+/* line 32, ../sass/site/site.sass */
 ul.label-select > li.active > a:hover {
   background-color: #d0d0d0;
 }
 
-/* line 34, ../sass/site/site.sass */
+/* line 35, ../sass/site/site.sass */
 .inline {
   display: inline;
 }
