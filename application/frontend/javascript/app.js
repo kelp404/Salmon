@@ -187,17 +187,16 @@
         }
       };
     }
-  ]).controller('NewIssueController', [
-    '$scope', '$injector', 'project', function($scope, $injector, project) {
+  ]).controller('EditIssueController', [
+    '$scope', '$injector', 'issue', function($scope, $injector, issue) {
       var $salmon, $state, $validator;
       $validator = $injector.get('$validator');
       $salmon = $injector.get('$salmon');
       $state = $injector.get('$state');
-      $scope.$projects.current = project;
       $scope.floorOptions = (function() {
         var index, _i, _ref, _ref1, _results;
         _results = [];
-        for (index = _i = _ref = project.floor_lowest, _ref1 = project.floor_highest; _i <= _ref1; index = _i += 1) {
+        for (index = _i = _ref = $scope.$projects.current.floor_lowest, _ref1 = $scope.$projects.current.floor_highest; _i <= _ref1; index = _i += 1) {
           if (index !== 0) {
             _results.push({
               label: index < 0 ? "B" + (index * -1) : "" + index,
@@ -207,11 +206,17 @@
         }
         return _results;
       })();
-      $scope.issue = {
-        title: '',
-        floor: $scope.floorOptions[0].value,
-        label_ids: []
-      };
+      if (issue != null) {
+        $scope.mode = 'edit';
+        $scope.issue = issue;
+      } else {
+        $scope.mode = 'new';
+        $scope.issue = {
+          title: '',
+          floor: $scope.floorOptions[0].value,
+          label_ids: []
+        };
+      }
       $scope.isActiveLabel = function(labelId) {
         return __indexOf.call($scope.issue.label_ids, labelId) >= 0;
       };
@@ -234,14 +239,21 @@
         $event.preventDefault();
         return $validator.validate($scope, 'issue').success(function() {
           NProgress.start();
-          return $salmon.api.issue.addIssue(project.id, $scope.issue).success(function() {
-            return $state.go('salmon.project.issues', {
-              projectId: project.id,
-              index: 0
-            }, {
-              reload: true
+          if ($scope.mode === 'new') {
+            return $salmon.api.issue.addIssue($scope.$projects.current.id, $scope.issue).success(function() {
+              return $state.go('salmon.project.issues', {
+                projectId: $scope.$projects.current.id,
+                index: 0
+              });
             });
-          });
+          } else {
+            return $salmon.api.issue.updateIssue($scope.$projects.current.id, $scope.issue).success(function() {
+              return $state.go('salmon.project.issue', {
+                projectId: $scope.$projects.current.id,
+                issueId: $scope.issue.id
+              });
+            });
+          }
         });
       };
     }
@@ -1299,11 +1311,31 @@
         url: '/issues/new',
         resolve: {
           title: function() {
-            return "" + (_('Issues')) + " - ";
+            return "" + (_('Issue')) + " - ";
+          },
+          issue: function() {
+            return null;
           }
         },
         templateUrl: '/views/issue/edit.html',
-        controller: 'NewIssueController'
+        controller: 'EditIssueController'
+      });
+      $stateProvider.state('salmon.project.issues-edit', {
+        url: '/issues/:issueId/edit',
+        resolve: {
+          title: function() {
+            return "" + (_('Issue')) + " - ";
+          },
+          issue: [
+            '$salmon', '$stateParams', function($salmon, $stateParams) {
+              return $salmon.api.issue.getIssue($stateParams.projectId, $stateParams.issueId).then(function(response) {
+                return response.data;
+              });
+            }
+          ]
+        },
+        templateUrl: '/views/issue/edit.html',
+        controller: 'EditIssueController'
       });
       $stateProvider.state('salmon.project.issue', {
         url: '/issues/:issueId',

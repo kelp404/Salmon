@@ -1,7 +1,8 @@
 <div class="row">
     <div class="col-sm-10">
         <div class="form-horizontal panel panel-default">
-            <div salmon-lang class="panel-heading">Create a new issue</div>
+            <div ng-if="mode=='new'" salmon-lang class="panel-heading">Create a new issue</div>
+            <div ng-if="mode=='edit'" salmon-lang class="panel-heading">Update an issue</div>
             <form class="panel-body">
                 <div class="form-group">
                     <label salmon-lang class="col-sm-2 control-label" for="input-title">Title</label>

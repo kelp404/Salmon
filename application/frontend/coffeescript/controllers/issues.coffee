@@ -102,20 +102,24 @@ angular.module 'salmon.controllers.issues', []
                     $timeout -> $validator.reset $scope, 'labelService'
 ]
 
-.controller 'NewIssueController', ['$scope', '$injector', 'project', ($scope, $injector, project) ->
+.controller 'EditIssueController', ['$scope', '$injector', 'issue', ($scope, $injector, issue) ->
     $validator = $injector.get '$validator'
     $salmon = $injector.get '$salmon'
     $state = $injector.get '$state'
 
-    $scope.$projects.current = project
     $scope.floorOptions = do ->
-        for index in [project.floor_lowest..project.floor_highest] by 1 when index isnt 0
+        for index in [$scope.$projects.current.floor_lowest..$scope.$projects.current.floor_highest] by 1 when index isnt 0
             label: if index < 0 then "B#{index * -1}" else "#{index}"
             value: index
-    $scope.issue =
-        title: ''
-        floor: $scope.floorOptions[0].value
-        label_ids: []
+    if issue?
+        $scope.mode = 'edit'
+        $scope.issue = issue
+    else
+        $scope.mode = 'new'
+        $scope.issue =
+            title: ''
+            floor: $scope.floorOptions[0].value
+            label_ids: []
     $scope.isActiveLabel = (labelId) -> labelId in $scope.issue.label_ids
     $scope.toggleLabel = (labelId, $event) ->
         $event.preventDefault()
@@ -131,11 +135,16 @@ angular.module 'salmon.controllers.issues', []
         $event.preventDefault()
         $validator.validate($scope, 'issue').success ->
             NProgress.start()
-            $salmon.api.issue.addIssue(project.id, $scope.issue).success ->
-                $state.go 'salmon.project.issues',
-                    projectId: project.id
-                    index: 0
-                , reload: yes
+            if $scope.mode is 'new'
+                $salmon.api.issue.addIssue($scope.$projects.current.id, $scope.issue).success ->
+                    $state.go 'salmon.project.issues',
+                        projectId: $scope.$projects.current.id
+                        index: 0
+            else # edit
+                $salmon.api.issue.updateIssue($scope.$projects.current.id, $scope.issue).success ->
+                    $state.go 'salmon.project.issue',
+                        projectId: $scope.$projects.current.id
+                        issueId: $scope.issue.id
 ]
 
 .controller 'IssueController', ['$scope', '$injector', 'issue', ($scope, $injector, issue) ->

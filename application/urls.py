@@ -45,6 +45,10 @@ urlpatterns = patterns('',
         GET=get_issue,
         PUT=update_issue,
     )),
+    # /projects/<project_id>/issues/<issue_id>/edit
+    url(r'^projects/(?P<project_id>[0-9]{1,32})/issues/(?P<issue_id>[0-9]{1,32})/edit$', api_dispatch(
+        GET=base_view,
+    )),
     # /projects/<project_id>/issues/count
     url(r'^projects/(?P<project_id>[0-9]{1,32})/issues/count$', api_dispatch(
         GET=count_issues,

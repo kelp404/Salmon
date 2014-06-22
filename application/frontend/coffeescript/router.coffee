@@ -85,9 +85,23 @@ angular.module 'salmon.router', [
     $stateProvider.state 'salmon.project.issues-new',
         url: '/issues/new'
         resolve:
-            title: -> "#{_ 'Issues'} - "
+            title: -> "#{_ 'Issue'} - "
+            issue: -> null
         templateUrl: '/views/issue/edit.html'
-        controller: 'NewIssueController'
+        controller: 'EditIssueController'
+    # ---------------------------------------------------------
+    # /projects/{projectId}/issues/new
+    # ---------------------------------------------------------
+    $stateProvider.state 'salmon.project.issues-edit',
+        url: '/issues/:issueId/edit'
+        resolve:
+            title: -> "#{_ 'Issue'} - "
+            issue: ['$salmon', '$stateParams', ($salmon, $stateParams) ->
+                $salmon.api.issue.getIssue($stateParams.projectId, $stateParams.issueId).then (response) ->
+                    response.data
+            ]
+        templateUrl: '/views/issue/edit.html'
+        controller: 'EditIssueController'
     # ---------------------------------------------------------
     # /projects/{projectId}/issues/{issueId}
     # ---------------------------------------------------------

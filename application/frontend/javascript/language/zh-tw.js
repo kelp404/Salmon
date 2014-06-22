@@ -42,6 +42,7 @@
     'Issue': '問題',
     'New Issue': '新增問題',
     'Create a new issue': '新增問題',
+    'Update an issue': '更新問題',
     'Content': '內容',
     'Author': '建立人',
     'Add Labels': '設定標籤',
