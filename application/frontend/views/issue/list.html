@@ -66,20 +66,19 @@
 
         <!-- label filter -->
         <h5><strong salmon-lang>Labels</strong></h5>
-        <ul class="nav nav-pills nav-stacked">
-            <div ng-show="labelService.manageMode" class="col-sm-12">
-                <div ng-repeat="label in labelService.labels" class="input-group">
-                    <input ng-model="label.title"
-                           salmon-enter="labelService.manageLabels()"
-                           class="form-control" type="text"/>
-                    <span class="input-group-btn">
-                        <button ng-click="labelService.labels.splice($index, 1)"
-                                class="btn btn-default" type="button"><i class="fa fa-trash-o fa-fw"></i></button>
-                    </span>
-                </div>
+        <div ng-show="labelService.manageMode" class="col-sm-12">
+            <div ng-repeat="label in labelService.labels" class="input-group">
+                <input ng-model="label.title"
+                       salmon-enter="labelService.manageLabels()"
+                       class="form-control" type="text"/>
+                <span class="input-group-btn">
+                    <button ng-click="labelService.labels.splice($index, 1)"
+                            class="btn btn-default" type="button"><i class="fa fa-trash-o fa-fw"></i></button>
+                </span>
             </div>
-            <li ng-hide="labelService.manageMode"
-                ng-repeat="label in $projects.current.labels" ng-class="{active: labelService.isActive(label.id)}">
+        </div>
+        <ul ng-hide="labelService.manageMode" class="nav nav-pills nav-stacked label-select">
+            <li ng-repeat="label in $projects.current.labels" ng-class="{active: labelService.isActive(label.id)}">
                 <a ng-click="labelService.updateLabelFilter(label.id, $event)" href="#">
                     <span class="badge pull-right">{{ count.labels[label.id] }}</span>
                     {{ label.title }}
