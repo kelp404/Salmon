@@ -27,7 +27,7 @@ def get_bleach_allow_tags():
     return [
         'hr',
         'img',
-        'p',
+        'p', 'span',
         'a',
         'del',
         'br',
@@ -41,6 +41,7 @@ def get_bleach_allow_tags():
         'strong',
         'ul',
         'div'
+        'h1', 'h2', 'h3', 'h4', 'h5',
     ]
 def get_bleach_allow_attributes():
     return {
