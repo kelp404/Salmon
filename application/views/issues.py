@@ -159,6 +159,7 @@ def update_issue(request, project_id, issue_id):
         # update the issue
         issue.title = form.title.data
         issue.content = form.content.data
+        issue.floor = form.floor.data
         issue.put()
     return JsonResponse(issue)
 

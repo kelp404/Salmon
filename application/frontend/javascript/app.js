@@ -49,6 +49,11 @@
       _ref = $scope.issues.items;
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         issue = _ref[_i];
+        if (issue.floor < 0) {
+          issue.floorText = "B" + (issue.floor * -1);
+        } else {
+          issue.floorText = "" + issue.floor;
+        }
         issue.labels = (function() {
           var label, result, _j, _len1, _ref1, _ref2;
           result = [];

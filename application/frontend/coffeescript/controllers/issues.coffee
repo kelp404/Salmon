@@ -7,6 +7,12 @@ angular.module 'salmon.controllers.issues', []
 
     $scope.issues = issues
     for issue in $scope.issues.items
+        # update .floorText
+        if issue.floor < 0
+            issue.floorText = "B#{issue.floor * -1}"
+        else
+            issue.floorText = "#{issue.floor}"
+        # update .labels
         issue.labels = do ->
             result = []
             for label in $scope.$projects.current.labels
