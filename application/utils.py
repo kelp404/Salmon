@@ -17,7 +17,11 @@ def current_language(request):
     :param request: The django request.
     :return: {string}
     """
-    return 'zh-tw'
+    languages = [x.split(';', 1)[0].lower() for x in request.META.get('HTTP_ACCEPT_LANGUAGE', '').split(',')]
+    for language in languages:
+        if language.startswith('zh'):
+            return 'zh-tw'
+    return 'en'
 
 def get_bleach_allow_tags():
     return [
