@@ -126,6 +126,9 @@ def get_issue(request, project_id, issue_id):
     issue = IssueModel.get_by_id(long(issue_id))
     if issue is None:
         raise Http404
+    if issue.project.key() != project.key():
+        raise Http404
+
     comments = CommentModel.all().filter('issue =', issue.key()).order('create_time').fetch(1000)
     result = issue.dict()
     result['comments'] = [x.dict() for x in comments]
@@ -144,6 +147,8 @@ def update_issue(request, project_id, issue_id):
         raise Http403
     issue = IssueModel.get_by_id(long(issue_id))
     if issue is None:
+        raise Http404
+    if issue.project.key() != project.key():
         raise Http404
 
     if not issue.is_close and form.is_close.data:
