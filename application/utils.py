@@ -72,6 +72,12 @@ def get_index_users():
     :return:
     """
     return search.Index(namespace='UserModel', name='default')
+def get_index_issues(project_id):
+    """
+    Get the the text search index of IssueModel.
+    :return:
+    """
+    return search.Index(namespace='IssueModel', name=str(project_id))
 
 def get_iso_format(date_time):
     """

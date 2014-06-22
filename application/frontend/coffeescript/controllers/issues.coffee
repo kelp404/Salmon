@@ -30,6 +30,12 @@ angular.module 'salmon.controllers.issues', []
                 $scope.$parent.count = result
     countIssues()
 
+    $scope.keyword = $scope.$stateParams.keyword
+    $scope.search = ($event, keyword) ->
+        $event.preventDefault()
+        $scope.$stateParams.keyword = keyword
+        $scope.$stateParams.index = 0
+        $scope.$state.go $scope.$state.current, $scope.$stateParams
     $scope.updateStatusFilter = (status) ->
         $scope.$stateParams.status = status
         $scope.$stateParams.index = 0

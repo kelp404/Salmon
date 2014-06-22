@@ -45,7 +45,7 @@ class UserModel(BaseModel):
         query_string = ''
         if len(plus) > 0:
             keyword = ' '.join(plus)
-            query_string += '(name:{1}) OR (email:{1})'.replace('{1}', keyword)
+            query_string += '((name:{1}) OR (email:{1}))'.replace('{1}', keyword)
         if len(minus) > 0:
             keyword = ' '.join(minus)
             query_string += 'NOT ((name:{1}) OR (email:{1}))'.replace('{1}', keyword)

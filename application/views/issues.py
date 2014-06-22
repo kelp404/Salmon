@@ -19,7 +19,8 @@ def get_issues(request, project_id):
     if 'label_ids' in request_dict:
         del request_dict['label_ids']
     form = IssueSearchForm(label_ids=request.GET.getlist('label_ids'), **request_dict)
-    project = ProjectModel.get_by_id(long(project_id))
+    project_id = long(project_id)
+    project = ProjectModel.get_by_id(project_id)
     if project is None:
         raise Http404
     if request.user.permission != UserPermission.root and\
@@ -28,8 +29,15 @@ def get_issues(request, project_id):
 
     if form.keyword.data:
         # search by keyword
-        total = 0
-        issues = []
+        issues, total = IssueModel.search(
+            project_id=project_id,
+            keyword=form.keyword.data,
+            floor_lowest=None if form.floor_lowest.data == 0 else form.floor_lowest.data,
+            floor_highest=None if form.floor_highest.data == 0 else form.floor_highest.data,
+            label_ids=form.label_ids.data,
+            index=form.index.data,
+            size=utils.default_page_size,
+        )
     else:
         query = IssueModel.all().filter('project =', project.key())
         # is_close filter
@@ -173,6 +181,7 @@ def update_issue(request, project_id, issue_id):
         issue.title = form.title.data
         issue.content = form.content.data
         issue.floor = form.floor.data
+        issue.label_ids = form.label_ids.data
         issue.put()
     return JsonResponse(issue)
 

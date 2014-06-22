@@ -79,6 +79,13 @@
         }
       };
       countIssues();
+      $scope.keyword = $scope.$stateParams.keyword;
+      $scope.search = function($event, keyword) {
+        $event.preventDefault();
+        $scope.$stateParams.keyword = keyword;
+        $scope.$stateParams.index = 0;
+        return $scope.$state.go($scope.$state.current, $scope.$stateParams);
+      };
       $scope.updateStatusFilter = function(status) {
         $scope.$stateParams.status = status;
         $scope.$stateParams.index = 0;
