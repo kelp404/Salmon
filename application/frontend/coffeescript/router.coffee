@@ -86,7 +86,7 @@ angular.module 'salmon.router', [
         url: '/issues/new'
         resolve:
             title: -> "#{_ 'Issues'} - "
-        templateUrl: '/views/issue/new.html'
+        templateUrl: '/views/issue/edit.html'
         controller: 'NewIssueController'
     # ---------------------------------------------------------
     # /projects/{projectId}/issues/{issueId}

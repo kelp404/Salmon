@@ -1289,7 +1289,7 @@
             return "" + (_('Issues')) + " - ";
           }
         },
-        templateUrl: '/views/issue/new.html',
+        templateUrl: '/views/issue/edit.html',
         controller: 'NewIssueController'
       });
       $stateProvider.state('salmon.project.issue', {
