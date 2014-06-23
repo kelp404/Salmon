@@ -41,7 +41,7 @@ angular.module 'salmon.controllers.settings', []
         project.isRoot = $scope.$user.id in project.root_ids
     $scope.removeProject = (project, $event) ->
         $event.preventDefault()
-        $salmon.alert.confirm "Do you want to delete the project #{project.title}?", (result) ->
+        $salmon.alert.confirm "#{_ 'Do you want to delete the project '}#{project.title}?", (result) ->
             return if not result
             NProgress.start()
             $salmon.api.project.removeProject(project.id).success ->
@@ -132,7 +132,7 @@ angular.module 'salmon.controllers.settings', []
     $scope.keyword = $stateParams.keyword
     $scope.removeUser = (user, $event) ->
         $event.preventDefault()
-        $salmon.alert.confirm "Do you want to delete the user #{user.name}<#{user.email}>?", (result) ->
+        $salmon.alert.confirm "#{_ 'Do you want to delete the user '}#{user.name}<#{user.email}>?", (result) ->
             return if not result
             NProgress.start()
             $salmon.api.user.removeUser(user.id).success ->

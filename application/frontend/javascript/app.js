@@ -480,7 +480,7 @@
       }
       return $scope.removeProject = function(project, $event) {
         $event.preventDefault();
-        return $salmon.alert.confirm("Do you want to delete the project " + project.title + "?", function(result) {
+        return $salmon.alert.confirm("" + (_('Do you want to delete the project ')) + project.title + "?", function(result) {
           if (!result) {
             return;
           }
@@ -623,7 +623,7 @@
       $scope.keyword = $stateParams.keyword;
       $scope.removeUser = function(user, $event) {
         $event.preventDefault();
-        return $salmon.alert.confirm("Do you want to delete the user " + user.name + "<" + user.email + ">?", function(result) {
+        return $salmon.alert.confirm("" + (_('Do you want to delete the user ')) + user.name + "<" + user.email + ">?", function(result) {
           if (!result) {
             return;
           }
@@ -1013,14 +1013,14 @@
     this.alert = {
       saved: function(message) {
         if (message == null) {
-          message = 'Saved successful.';
+          message = _('Saved successful.');
         }
 
         /*
         Pop the message to tell user the data hade been saved.
          */
         return $.av.pop({
-          title: 'Success',
+          title: _('Success'),
           message: message,
           expire: 3000
         });

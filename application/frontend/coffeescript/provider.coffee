@@ -26,12 +26,12 @@ angular.module 'salmon.provider', []
     @url = window.url
 
     @alert =
-        saved: (message='Saved successful.') ->
+        saved: (message=_('Saved successful.')) ->
             ###
             Pop the message to tell user the data hade been saved.
             ###
             $.av.pop
-                title: 'Success'
+                title: _ 'Success'
                 message: message
                 expire: 3000
         confirm: (message, callback) ->
