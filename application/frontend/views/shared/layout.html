@@ -1,7 +1,7 @@
 <nav ng-controller="NavigationController" class="navbar navbar-default navbar-fixed-top">
     <div class="container-fluid">
         <div class="navbar-header">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse">
+            <button salmon-nav-collapse-button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse">
                 <span class="sr-only">Toggle navigation</span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
@@ -11,6 +11,7 @@
         </div>
         <div class="collapse navbar-collapse" id="navbar-collapse">
             <ul class="nav navbar-nav navbar-right">
+                <!-- projects -->
                 <li ng-if="$user.isLogin && $projects.items.length" class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ $projects.current.title }} <b class="caret"></b></a>
                     <ul class="dropdown-menu">
@@ -19,14 +20,17 @@
                         </li>
                     </ul>
                 </li>
+                <!-- new issue -->
                 <li ng-if="$user.isLogin && $projects.items.length"
                     ng-class="{active: $state.current.name.indexOf('salmon.project.issues-new')==0}">
-                    <a href="/projects/{{ $projects.current.id }}/issues/new"><i class="fa fa-plus fa-fw"></i> <span salmon-lang>New Issue</span></a>
+                    <a href="/projects/{{ $projects.current.id }}/issues/new"><i class="fa fa-plus fa-fw hidden-xs"></i> <span salmon-lang>New Issue</span></a>
                 </li>
+                <!-- issue list -->
                 <li ng-if="$user.isLogin && $projects.items.length"
                     ng-class="{active: $state.current.name.indexOf('salmon.project.issue')==0 && $state.current.name!='salmon.project.issues-new'}">
                     <a salmon-lang href="/projects/{{ $projects.current.id }}/issues">Issues</a>
                 </li>
+                <!-- settings -->
                 <li ng-if="$user.isLogin" ng-class="{active: $state.current.name.indexOf('salmon.settings')==0}" class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span salmon-lang>Settings</span> <b class="caret"></b></a>
                     <ul class="dropdown-menu">

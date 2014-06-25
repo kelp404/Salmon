@@ -868,7 +868,22 @@
         }
       }
     };
-  }).directive('salmonConfirm', [
+  }).directive('salmonNavCollapseButton', [
+    '$injector', function($injector) {
+      var $salmon;
+      $salmon = $injector.get('$salmon');
+      return {
+        restrict: 'A',
+        link: function(scope, element, attrs) {
+          return scope.$on($salmon.broadcastChannel.hideNavBar, function() {
+            if ($(attrs.target).hasClass('in')) {
+              return $(element).click();
+            }
+          });
+        }
+      };
+    }
+  ]).directive('salmonConfirm', [
     '$injector', function($injector) {
 
       /*
@@ -1010,6 +1025,9 @@
     this.user.isRoot = this.user.permission === 1;
     this.user.isAdvanced = this.user.permission === 3;
     this.url = window.url;
+    this.broadcastChannel = {
+      hideNavBar: '$hideNavBar'
+    };
     this.alert = {
       saved: function(message) {
         if (message == null) {
@@ -1335,6 +1353,7 @@
           return {
             user: _this.user,
             url: _this.url,
+            broadcastChannel: _this.broadcastChannel,
             alert: _this.alert,
             api: _this.api
           };
@@ -1603,7 +1622,8 @@
         changeStartEvent = window.event;
         fromStateName = fromState.name;
         toStateName = toState.name;
-        return NProgress.start();
+        NProgress.start();
+        return $rootScope.$broadcast($salmon.broadcastChannel.hideNavBar);
       });
       $rootScope.$on('$stateChangeSuccess', function(event, toState) {
         NProgress.done();

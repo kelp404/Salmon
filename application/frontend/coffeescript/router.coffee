@@ -230,6 +230,7 @@ angular.module 'salmon.router', [
         fromStateName = fromState.name
         toStateName = toState.name
         NProgress.start()
+        $rootScope.$broadcast $salmon.broadcastChannel.hideNavBar
     $rootScope.$on '$stateChangeSuccess', (event, toState) ->
         NProgress.done()
         if not $salmon.user.isLogin and toState.name isnt 'salmon.login'

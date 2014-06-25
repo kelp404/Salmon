@@ -25,6 +25,9 @@ angular.module 'salmon.provider', []
     @user.isAdvanced = @user.permission is 3
     @url = window.url
 
+    @broadcastChannel =
+        hideNavBar: '$hideNavBar'
+
     @alert =
         saved: (message=_('Saved successful.')) ->
             ###
@@ -211,6 +214,7 @@ angular.module 'salmon.provider', []
 
         user: @user
         url: @url
+        broadcastChannel: @broadcastChannel
         alert: @alert
         api: @api
     ]

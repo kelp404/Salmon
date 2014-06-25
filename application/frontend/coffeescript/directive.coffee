@@ -150,6 +150,19 @@ angular.module 'salmon.directive', []
             $(element).modal 'show'
 
 # ---------------------------------------------------------
+# salmon-nav-collapse-button
+# ---------------------------------------------------------
+.directive 'salmonNavCollapseButton', ['$injector', ($injector) ->
+    $salmon = $injector.get '$salmon'
+
+    restrict: 'A'
+    link: (scope, element, attrs) ->
+        scope.$on $salmon.broadcastChannel.hideNavBar, ->
+            if $(attrs.target).hasClass 'in'
+                $(element).click()
+]
+
+# ---------------------------------------------------------
 # salmon-confirm
 # ---------------------------------------------------------
 .directive 'salmonConfirm', ['$injector', ($injector) ->
