@@ -8,8 +8,7 @@ machine:
 
 dependencies:
   pre:
-    - git submodule init
-    - git submodule update
+    - git submodule update --init
     # google app engine
     - curl -O https://googleappengine.googlecode.com/files/google_appengine_1.8.9.zip
     - unzip -q google_appengine_1.8.9.zip
@@ -18,7 +17,6 @@ dependencies:
     # node modules
     - npm install -g grunt-cli
     - npm install -g bower
-    - npm install
     # bower componetns
     - bower install
 
