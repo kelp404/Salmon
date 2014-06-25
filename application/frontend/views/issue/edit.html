@@ -20,11 +20,31 @@
                         </select>
                     </div>
                 </div>
+                <!-- add labels xs -->
+                <div class="form-group visible-xs">
+                    <label salmon-lang class="col-sm-2 control-label" for="input-labels">Add Labels</label>
+                    <div class="col-sm-10">
+                        <ul class="nav nav-pills nav-stacked label-select">
+                            <li ng-repeat="label in $projects.current.labels"
+                                ng-class="{active: isActiveLabel(label.id)}">
+                                <a ng-click="toggleLabel(label.id, $event)" href="#">
+                                    {{ label.title }}
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
                 <div class="form-group">
                     <label salmon-lang class="col-sm-2 control-label" for="input-content">Content</label>
                     <div class="col-sm-10">
-                        <div ng-model="issue.content" salmon-redactor="{}"
-                             style="min-height: 160px;" id="input-content"></div>
+                        <div class="visible-xs">
+                            <div ng-model="issue.content" salmon-redactor="{air: true}"
+                                 style="min-height: 120px;"></div>
+                        </div>
+                        <div class="hidden-xs">
+                            <div ng-model="issue.content" salmon-redactor="{}"
+                                 style="min-height: 160px;" id="input-content"></div>
+                        </div>
                     </div>
                 </div>
                 <div class="form-group">
@@ -36,7 +56,7 @@
             </form>
         </div>
     </div>
-    <div class="col-sm-2">
+    <div class="col-sm-2 hidden-xs">
         <h4 salmon-lang>Add Labels</h4>
         <ul class="nav nav-pills nav-stacked label-select">
             <li ng-repeat="label in $projects.current.labels"
