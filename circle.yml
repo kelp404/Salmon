@@ -1,7 +1,7 @@
 machine:
   python:
     version:
-      2.7.7
+      2.7.6
   node:
     version:
       v0.10.25

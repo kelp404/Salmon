@@ -25,5 +25,8 @@
     "font-awesome": "4.1.0",
     "angular-validator": "0.2.1",
     "AlertView": "https://github.com/kelp404/AlertView.git#~1.0.2"
+  },
+  "resolutions": {
+    "angular": "1.2.18"
   }
 }
