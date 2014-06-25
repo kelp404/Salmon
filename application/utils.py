@@ -14,6 +14,7 @@ def is_debug():
 def current_language(request):
     """
     Get current language code.
+    request.META['HTTP_ACCEPT_LANGUAGE']: `zh-TW,zh;q=0.8,en;q=0.6`
     :param request: The django request.
     :return: {string}
     """

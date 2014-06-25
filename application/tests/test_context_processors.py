@@ -18,3 +18,22 @@ class TestContextProcessors(unittest.TestCase):
     def test_context_processors_debug_false(self):
         context = context_processors.debug(None)
         self.assertDictEqual(context, {'debug': False})
+
+    @patcher(
+        patch('application.utils.current_language', new=MagicMock(return_value='zh-tw'))
+    )
+    def test_context_processors_language_zh_tw(self):
+        context = context_processors.language(None)
+        self.assertDictEqual(context, {
+            'lang_code': 'zh-tw',
+            'lang_code_redactor': 'zh-tw',
+        })
+    @patcher(
+        patch('application.utils.current_language', new=MagicMock(return_value='en'))
+    )
+    def test_context_processors_language_en(self):
+        context = context_processors.language(None)
+        self.assertDictEqual(context, {
+            'lang_code': 'en',
+            'lang_code_redactor': None,
+        })
