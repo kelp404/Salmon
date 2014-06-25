@@ -1,0 +1,26 @@
+machine:
+  python:
+    version:
+      2.7.7
+  node:
+    version:
+      v0.10.25
+
+dependencies:
+  pre:
+    # google app engine
+    - curl -O https://googleappengine.googlecode.com/files/google_appengine_1.8.9.zip
+    - unzip -q google_appengine_1.8.9.zip
+    # pip requirements
+    - pip install -r pip_requirements.txt
+    # node modules
+    - npm install -g grunt-cli
+    - npm install -g bower
+    - npm install
+    # bower componetns
+    - bower install
+
+test:
+  override:
+    - python application/test.py
+    - grunt test

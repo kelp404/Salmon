@@ -1,4 +1,4 @@
-#Salmon
+#Salmon [![circle-ci](https://circleci.com/gh/kelp404/Salmon/tree/master.png?circle-token=21752831e8ea62092d9f0e713154cab11086daf7)](https://circleci.com/gh/kelp404/Salmon/tree/master)
 
 Salmon issue tracker.
 
