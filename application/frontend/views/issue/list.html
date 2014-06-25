@@ -1,7 +1,7 @@
 <div class="row">
     <div class="col-sm-3">
         <!-- keyword -->
-        <form>
+        <form class="hidden-xs">
             <div class="input-group">
                 <input salmon-focus ng-model="keyword" type="text" class="form-control"/>
                 <span class="input-group-btn">
@@ -43,22 +43,31 @@
             <div class="col-sm-2" style="padding: 4px 0;">
                 <label salmon-lang for="input-floors">Floor</label>
             </div>
-            <div class="col-sm-4" style="padding: 0">
-                <select ng-model="floorOptions.lowest"
+            <div class="col-xm-12 visible-xs" style="padding: 0">
+                <select ng-model="floorOptions.target"
                         ng-options="option.value as option.label for option in $projects.current.floor_options"
                         id="input-floors" class="form-control input-sm">
                     <option value="">---</option>
                 </select>
             </div>
-            <div class="col-sm-1" style="padding: 5px 7px;">
+            <div class="col-sm-4 hidden-xs" style="padding: 0">
+                <select ng-model="floorOptions.lowest"
+                        ng-options="option.value as option.label for option in $projects.current.floor_options"
+                        id="input-floors" class="form-control input-sm">
+                    <option value="">---</option>
+                </select>
+                <small salmon-lang class="text-muted">Lowest floor</small>
+            </div>
+            <div class="col-sm-1 hidden-xs" style="padding: 5px 7px;">
                 <p class="form-control-static">～</p>
             </div>
-            <div class="col-sm-4" style="padding: 0">
+            <div class="col-sm-4 hidden-xs" style="padding: 0">
                 <select ng-model="floorOptions.highest"
                         ng-options="option.value as option.label for option in $projects.current.floor_options"
                         class="form-control input-sm">
                     <option value="">---</option>
                 </select>
+                <small salmon-lang class="text-muted">Highest floor</small>
             </div>
         </div>
         <div class="clearfix"></div>
@@ -66,6 +75,13 @@
 
         <!-- label filter -->
         <h5><strong salmon-lang>Labels</strong></h5>
+        <div class="col-xm-12 visible-xs" style="padding: 0">
+            <select ng-model="labelService.label"
+                    ng-options="label.id as label.title for label in $projects.current.labels"
+                    class="form-control input-sm">
+                <option value="">---</option>
+            </select>
+        </div>
         <div ng-show="labelService.manageMode" class="col-sm-12">
             <div ng-repeat="label in labelService.labels" class="input-group">
                 <input ng-model="label.title"
@@ -77,7 +93,7 @@
                 </span>
             </div>
         </div>
-        <ul ng-hide="labelService.manageMode" class="nav nav-pills nav-stacked label-select">
+        <ul ng-hide="labelService.manageMode" class="nav nav-pills nav-stacked label-select hidden-xs">
             <li ng-repeat="label in $projects.current.labels" ng-class="{active: labelService.isActive(label.id)}">
                 <a ng-click="labelService.updateLabelFilter(label.id, $event)" href="#">
                     <span class="badge pull-right">{{ count.labels[label.id] }}</span>
@@ -87,14 +103,15 @@
         </ul>
         <button ng-click="labelService.manageLabels()"
                 ng-show="$user.isRoot || $projects.current.isRoot"
-                ng-class="{active: labelService.manageMode}" class="col-sm-12 btn btn-default btn-sm" style="margin-top: 10px;">
+                ng-class="{active: labelService.manageMode}"
+                class="col-xs-12 btn btn-default btn-sm hidden-xs" style="margin-top: 10px;">
             <strong salmon-lang>Manage labels</strong>
         </button>
         <div class="clearfix"></div>
         <hr/>
 
         <!-- new label -->
-        <div ng-show="$user.isRoot || $projects.current.isRoot" class="form-group">
+        <div ng-show="$user.isRoot || $projects.current.isRoot" class="form-group hidden-xs">
             <label salmon-lang class="control-label" for="input-new-label">New label</label>
             <input ng-model="labelService.newLabel"
                    validator="[required]"
@@ -107,7 +124,7 @@
     <!-- issues -->
     <div class="col-sm-9">
         <div class="panel panel-default">
-            <div class="panel-heading">
+            <div class="panel-heading hidden-xs">
                 <label class="checkbox-inline">
                     <input ng-model="multiService.all" type="checkbox"/>
                     <span salmon-lang>all</span>
@@ -123,8 +140,8 @@
                     <thead>
                         <tr>
                             <th salmon-lang>Title</th>
-                            <th salmon-lang>Floor</th>
-                            <th salmon-lang>Author</th>
+                            <th salmon-lang class="hidden-xs">Floor</th>
+                            <th salmon-lang class="hidden-xs">Author</th>
                             <th salmon-lang class="hidden-xs hidden-sm" width="160px">Create time</th>
                         </tr>
                     </thead>
@@ -134,7 +151,7 @@
                         </tr>
                         <tr ng-repeat="issue in issues.items">
                             <td>
-                                <label class="checkbox-inline">
+                                <label class="checkbox-inline hidden-xs">
                                     <input ng-model="multiService.checked[$index]" type="checkbox" style="margin: 0 0 0 -20px;"/>
                                 </label>
                                 <span ng-if="!issue.is_close" class="text-danger"><i class="fa fa-exclamation-circle fa-fw"></i></span>
@@ -151,8 +168,8 @@
                                     </h5>
                                 </span>
                             </td>
-                            <td>{{ issue.floorText }}</td>
-                            <td>
+                            <td class="hidden-xs">{{ issue.floorText }}</td>
+                            <td class="hidden-xs">
                                 <a salmon-mail-to="issue.author.email">{{ issue.author.name }}</a>
                             </td>
                             <td class="hidden-xs hidden-sm">{{ issue.create_time|date:'yyyy-MM-dd HH:mm' }}</td>

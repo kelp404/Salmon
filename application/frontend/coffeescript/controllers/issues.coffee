@@ -47,8 +47,12 @@ angular.module 'salmon.controllers.issues', []
     $scope.floorOptions =
         lowest: $scope.$stateParams.floor_lowest
         highest: $scope.$stateParams.floor_highest
+        target: $scope.$stateParams.floor_lowest # mobile just allow select a floor
     $scope.$watch 'floorOptions', (newValue, oldValue) ->
         return if newValue is oldValue
+        if newValue.target isnt oldValue.target
+            $scope.floorOptions.lowest = newValue.target
+            $scope.floorOptions.highest = newValue.target
         $scope.$stateParams.floor_lowest = $scope.floorOptions.lowest
         $scope.$stateParams.floor_highest = $scope.floorOptions.highest
         $scope.$stateParams.index = 0
@@ -75,10 +79,17 @@ angular.module 'salmon.controllers.issues', []
             for index in [0...$scope.issues.items.length] by 1
                 $scope.multiService.checked[index] = no
 
+    if not $scope.$stateParams.label_ids?
+        firstLabelId = ''
+    else if typeof($scope.$stateParams.label_ids) is 'string'
+        firstLabelId = $scope.$stateParams.label_ids * 1
+    else
+        firstLabelId = $scope.$stateParams.label_ids[0]
     $scope.labelService =
         newLabel: ''
         manageMode: no
         labels: []
+        label: firstLabelId # for xs
         manageLabels: ->
             if @manageMode
                 # submit change to server
@@ -108,6 +119,9 @@ angular.module 'salmon.controllers.issues', []
             else
                 labelId in $scope.$stateParams.label_ids
         updateLabelFilter: (labelId, $event) ->
+            ###
+            If the label is exist it will be remove form the filter, else it will be added into the filter.
+            ###
             $event.preventDefault()
             labelId = "#{labelId}"
             $scope.$stateParams.label_ids ?= []
@@ -132,6 +146,11 @@ angular.module 'salmon.controllers.issues', []
                     $scope.$projects.current.labels = result
                     $scope.labelService.newLabel = ''
                     $timeout -> $validator.reset $scope, 'labelService'
+    $scope.$watch 'labelService.label', (newValue, oldValue) ->
+        return if newValue is oldValue
+        $scope.$stateParams.label_ids = [newValue]
+        $scope.$stateParams.index = 0
+        $scope.$state.go $scope.$state.current, $scope.$stateParams
 ]
 
 .controller 'EditIssueController', ['$scope', '$injector', 'issue', ($scope, $injector, issue) ->

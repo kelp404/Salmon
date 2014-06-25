@@ -41,7 +41,7 @@
 
   angular.module('salmon.controllers.issues', []).controller('IssuesController', [
     '$scope', '$injector', 'issues', function($scope, $injector, issues) {
-      var $salmon, $timeout, $validator, countIssues, issue, _i, _len, _ref;
+      var $salmon, $timeout, $validator, countIssues, firstLabelId, issue, _i, _len, _ref;
       $validator = $injector.get('$validator');
       $salmon = $injector.get('$salmon');
       $timeout = $injector.get('$timeout');
@@ -99,11 +99,16 @@
       };
       $scope.floorOptions = {
         lowest: $scope.$stateParams.floor_lowest,
-        highest: $scope.$stateParams.floor_highest
+        highest: $scope.$stateParams.floor_highest,
+        target: $scope.$stateParams.floor_lowest
       };
       $scope.$watch('floorOptions', function(newValue, oldValue) {
         if (newValue === oldValue) {
           return;
+        }
+        if (newValue.target !== oldValue.target) {
+          $scope.floorOptions.lowest = newValue.target;
+          $scope.floorOptions.highest = newValue.target;
         }
         $scope.$stateParams.floor_lowest = $scope.floorOptions.lowest;
         $scope.$stateParams.floor_highest = $scope.floorOptions.highest;
@@ -152,10 +157,18 @@
           return _results1;
         }
       });
-      return $scope.labelService = {
+      if ($scope.$stateParams.label_ids == null) {
+        firstLabelId = '';
+      } else if (typeof $scope.$stateParams.label_ids === 'string') {
+        firstLabelId = $scope.$stateParams.label_ids * 1;
+      } else {
+        firstLabelId = $scope.$stateParams.label_ids[0];
+      }
+      $scope.labelService = {
         newLabel: '',
         manageMode: false,
         labels: [],
+        label: firstLabelId,
         manageLabels: function() {
           var changedLabels, label, newLabels, x, _j, _k, _len1, _len2, _ref1, _ref2;
           if (this.manageMode) {
@@ -197,6 +210,10 @@
           }
         },
         updateLabelFilter: function(labelId, $event) {
+
+          /*
+          If the label is exist it will be remove form the filter, else it will be added into the filter.
+           */
           var exist, index, _base, _j, _ref1;
           $event.preventDefault();
           labelId = "" + labelId;
@@ -239,6 +256,14 @@
           });
         }
       };
+      return $scope.$watch('labelService.label', function(newValue, oldValue) {
+        if (newValue === oldValue) {
+          return;
+        }
+        $scope.$stateParams.label_ids = [newValue];
+        $scope.$stateParams.index = 0;
+        return $scope.$state.go($scope.$state.current, $scope.$stateParams);
+      });
     }
   ]).controller('EditIssueController', [
     '$scope', '$injector', 'issue', function($scope, $injector, issue) {

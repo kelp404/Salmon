@@ -16,13 +16,14 @@
         <div class="panel panel-default">
             <div class="panel-heading">
                 <span class="pull-right">
-                    <span>{{ issue.create_time|date:'yyyy-MM-dd HH:mm' }}</span>
+                    <span class="hidden-xs">{{ issue.create_time|date:'yyyy-MM-dd HH:mm' }}</span>
                     <a href="/projects/{{ $projects.current.id }}/issues/{{ issue.id }}/edit" class="btn btn-default btn-sm" style="margin-top: -5px;"><i class="fa fa-pencil fa-fw"></i></a>
                 </span>
                 <a salmon-mail-to="issue.author.email">{{ issue.author.name }}</a>
             </div>
             <div class="panel-body" style="min-height: 160px;">
                 <div salmon-issue-content="issue.content"></div>
+                <small class="pull-right visible-xs">{{ issue.create_time|date:'yyyy-MM-dd HH:mm' }}</small>
             </div>
         </div>
 
@@ -43,8 +44,14 @@
                 <a salmon-mail-to="$user.email">{{ $user.name }}</a>
             </div>
             <div class="panel-body">
-                <div ng-model="comment.newComment" salmon-redactor="{}"
-                     style="min-height: 120px;" id="input-content"></div>
+                <div class="visible-xs">
+                    <div ng-model="comment.newComment" salmon-redactor="{air: true}"
+                         style="min-height: 120px;" id="input-content"></div>
+                </div>
+                <div class="hidden-xs">
+                    <div ng-model="comment.newComment" salmon-redactor="{}"
+                         style="min-height: 120px;" id="input-content"></div>
+                </div>
             </div>
             <div class="panel-footer text-right">
                 <button ng-click="comment.submit()" class="btn btn-default"><i class="fa fa-check fa-fw text-success"></i> <span salmon-lang>Submit</span></button>
