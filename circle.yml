@@ -8,6 +8,8 @@ machine:
 
 dependencies:
   pre:
+    - git submodule init
+    - git submodule update
     # google app engine
     - curl -O https://googleappengine.googlecode.com/files/google_appengine_1.8.9.zip
     - unzip -q google_appengine_1.8.9.zip
