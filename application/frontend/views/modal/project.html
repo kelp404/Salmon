@@ -35,7 +35,7 @@
                         <small salmon-lang class="text-muted">Lowest floor</small>
                     </div>
                     <div class="col-sm-1">
-                        <p class="form-control-static">～</p>
+                        <p class="form-control-static hidden-xs">～</p>
                     </div>
                     <div class="col-sm-3">
                         <select ng-model="project.floor_highest"
@@ -53,7 +53,10 @@
                         <table class="table table-condensed table-hover">
                             <tbody>
                             <tr ng-repeat="member in project.members">
-                                <td>{{ member.name }} &lt;{{ member.email }}&gt;</td>
+                                <td>
+                                    <span class="hidden-xs">{{ member.name }} &lt;{{ member.email }}&gt;</span>
+                                    <span class="visible-xs">&lt;{{ member.email }}&gt;</span>
+                                </td>
                                 <td width="60px">
                                     <label class="checkbox-inline" style="padding-top: 0;">
                                         <input ng-model="member.isRoot"
