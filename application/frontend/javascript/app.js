@@ -974,8 +974,8 @@
 
 (function() {
   window._ = function(key) {
-    var result;
-    result = window.languageResource[key];
+    var result, _ref;
+    result = (_ref = window.languageResource) != null ? _ref[key] : void 0;
     if (result != null) {
       return result;
     } else {
