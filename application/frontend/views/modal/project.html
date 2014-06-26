@@ -57,12 +57,12 @@
                                     <span class="hidden-xs">{{ member.name }} &lt;{{ member.email }}&gt;</span>
                                     <span class="visible-xs">&lt;{{ member.email }}&gt;</span>
                                 </td>
-                                <td width="60px">
+                                <td width="80px">
                                     <label class="checkbox-inline" style="padding-top: 0;">
                                         <input ng-model="member.isRoot"
                                                ng-disabled="(!$user.isRoot && !project.isRoot) || (member.isRoot && project.root_ids.length==1)"
                                                type="checkbox"/>
-                                        root
+                                        <span salmon-lang>root</span>
                                     </label>
                                 </td>
                                 <td width="36px">
