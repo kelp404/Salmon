@@ -1042,7 +1042,18 @@
         $http = $injector.get('$http');
         $rootScope = $injector.get('$rootScope');
         $rootScope.$confirmModal = {};
-        return $rootScope.$user = _this.user;
+        $rootScope.$user = _this.user;
+        return $rootScope.$loadings = {
+          hasAny: function() {
+            var key;
+            for (key in this) {
+              if (key !== 'hasAny') {
+                return true;
+              }
+            }
+            return false;
+          }
+        };
       };
     })(this);
     this.user = (_ref = window.user) != null ? _ref : {};
@@ -1074,17 +1085,27 @@
         return $rootScope.$confirmModal.isShow = true;
       }
     };
+    this.httpId = 0;
     this.http = (function(_this) {
       return function(args) {
-        return $http(args).error(function(data, status, headers, config) {
+        var httpId;
+        httpId = _this.httpId++;
+        $rootScope.$loadings[httpId] = {
+          method: args.method,
+          url: args.url
+        };
+        return $http(args).success(function() {
+          return delete $rootScope.$loadings[httpId];
+        }).error(function(data, status, headers, config) {
           var document, _ref1;
+          delete $rootScope.$loadings[httpId];
+          NProgress.done();
           $.av.pop({
             title: 'Server Error',
             message: 'Please try again or refresh this page.',
             template: 'error',
             expire: 3000
           });
-          NProgress.done();
           if ((_ref1 = config.data) != null) {
             delete _ref1.password;
           }

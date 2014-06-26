@@ -27,7 +27,11 @@ $rootScope =
         message: {string}
         callback: (result) ->
         isShow: {bool}
-    $projects:   # from BaseController
+    $loadings:
+        # current $http instances
+        hasAny: -> # is any $http processing?
+    $projects:
+        # from BaseController
         items: []
         current: {}
     $user:
