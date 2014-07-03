@@ -58,7 +58,6 @@ class IssueModel(BaseModel):
         for label_id in label_ids:
             if label_id:
                 query_string += ' AND (label_ids:%s)' % label_id
-        print(query_string)
 
         create_time_desc = search.SortExpression(
             expression='create_time',
