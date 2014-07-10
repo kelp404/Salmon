@@ -337,18 +337,19 @@
     }
   ]).controller('IssueController', [
     '$scope', '$injector', 'issue', function($scope, $injector, issue) {
-      var $salmon, $state;
+      var $salmon, $state, _ref;
       $salmon = $injector.get('$salmon');
       $state = $injector.get('$state');
       $scope.issue = issue;
       $scope.issue.floorText = issue.floor < 0 ? "B" + (issue.floor * -1) : "" + issue.floor;
+      $scope.issue.isEditabled = $scope.$user.isRoot || (_ref = $scope.$user.id, __indexOf.call($scope.$projects.current.root_ids, _ref) >= 0) || issue.author.id === $scope.$user.id;
       $scope.issue.labels = (function() {
-        var label, result, _i, _len, _ref, _ref1;
+        var label, result, _i, _len, _ref1, _ref2;
         result = [];
-        _ref = $scope.$projects.current.labels;
-        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-          label = _ref[_i];
-          if (_ref1 = label.id, __indexOf.call(issue.label_ids, _ref1) >= 0) {
+        _ref1 = $scope.$projects.current.labels;
+        for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
+          label = _ref1[_i];
+          if (_ref2 = label.id, __indexOf.call(issue.label_ids, _ref2) >= 0) {
             result.push(label);
           }
         }

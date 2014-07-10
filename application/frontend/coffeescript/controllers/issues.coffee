@@ -204,6 +204,7 @@ angular.module 'salmon.controllers.issues', []
 
     $scope.issue = issue
     $scope.issue.floorText = if issue.floor < 0 then "B#{issue.floor * -1}" else "#{issue.floor}"
+    $scope.issue.isEditabled = $scope.$user.isRoot or $scope.$user.id in $scope.$projects.current.root_ids or issue.author.id is $scope.$user.id
     $scope.issue.labels = do ->
         result = []
         for label in $scope.$projects.current.labels

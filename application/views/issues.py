@@ -178,6 +178,10 @@ def update_issue(request, project_id, issue_id):
         issue.put()
     else:
         # update the issue
+        if request.user.permission != UserPermission.root and\
+                not request.user.key().id() in project.root_ids and\
+                request.user.key() != issue.author.key():
+            raise Http403
         issue.title = form.title.data
         issue.content = bleach.clean(
             form.content.data,
