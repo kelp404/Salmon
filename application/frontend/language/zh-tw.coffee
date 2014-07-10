@@ -57,6 +57,7 @@ window.languageResource =
     'New label': '新增標籤'
     'All': '全部'
     'Open': '未關閉'
+    'Reopen': '取消關閉'
     'Closed': '已關閉'
     'Close': '關閉'
     'all': '全選'

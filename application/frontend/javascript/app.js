@@ -372,11 +372,24 @@
           });
         }
       };
-      return $scope.closeIssue = function() {
+      $scope.closeIssue = function() {
+        var issueClone;
         NProgress.start();
-        $scope.issue.is_close = true;
-        return $salmon.api.issue.updateIssue($scope.$projects.current.id, $scope.issue).success(function() {
-          return NProgress.done();
+        issueClone = angular.copy($scope.issue);
+        issueClone.is_close = true;
+        return $salmon.api.issue.updateIssue($scope.$projects.current.id, issueClone).success(function() {
+          NProgress.done();
+          return $scope.issue.is_close = true;
+        });
+      };
+      return $scope.reopenIssue = function() {
+        var issueClone;
+        NProgress.start();
+        issueClone = angular.copy($scope.issue);
+        issueClone.is_close = false;
+        return $salmon.api.issue.updateIssue($scope.$projects.current.id, issueClone).success(function() {
+          NProgress.done();
+          return $scope.issue.is_close = false;
         });
       };
     }

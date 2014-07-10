@@ -3,8 +3,17 @@
         <h2>
             <span>{{ issue.title }}</span>
             <small>{{ issue.floorText }}</small>
+            <button ng-click="reopenIssue()"
+                    ng-show="issue.is_close"
+                    ng-disabled="$loadings.hasAny()"
+                    class="btn btn-default pull-right">
+                <span salmon-lang>Reopen</span>
+            </button>
             <button ng-click="closeIssue()"
-                    ng-disabled="$loadings.hasAny() || issue.is_close" class="btn btn-default pull-right"><i class="fa fa-check fa-fw text-success"></i> <span salmon-lang>Close</span></button>
+                    ng-hide="issue.is_close"
+                    ng-disabled="$loadings.hasAny()" class="btn btn-default pull-right">
+                <i class="fa fa-check fa-fw text-success"></i> <span salmon-lang>Close</span>
+            </button>
         </h2>
         <div class="clearfix"></div>
         <hr/>

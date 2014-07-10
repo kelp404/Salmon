@@ -227,7 +227,16 @@ angular.module 'salmon.controllers.issues', []
 
     $scope.closeIssue = ->
         NProgress.start()
-        $scope.issue.is_close = yes
-        $salmon.api.issue.updateIssue($scope.$projects.current.id, $scope.issue).success ->
+        issueClone = angular.copy $scope.issue
+        issueClone.is_close = yes
+        $salmon.api.issue.updateIssue($scope.$projects.current.id, issueClone).success ->
             NProgress.done()
+            $scope.issue.is_close = yes
+    $scope.reopenIssue = ->
+        NProgress.start()
+        issueClone = angular.copy $scope.issue
+        issueClone.is_close = no
+        $salmon.api.issue.updateIssue($scope.$projects.current.id, issueClone).success ->
+            NProgress.done()
+            $scope.issue.is_close = no
 ]

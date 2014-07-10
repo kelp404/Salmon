@@ -172,9 +172,9 @@ def update_issue(request, project_id, issue_id):
     if issue.project.key() != project.key():
         raise Http404
 
-    if not issue.is_close and form.is_close.data:
-        # close the issue
-        issue.is_close = True
+    if issue.is_close != form.is_close.data:
+        # close/reopen the issue
+        issue.is_close = form.is_close.data
         issue.put()
     else:
         # update the issue
