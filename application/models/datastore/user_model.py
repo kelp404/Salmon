@@ -17,6 +17,12 @@ class UserModel(BaseModel):
     permission = db.IntegerProperty(default=UserPermission.anonymous)
     create_time = db.DateTimeProperty(auto_now_add=True)
 
+    def __str__(self):
+        if self.email:
+            return '%s<%s>' % (self.name, self.email)
+        else:
+            return ''
+
     @property
     def is_login(self):
         return not not self.has_key()

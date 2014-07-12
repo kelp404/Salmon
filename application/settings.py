@@ -16,6 +16,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 GAE_ACCOUNT = 'kelp.phate@gmail.com'
 HOST = 'salmon-issue.appspot.com'
 ALLOW_REGISTER = False
+VICTORIQUE_URL = 'https://victorique-demo.appspot.com/api/applications/24c1ce30-f9f5-11e3-99ab-4bfec4a2f6a3/logs'
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.6/howto/deployment/checklist/
