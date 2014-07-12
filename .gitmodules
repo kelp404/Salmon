@@ -16,3 +16,6 @@
 [submodule "submodules/six"]
 	path = submodules/six
 	url = https://github.com/kelp404/six.git
+[submodule "submodules/requests"]
+	path = submodules/requests
+	url = https://github.com/kennethreitz/requests.git
