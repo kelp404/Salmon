@@ -10,7 +10,6 @@ from application.forms.user_form import UserForm
 from application.models.dto.page_list import PageList
 from application.models.datastore.user_model import UserModel, UserPermission
 from application.models.datastore.project_model import ProjectModel
-from application.models.datastore.issue_model import IssueModel
 from application.models.datastore.label_model import LabelModel
 
 
@@ -35,7 +34,7 @@ def get_projects(request):
 def get_project(request, project_id):
     project = ProjectModel.get_by_id(long(project_id))
     if project is None:
-        raise Http404
+        raise Http404('not found the project %s' % project_id)
     if request.user.permission != UserPermission.root and\
                     request.user.key().id() not in project.member_ids:
         raise Http403

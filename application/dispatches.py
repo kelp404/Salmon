@@ -8,7 +8,7 @@ def dispatch(**dispatches):
         try:
             return handler(request, *args, **kwargs)
         except ApplicationException as e:
-            return e.view(request)
+            return e.view(request, e)
     return wraps
 def api_dispatch(**dispatches):
     def wraps(request, *args, **kwargs):
@@ -19,5 +19,5 @@ def api_dispatch(**dispatches):
         try:
             return handler(request, *args, **kwargs)
         except ApplicationException as e:
-            return e.view(request)
+            return e.view(request, e)
     return wraps

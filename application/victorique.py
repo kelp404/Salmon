@@ -15,6 +15,6 @@ class Victorique(object):
         }
         try:
             requests.post(self.api_url, data=json.dumps(data), headers=headers)
-        except:
+        except Exception as e:
             import logging
-            logging.error('error report send failed.')
+            logging.error('error report send failed. %s' % e.message)
