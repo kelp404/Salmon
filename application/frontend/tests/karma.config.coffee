@@ -13,6 +13,7 @@ module.exports = (config) ->
             'bower_components/bootstrap/dist/js/bootstrap.js'
             'bower_components/AlertView/dist/alert_view.js'
             'bower_components/nprogress/nprogress.js'
+            'javascript//redactor.js'
             # angular
             'bower_components/angular/angular.js'
             'bower_components/angular-ui-router/release/angular-ui-router.js'

@@ -50,6 +50,37 @@ describe 'salmon.directive', ->
             expect(enterSpy).toHaveBeenCalledWith e
             expect(e.preventDefault).toHaveBeenCalled()
 
+    describe 'salmon-redactor', ->
+        $scope = null
+        $compile = null
+        $timeout = null
+        template = """<div ng-model="content" salmon-redactor="{}"></div>"""
+
+        beforeEach inject ($httpBackend) ->
+            mackUiRouter $httpBackend
+        beforeEach inject ($injector) ->
+            $rootScope = $injector.get '$rootScope'
+            $scope = $rootScope.$new()
+            $compile = $injector.get '$compile'
+            $timeout = $injector.get '$timeout'
+            # mack language as english
+            window.languageResource =
+                code: 'en'
+        it 'salmon-redactor will be call $(element).redactor()', ->
+            spyOn $.fn, 'redactor'
+            $compile(template) $scope
+            expect($.fn.redactor).toHaveBeenCalled()
+        it 'salmon-redactor let redactor bind ng-model', ->
+            view = $compile(template) $scope
+            # update content by redactor api
+            $(view).redactor 'set', '<p>test</p>'
+            $scope.$digest()
+            expect($scope.content).toEqual '<p>test</p>'
+            # update content by scope
+            $scope.content = '<p>update</p>'
+            $scope.$digest()
+            expect($(view).redactor('get')).toEqual '<p>update</p>'
+
     describe 'salmon-modal', ->
         $scope = null
         $compile = null
