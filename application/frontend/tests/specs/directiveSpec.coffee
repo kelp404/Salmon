@@ -53,7 +53,6 @@ describe 'salmon.directive', ->
     describe 'salmon-redactor', ->
         $scope = null
         $compile = null
-        $timeout = null
         template = """<div ng-model="content" salmon-redactor="{}"></div>"""
 
         beforeEach inject ($httpBackend) ->
@@ -62,7 +61,6 @@ describe 'salmon.directive', ->
             $rootScope = $injector.get '$rootScope'
             $scope = $rootScope.$new()
             $compile = $injector.get '$compile'
-            $timeout = $injector.get '$timeout'
             # mack language as english
             window.languageResource =
                 code: 'en'
