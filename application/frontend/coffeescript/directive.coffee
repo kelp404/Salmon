@@ -139,7 +139,7 @@ angular.module 'salmon.directive', []
                     scope.$eval scope.modal.hiddenCallback,
                         $event: e
         $(element).on 'shown.bs.modal', ->
-            # focus the firest element
+            # focus the first element
             $firstController = $(element).find('form .form-control:first')
             if $firstController.length
                 $firstController.select()

@@ -14,6 +14,11 @@ describe 'salmon.provider', ->
             salmonProvider = $salmonProvider
     beforeEach module('fakeModule')
 
+    mackUiRouter = ($httpBackend) ->
+        $httpBackend.whenGET('/views/shared/layout.html').respond ''
+        $httpBackend.whenGET('/views/login.html').respond ''
+        $httpBackend.whenGET('/views/index.html').respond ''
+
     describe '$salmon.user login', ->
         beforeEach ->
             window.user =
@@ -35,9 +40,7 @@ describe 'salmon.provider', ->
 
     describe 'salmonProvider.http', ->
         it 'salmonProvider.http is $http', inject ($httpBackend) ->
-            $httpBackend.whenGET('/views/shared/layout.html').respond '' # ui-router
-            $httpBackend.whenGET('/views/login.html').respond '' # ui-router
-            $httpBackend.whenGET('/views/index.html').respond '' # ui-router
+            mackUiRouter $httpBackend
             $httpBackend.whenGET('/').respond 'result'
             successSpy = jasmine.createSpy 'success'
             salmonProvider.http
