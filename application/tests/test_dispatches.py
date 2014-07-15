@@ -22,6 +22,9 @@ class TestDispatches(unittest.TestCase):
         self.view.assert_called_with(self.request)
         self.assertEqual(response, 'view')
 
+    @patcher(
+        patch('application.views.error.Victorique.send', new=MagicMock())
+    )
     def test_dispatches_dispatch_get_method_not_allowed(self):
         self.request.method = 'GET'
         d = dispatch(
@@ -30,6 +33,9 @@ class TestDispatches(unittest.TestCase):
         response = d(self.request)
         self.assertEqual(response.status_code, 405)
 
+    @patcher(
+        patch('application.views.error.Victorique.send', new=MagicMock())
+    )
     def test_dispatches_dispatch_raise_404(self):
         self.request.method = 'GET'
         d = dispatch(
