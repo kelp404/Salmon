@@ -7,7 +7,7 @@ from application.models.dto.error_model import ErrorModel
 
 
 def bad_request(request, e=None):
-    v = Victorique(getattr(settings, 'VICTORIQUE_URL'), str(request.user))
+    v = Victorique(getattr(settings, 'VICTORIQUE_URL'), unicode(request.user) if hasattr(request, 'user') else '')
     document = {
         'method': request.method,
         'path': request.get_host() + request.get_full_path(),
@@ -24,7 +24,7 @@ def bad_request(request, e=None):
     return http.HttpResponseBadRequest(template.render(RequestContext(request, model)))
 
 def permission_denied(request, e=None):
-    v = Victorique(getattr(settings, 'VICTORIQUE_URL'), str(request.user))
+    v = Victorique(getattr(settings, 'VICTORIQUE_URL'), unicode(request.user) if hasattr(request, 'user') else '')
     document = {
         'method': request.method,
         'path': request.get_host() + request.get_full_path(),
@@ -41,7 +41,7 @@ def permission_denied(request, e=None):
     return http.HttpResponseForbidden(template.render(RequestContext(request, model)))
 
 def page_not_found(request, e=None):
-    v = Victorique(getattr(settings, 'VICTORIQUE_URL'), str(request.user))
+    v = Victorique(getattr(settings, 'VICTORIQUE_URL'), unicode(request.user) if hasattr(request, 'user') else '')
     document = {
         'method': request.method,
         'path': request.get_host() + request.get_full_path(),
@@ -58,7 +58,7 @@ def page_not_found(request, e=None):
     return http.HttpResponseNotFound(template.render(RequestContext(request, model)))
 
 def method_not_allowed(request, e=None):
-    v = Victorique(getattr(settings, 'VICTORIQUE_URL'), str(request.user))
+    v = Victorique(getattr(settings, 'VICTORIQUE_URL'), unicode(request.user) if hasattr(request, 'user') else '')
     document = {
         'method': request.method,
         'path': request.get_host() + request.get_full_path(),
