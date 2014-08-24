@@ -10,7 +10,7 @@ origin_handler = app.handle_uncaught_exception
 def exception_handler(request, resolver, exc_info):
     from django.conf import settings
     exc_type, exc_value, exc_traceback = exc_info
-    v = Victorique(getattr(settings, 'VICTORIQUE_URL'), str(request.user))
+    v = Victorique(getattr(settings, 'VICTORIQUE_URL'), unicode(request.user) if hasattr(request, 'user') else '')
     v.send('exception: %s' % str(exc_value), {
         'method': request.method,
         'path': request.get_host() + request.get_full_path(),
