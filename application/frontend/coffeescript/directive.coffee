@@ -222,7 +222,7 @@ angular.module 'salmon.directive', []
         </ul>
         """
     link: (scope) ->
-        scope.queryString = location.search.replace /index=\d/, ''
+        scope.queryString = location.search.replace /index=\d*/, ''
         scope.queryString = scope.queryString.replace '?', ''
 
         scope.$watch 'queryString', ->
@@ -244,6 +244,6 @@ angular.module 'salmon.directive', []
 
         $timeout ->
             # ui-router update location too late
-            scope.queryString = location.search.replace /index=\d/, ''
+            scope.queryString = location.search.replace /index=\d*/, ''
             scope.queryString = scope.queryString.replace '?', ''
 ]
